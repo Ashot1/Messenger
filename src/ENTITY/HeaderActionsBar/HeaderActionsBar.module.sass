@@ -1,0 +1,77 @@
+.actions
+  display: flex
+  position: relative
+  padding-right: 50px
+  gap: 25px
+
+.NotifModal
+  width: 250px
+  background: rgb(20, 18, 01)
+  height: 250px
+  right: 65px
+  border-radius: 15px
+  color: white
+  place-items: center
+  display: grid
+
+.UserModal
+  width: 125px
+  background: rgb(20, 18, 01)
+  max-height: 250px
+  right: 30px
+  border-radius: 15px
+  ul
+    width: 100%
+    list-style: none
+    padding: 0
+    display: flex
+    place-items: center
+    gap: 15px
+    flex-direction: column
+    .RedButton
+      transition: .2s
+      color: rgba(255,255,255,0.71)
+      background: rgba(255,44,42,0.41)
+      &:hover
+        transition: .2s
+        color: #FFF
+        background: rgba(255,44,42, 1)
+    li
+      transition: .2s
+      padding: 5px 15px
+      border-radius: 10px
+      color: white
+      cursor: pointer
+      a
+        color: inherit
+        text-decoration: none
+      &:hover
+        transition: .2s
+        background: rgb(27, 74, 238, .25)
+
+
+.Notification
+  position: relative
+  img
+    filter: var(--invertFilter)
+    width: 25px
+    height: 25px
+  &::after
+    content: '0'
+    position: absolute
+    color: white
+    font-size: 12px
+    width: 18px
+    height: 16px
+    display: grid
+    place-items: center
+    border-radius: 50%
+    margin-top: -10px
+    right: 0
+    background: red
+
+.UserLogo
+  img
+    border: 2px solid var(--MainColor)
+    width: 35px
+    height: 35px

@@ -5,7 +5,7 @@
   "component": {
     "default": {
       "customTemplates": {
-        "component": "src/Templates/TemplateName.tsx",
+        "component": "src/Templates/index.tsx",
         "style": "src/Templates/TemplateName.module.sass"
       },
       "path": "src",

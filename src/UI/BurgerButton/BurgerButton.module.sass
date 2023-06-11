@@ -1,0 +1,48 @@
+$transitionMS: .2s
+
+=BurgerBA
+  transition: $transitionMS
+  content: ''
+  width: 100%
+  height: 2px
+  background: var(--MainColor)
+  display: block
+  position: absolute
+
+.Position
+  position: relative
+  cursor: pointer
+  width: 30px
+  height: 18px
+  display: flex
+  place-items: center
+  transition: $transitionMS
+  &:hover
+    transition: $transitionMS
+    filter: drop-shadow(0 0 10px white)
+
+.Burger
+  transition: .1s
+  width: 100%
+  height: 2px
+  background: var(--MainColor)
+  display: block
+  &::before
+    +BurgerBA
+    top: 0
+  &::after
+    +BurgerBA
+    bottom: 0
+
+.BurgerActive
+  transition: .1s
+  background: transparent
+  &::before
+    transition: $transitionMS
+    top: auto
+    rotate: -45deg
+
+  &::after
+    transition: $transitionMS
+    bottom: auto
+    rotate: 45deg

@@ -1,0 +1,62 @@
+.MenuButtons
+  width: 50px
+  transition: .4s
+  height: 50px
+  img
+    width: 25px
+    opacity: .5
+    filter: var(--invertFilter)
+  &:hover
+    background: rgb(27, 74, 238, .15)
+    img
+      transition: .4s
+      opacity: .8
+  @media (max-width: 768px)
+    padding-top: 5px
+    width: 70px
+    height: 60px
+    flex-direction: column
+
+.fullMenuButton
+  @media (min-width: 768px)
+    display: flex !important
+    padding: 0 15px
+    gap: 15px
+    transition: .4s
+    width: auto
+
+.content
+  display: flex
+  flex-direction: column
+  gap: 25px
+  @media (max-width: 768px)
+    flex-direction: row
+
+.Menu
+  width: 100%
+  flex: 1
+  display: grid
+  place-items: center
+
+.ActiveMenu
+  width: 100%
+  flex: 1
+  display: flex
+  align-items: center
+  padding: 0 15px
+  @media (max-width: 768px)
+    justify-content: center
+
+.ActiveButton
+  background: rgb(27, 74, 238, .15)
+  img
+    opacity: .8
+
+.text
+  padding: 0
+  margin: 0
+  overflow: hidden
+  @media (max-width: 768px)
+    position: relative !important
+    width: auto !important
+    font-size: 10px

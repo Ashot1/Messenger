@@ -1,0 +1,26 @@
+\:root
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif
+  line-height: 1.5
+  font-weight: 400
+  --border: 1px solid rgba(142,185,255,0.10)
+body,
+#root,
+:root
+  min-width: 100vw
+  min-height: 100vh
+  padding: 0
+  margin: 0
+  overflow-x: hidden
+
+body
+  background: var(--bodyBGcolor)
+
+\:root[data-theme='darkmode']
+  --mainBGcolor: rgb(17, 14, 23, 0.7)
+  --bodyBGcolor: rgb(24, 26, 47)
+  --invertFilter: invert(100%)
+  --MainColor: white
+
+
+//linear-gradient(90deg, #006880 10.79%, #005366 87.08%);
+//linear-gradient(90deg, #2870EA 10.79%, #1B4AEF 87.08%)
