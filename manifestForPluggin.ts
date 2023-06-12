@@ -57,7 +57,7 @@ export const manifestForPlugin: Partial<VitePWAOptions> = {
         'scope': '/',
         'start_url': '/messages',
         'display': 'standalone',
-        'theme_color': '#1B4AEF',
+        'theme_color': 'rgb(24, 26, 47)',
         'background_color': '#fff'
     }
 }
