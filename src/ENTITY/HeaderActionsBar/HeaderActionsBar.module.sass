@@ -11,7 +11,7 @@
 
 .NotifModal
   width: 250px
-  background: rgb(20, 18, 01)
+  background: var(--primaryBGcolor)
   height: 250px
   right: 65px
   border-radius: 15px
@@ -23,7 +23,7 @@
 
 .UserModal
   width: 125px
-  background: rgb(20, 18, 01)
+  background: var(--primaryBGcolor)
   max-height: 250px
   right: 10px
   border-radius: 15px
@@ -54,8 +54,9 @@
         text-decoration: none
       &:hover
         transition: .2s
-        background: rgb(27, 74, 238, .25)
-
+        background: var(--hoverColor)
+  @media (max-width: 768px)
+    font-size: 13px
 
 .Notification
   position: relative
@@ -67,6 +68,9 @@
     filter: var(--invertFilter)
     width: 25px
     height: 25px
+    @media (max-width: 500px)
+      width: 20px
+      height: 20px
   &::after
     content: '0'
     position: absolute
@@ -80,6 +84,10 @@
     margin-top: -10px
     right: 0
     background: red
+    @media (max-width: 500px)
+      font-size: 11px
+      width: 16px
+      height: 14px
 
 .UserLogo
   transition: .3s
@@ -90,3 +98,6 @@
     border: 2px solid var(--MainColor)
     width: 35px
     height: 35px
+    @media (max-width: 500px)
+      width: 30px
+      height: 30px

@@ -2,7 +2,7 @@
   font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif
   line-height: 1.5
   font-weight: 400
-  --border: 1px solid rgba(142,185,255,0.10)
+  --border: none //1px solid var(--primaryColor)
   touch-action: none
   -webkit-tap-highlight-color: transparent
 
@@ -21,10 +21,18 @@ body
   background: var(--bodyBGcolor)
 
 \:root[data-theme='darkmode']
-  --mainBGcolor: rgb(17, 14, 23, 0.7)
+  --mainBGcolor: rgb(19, 19, 19)
+  --primaryBGcolor: rgb(19, 19, 19)
   --bodyBGcolor: rgb(24, 26, 47)
+  --hoverColor: rgba(255,255,255,0.1)
+  --secondaryColor: rgb(32, 35, 42)
   --invertFilter: invert(100%)
   --MainColor: white
+  @media (max-width: 768px)
+    --mainBGcolor: rgb(32, 35, 42)
+
+\:root[data-theme='lightmode']
+  --hoverColor: #4487a2
 
 
 //linear-gradient(90deg, #006880 10.79%, #005366 87.08%);

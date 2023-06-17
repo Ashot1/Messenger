@@ -3,6 +3,7 @@ import {Navigate, Outlet, useLocation} from "react-router-dom";
 import styles from "./App.module.sass"
 import AsideMenu from "../MODULE/AsideMenu";
 import Header from "../MODULE/Header";
+import Main from "../MODULE/Main";
 import MessagesPhoto from "../ASSET/icon-messages.png";
 import FriendsPhoto from "../ASSET/icon-friends.png";
 import NewsPhoto from "../ASSET/icon-news.png";
@@ -49,9 +50,9 @@ const App: FC = () => {
                         }
                     })}
                 </Header>
-                <main>
-                    <Outlet/>
-                </main>
+                <Main>
+                        <Outlet/>
+                </Main>
             </section>
         </div>
     );

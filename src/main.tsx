@@ -1,15 +1,17 @@
-import React from 'react'
+import {createBrowserRouter, RouterProvider} from "react-router-dom";
+import {Provider} from "react-redux";
+import {lazy, StrictMode} from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './APP'
-import {createBrowserRouter, RouterProvider} from "react-router-dom";
-import './main.sass'
-import Messages from "./PAGE/Messages";
-import Contacts from "./PAGE/Contacts";
-import News from "./PAGE/News";
-import {Provider} from "react-redux";
 import store from './STORE'
-import Settings from "./PAGE/Settings";
-import NotFound from "./PAGE/NotFound";
+import './main.sass'
+// import './firebase'
+import Authentication from "./PAGE/Authentication";
+const Messages = lazy(() => import("./PAGE/Messages"))
+const Contacts = lazy(() => import("./PAGE/Contacts"))
+const News = lazy(() => import("./PAGE/News"))
+const Settings = lazy(() => import("./PAGE/Settings"))
+const NotFound = lazy(() => import("./PAGE/NotFound"))
 
 const router = createBrowserRouter([
     {
@@ -37,14 +39,18 @@ const router = createBrowserRouter([
                 element: <NotFound />,
             }
         ]
+    },
+    {
+        path: "/auth",
+        element: <Authentication />,
     }
 ])
 
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
+  <StrictMode>
       <Provider store={store}>
           <RouterProvider router={router} />
       </Provider>
-  </React.StrictMode>,
+  </StrictMode>,
 )

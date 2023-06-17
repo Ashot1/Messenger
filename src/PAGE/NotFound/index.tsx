@@ -7,7 +7,7 @@ const NotFound: FC = () => {
 		<>
 			<Navigate to="/notfound"/>
 			<div className={styles.NotFound}>
-				В разработке
+				Эта страница не доступна
 			</div>
 		</>
 
