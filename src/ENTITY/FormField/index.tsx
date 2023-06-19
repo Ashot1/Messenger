@@ -1,13 +1,13 @@
-// import styles from './FormField.module.sass'
+import styles from './FormField.module.sass'
 import { FC } from 'react'
-import TransparentInput from "../../UI/TransparentInput/TransparentInput.tsx";
+import TransparentInput from "../../UI/TransparentInput";
 import {IFormField} from "./Types.ts";
 
-const FormField: FC<IFormField> = ({title, type}) => {
+const FormField: FC<IFormField> = ({title, type, Value, setValue, required}) => {
 	return (
-		<label htmlFor="email">
+		<label htmlFor="email" className={styles.label}>
 			{title}
-			<TransparentInput TypeI={type}/>
+			<TransparentInput TypeI={type} dopClass={styles.input} Value={Value} setValue={setValue} required={required}/>
 		</label>
 	)
 }

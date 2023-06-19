@@ -5,8 +5,10 @@ import ReactDOM from 'react-dom/client'
 import App from './APP'
 import store from './STORE'
 import './main.sass'
-// import './firebase'
+import './firebaseInit.ts'
 import Authentication from "./PAGE/Authentication";
+import RegisterForm from "./MODULE/RegisterForm";
+import LoginForm from "./MODULE/LoginForm";
 const Messages = lazy(() => import("./PAGE/Messages"))
 const Contacts = lazy(() => import("./PAGE/Contacts"))
 const News = lazy(() => import("./PAGE/News"))
@@ -43,6 +45,16 @@ const router = createBrowserRouter([
     {
         path: "/auth",
         element: <Authentication />,
+        children: [
+            {
+                path: "/auth/register",
+                element: <RegisterForm />,
+            },
+            {
+                path: "/auth/login",
+                element: <LoginForm />,
+            }
+        ]
     }
 ])
 
