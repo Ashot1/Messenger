@@ -10,7 +10,7 @@ const RegisterForm: FC = () => {
 	 	[Error, setError] = useState(""),
 		Navigate = useNavigate()
 
-	const CreateUser = (e: Event) => {
+	const CreateUser = (e: MouseEvent) => {
 		e.preventDefault()
 		if(!Info.FirstName || !Info.LastName || !Info.email || !Info.password) return setError("Не все данные введены")
 		createUserWithEmailAndPassword(auth, Info.email, Info.password)
