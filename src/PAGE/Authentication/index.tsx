@@ -1,8 +1,10 @@
 import styles from './Authentication.module.sass'
 import { FC } from 'react'
-import {Link, Navigate, Outlet} from "react-router-dom";
+import {Navigate, Outlet} from "react-router-dom";
 import {useAppDispatch, useAppSelector} from "../../HOOK/ReduxCustomHooks.ts";
 import {UserChecker} from "../../UserChecker.ts";
+import LogRegLinks from "../../ENTITY/LogRegLinks";
+import OtherAuthMethods from "../../ENTITY/OtherAuthMethods";
 
 const Authentication: FC = () => {
 
@@ -17,8 +19,8 @@ const Authentication: FC = () => {
 		<div className={styles.Wrapper}>
 			<form autoComplete="on" className={styles.form}>
 				<Outlet/>
-				<Link to="/auth/login">Войти</Link>
-				<Link to="/auth/register">Зарегистрироваться</Link>
+				<LogRegLinks/>
+				<OtherAuthMethods/>
 			</form>
 		</div>
 	)

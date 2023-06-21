@@ -31,7 +31,7 @@ const App: FC = () => {
         {url: '/notfound', icon: NotFoundPhoto, alt: 'Страница не найдена'},
     ], [])
 
-    if(!UserSelector.loading && !UserSelector.userEmail) return <Navigate to="/auth"/>
+    if(!UserSelector.loading && !UserSelector.userEmail) return <Navigate to="/auth/login"/>
 
     if(location.pathname === '/' && UserSelector.userEmail) return <Navigate to="/messages"/>
 
