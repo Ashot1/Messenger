@@ -15,7 +15,10 @@ body,
   margin: 0
   overflow-x: hidden
   touch-action: none
+  position: relative
 
+#modal
+  z-index: 10
 
 body
   background: var(--bodyBGcolor)
@@ -26,8 +29,9 @@ body
   --bodyBGcolor: rgb(24, 26, 47)
   --hoverColor: rgba(255,255,255,0.1)
   --secondaryColor: rgb(32, 35, 42)
-  --invertFilter: invert(100%)
+  --invertFilter: invert(90%)
   --MainColor: white
+  --redColor: rgba(255,26,21,0.67)
   @media (max-width: 768px)
     --mainBGcolor: rgb(32, 35, 42)
 

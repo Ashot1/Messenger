@@ -1,7 +1,7 @@
 import styles from './Authentication.module.sass'
 import { FC } from 'react'
 import {Navigate, Outlet} from "react-router-dom";
-import {useAppDispatch, useAppSelector} from "../../HOOK/ReduxCustomHooks.ts";
+import {useAppDispatch, useAppSelector} from "../../HOOK";
 import {UserChecker} from "../../UserChecker.ts";
 import LogRegLinks from "../../ENTITY/LogRegLinks";
 import OtherAuthMethods from "../../ENTITY/OtherAuthMethods";

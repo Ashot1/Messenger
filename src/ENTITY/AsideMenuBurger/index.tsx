@@ -1,9 +1,9 @@
 import styles from './AsideMenuBurger.module.sass'
-import { FC } from 'react'
+import {FC, memo} from 'react'
 import BurgerButton from "../../UI/BurgerButton";
 import {setOpen} from "../../STORE/menuSlice.ts";
 import {IAsideMenuBurger} from "./Types.ts";
-import {useAppDispatch} from "../../HOOK/ReduxCustomHooks.ts";
+import {useAppDispatch} from "../../HOOK";
 
 const AsideMenuBurger: FC<IAsideMenuBurger> = ({isActive}) => {
 
@@ -16,4 +16,4 @@ const AsideMenuBurger: FC<IAsideMenuBurger> = ({isActive}) => {
 	)
 }
 
-export default AsideMenuBurger
+export default memo(AsideMenuBurger)

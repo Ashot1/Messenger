@@ -8,9 +8,10 @@ const TransparentInput: FC<ITransparentInput> =
 		 Value,
 		 TypeI = 'text',
 		 dopClass,
+		 required,
 		 ...props}) => {
 	return (
-		<input type={TypeI} placeholder={placeholder} className={`${styles.TransparentInput} ${dopClass}`} onChange={setValue} value={Value} {...props}/>
+		<input type={TypeI} placeholder={placeholder} className={`${styles.TransparentInput} ${dopClass}`} onChange={setValue} value={Value} required={required} {...props}/>
 	);
 }
 

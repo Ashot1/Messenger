@@ -1,9 +1,10 @@
 import {FC, useState} from 'react'
 import FormField from "../../ENTITY/FormField";
-import WaveButton from "../../UI/WaveButton/WaveButton.tsx";
+import WaveButton from "../../UI/WaveButton";
 import {createUserWithEmailAndPassword, updateProfile} from "firebase/auth";
 import {auth} from "../../firebaseInit.ts";
 import {useNavigate} from "react-router-dom";
+import styles from "./RegisterForm.module.sass"
 
 const RegisterForm: FC = () => {
 	const [Info, setInfo] = useState({FirstName: "", email: "", password: ""}),
@@ -18,9 +19,9 @@ const RegisterForm: FC = () => {
 				updateProfile(response.user, {
 					displayName: Info.FirstName
 				}).catch(e => setError(e.message))
+				Navigate('/')
 			})
-			.catch(e => setError(e.message))
-			.finally(() => Navigate('/'))
+			.catch(e => setError(e.message.split('/')[1].slice(0, -2)))
 	}
 
 	return (
@@ -32,7 +33,9 @@ const RegisterForm: FC = () => {
 			<FormField title="Пароль" type="password" Value={Info.password} required
 					   setValue={(e) => setInfo({FirstName: Info.FirstName, email: Info.email, password: e.target.value})}/>
 			<p style={{color: 'red'}}>{Error}</p>
-			<WaveButton onclick={CreateUser}>Зарегистрироваться</WaveButton>
+			<div className={styles.ButtonPos}>
+				<WaveButton onclick={CreateUser}>Зарегистрироваться</WaveButton>
+			</div>
 		</>
 	)
 }
