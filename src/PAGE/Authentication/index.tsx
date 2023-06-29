@@ -13,15 +13,17 @@ const Authentication: FC = () => {
 
 	UserChecker(dispatcher)
 
-	if(!user.loading && user.userEmail) return <Navigate to="/"/>
+	if(!user.loading && user.userEmail) {
+		return <Navigate to="/"/>
+	}
 
 	return (
 		<div className={styles.Wrapper}>
-			<form autoComplete="on" className={styles.form}>
+			<div className={styles.content}>
 				<Outlet/>
 				<LogRegLinks/>
 				<OtherAuthMethods/>
-			</form>
+			</div>
 		</div>
 	)
 }

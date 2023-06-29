@@ -14,9 +14,19 @@
   background: var(--secondaryColor)
   border-top-left-radius: 20px
   border-bottom-left-radius: 20px
+  overflow-y: auto
+  scrollbar-gutter: stable
+  scrollbar-color: var(--primaryBGcolor) transparent
   @media (max-width: 768px)
     border-top-left-radius: 0
     border-bottom-left-radius: 0
+  &::-webkit-scrollbar
+    background: transparent
+  &::-webkit-scrollbar-thumb
+    background: var(--primaryBGcolor)
+    box-shadow: 0 0 5px var(--primaryBGcolor)
+    opacity: .3
+    border-radius: 2px
 
 .HeaderIcon
   filter: var(--invertFilter)

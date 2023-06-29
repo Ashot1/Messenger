@@ -5,31 +5,31 @@ import {signInWithEmailAndPassword} from "firebase/auth";
 import {auth} from "../../firebaseInit.ts";
 import {useNavigate} from "react-router-dom";
 import styles from "./LoginForm.module.sass"
+import {useForm} from "react-hook-form";
+import {Inputs} from "../../UI/TransparentInput";
+import CustomButton from "../../UI/CustomButton";
 
 const LoginForm: FC = () => {
-	const [Params, setParams] = useState({email: "", password: ""}),
-		[Error, setError] = useState(''),
-		Navigate = useNavigate()
+	const [Error, setError] = useState(''),
+		Navigate = useNavigate(),
+		{ register, handleSubmit, formState: {errors} } = useForm<Inputs>()
 
-	const Login = async (e: MouseEvent) => {
-		e.preventDefault();
-		signInWithEmailAndPassword(auth, Params.email, Params.password)
+	const Login = (data: Inputs) => {
+		signInWithEmailAndPassword(auth, data.Email, data.Password)
 			.then(() => Navigate('/'))
 			.catch(err => setError(err.message.split("/")[1].slice(0, -2)))
 	}
 
 	return (
-		<>
-			<FormField title="Email" type="email"
-					   setValue={e => setParams({email: e.target.value, password: Params.password})}
-					   Value={Params.email}/>
-			<FormField title="Пароль" type="password"
-					   setValue={e => setParams({email:  Params.email, password: e.target.value})} Value={Params.password}/>
+		<form autoComplete="on" className={styles.form} onSubmit={handleSubmit(Login)}>
+			<FormField title="Email" type="email" register={register} label="Email" errors={errors.Email} options={{required: true}}/>
+			<FormField title="Пароль" type="password" register={register} label="Password" errors={errors.Password} options={{required: true}}/>
+			<CustomButton isLink url="/auth/reset" dopClass={styles.reset}>Сбросить пароль</CustomButton>
 			<p style={{color: 'red'}}>{Error}</p>
 			<div className={styles.ButtonPos}>
-				<WaveButton onclick={Login}>Войти</WaveButton>
+				<WaveButton>Войти</WaveButton>
 			</div>
-		</>
+		</form>
 	)
 }
 

@@ -50,7 +50,7 @@ const HeaderActionsBar: FC<IHeaderActionsBar> = () => {
 				{OpenState.user && <ModalBlock dopClass={styles.UserModal}>
 					<ul>
 						<li onClick={() => window.location.reload()}>Обновить</li>
-						<Link to="/settings"><li>Настройки</li></Link>
+						<Link to="/settings/main"><li>Настройки</li></Link>
 						<li className={styles.RedButton} onClick={() => setModal(true)}>Выйти</li>
 					</ul>
 				</ModalBlock>}

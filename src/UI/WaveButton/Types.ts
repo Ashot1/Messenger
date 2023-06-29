@@ -1,8 +1,8 @@
-import {CSSProperties, HTMLAttributes, ReactNode} from "react";
+import {CSSProperties, HTMLAttributes} from "react";
 
 export interface IWaveButton extends HTMLAttributes<HTMLButtonElement>{
-    onclick: (e: any) => void,
-    children: ReactNode,
+    onclick?: (e: any) => void,
+    children: string,
     color?: string
 }
 

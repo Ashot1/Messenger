@@ -6,14 +6,18 @@ import App from './APP'
 import store from './STORE'
 import './main.sass'
 import './firebaseInit.ts'
-import Authentication from "./PAGE/Authentication";
-import RegisterForm from "./MODULE/RegisterForm";
-import LoginForm from "./MODULE/LoginForm";
+import {Toaster} from "react-hot-toast";
 const Messages = lazy(() => import("./PAGE/Messages"))
 const Contacts = lazy(() => import("./PAGE/Contacts"))
 const News = lazy(() => import("./PAGE/News"))
 const Settings = lazy(() => import("./PAGE/Settings"))
 const NotFound = lazy(() => import("./PAGE/NotFound"))
+const Authentication = lazy(() => import("./PAGE/Authentication"))
+const RegisterForm = lazy(() => import("./MODULE/RegisterForm"))
+const LoginForm = lazy(() => import("./MODULE/LoginForm"))
+const BasicSettings = lazy(() => import("./MODULE/BasicSettings"))
+const Safety = lazy(() => import("./MODULE/Safety"))
+const ResetPassword = lazy(() => import("./PAGE/ResetPassword"))
 
 const router = createBrowserRouter([
     {
@@ -35,6 +39,16 @@ const router = createBrowserRouter([
             {
                 path: "/settings",
                 element: <Settings />,
+                children: [
+                    {
+                        path: "/settings/main",
+                        element: <BasicSettings />,
+                    },
+                    {
+                        path: "/settings/safety",
+                        element: <Safety />,
+                    },
+                ]
             },
             {
                 path: "*",
@@ -53,7 +67,11 @@ const router = createBrowserRouter([
             {
                 path: "/auth/login",
                 element: <LoginForm />,
-            }
+            },
+            {
+                path: "/auth/reset",
+                element: <ResetPassword />,
+            },
         ]
     }
 ])
@@ -62,6 +80,10 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <StrictMode>
       <Provider store={store}>
+          <Toaster
+              position="top-center"
+              reverseOrder={true}
+          />
           <RouterProvider router={router} />
       </Provider>
   </StrictMode>,

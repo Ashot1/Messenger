@@ -11,7 +11,7 @@ import SettingsPhoto from "../ASSET/icon-setting.png";
 import NotFoundPhoto from "../ASSET/icon-notfound.png";
 import {UserChecker} from "../UserChecker.ts";
 import {useAppDispatch, useAppSelector} from "../HOOK";
-import {ThemeChecker} from "../ThemeChecker.ts";
+import {ThemeChecker} from "./ThemeChecker.ts";
 
 const App: FC = () => {
 
@@ -37,6 +37,7 @@ const App: FC = () => {
 
     return (
         <div className={styles.app}>
+
             {UserSelector.userEmail && <AsideMenu PageList={PageList.slice(0, -2)}/>}
             <section className={styles.rightside}>
                 {UserSelector.userEmail
