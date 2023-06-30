@@ -21,3 +21,4 @@ const FormField: FC<IFormField> = ({
 }
 
 export default FormField
+export type {IFormField}

@@ -4,10 +4,15 @@ import UserCircle from "../UserCircle";
 import userPNG from "../../ASSET/icon-avatar.png";
 import {IUserData} from "./Types.ts";
 
-const UserData: FC<IUserData> = ({photo, name, secondaryText, logoDopClass, TextDopClass}) => {
+const UserData: FC<IUserData> = ({photo,
+									 name,
+									 secondaryText,
+									 logoDopClass,
+									 TextDopClass,
+									 click}) => {
 	return (
 		<section className={styles.UserData}>
-			<UserCircle url={photo || userPNG} dopClass={logoDopClass} imgStyles={{filter: !photo ? 'var(--invertFilter)' : ''}}/>
+			<UserCircle url={photo || userPNG} dopClass={logoDopClass} imgStyles={{filter: !photo ? 'var(--invertFilter)' : ''}} onclick={click}/>
 			<span className={TextDopClass}>
 				<p>{name || 'Загрузка'}</p>
 				<p>{secondaryText || 'Загрузка'}</p>
@@ -17,3 +22,4 @@ const UserData: FC<IUserData> = ({photo, name, secondaryText, logoDopClass, Text
 }
 
 export default UserData
+export type {IUserData}

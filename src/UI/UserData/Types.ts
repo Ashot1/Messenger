@@ -3,5 +3,6 @@ export interface IUserData {
     name?: string,
     secondaryText?: string,
     logoDopClass?: string,
-    TextDopClass?: string
+    TextDopClass?: string,
+    click?: () => void
 }
