@@ -49,7 +49,8 @@ const BasicSettings: FC = () => {
 
 	const createdAt = auth.currentUser?.metadata.creationTime,
 		lastSignIn = auth.currentUser?.metadata.lastSignInTime,
-		providerID = auth.currentUser?.providerData[0].providerId
+		providerID = auth.currentUser?.providerData[0].providerId,
+		condition = auth.currentUser?.providerData[0].providerId === 'password'
 
 	if(createdAt && lastSignIn && providerID) return (
 		<div className={styles.BasicSettings}>
@@ -63,7 +64,7 @@ const BasicSettings: FC = () => {
 				label="Name"
 				title="Изменить имя"
 				type="text"/>
-			<SettingsBlock
+			{condition ? <SettingsBlock
 				SubmitFunction={ChangeEmail}
 				handleSubmit={handleSubmit}
 				register={register}
@@ -72,6 +73,7 @@ const BasicSettings: FC = () => {
 				label="Email"
 				title="Изменить email"
 				type="text"/>
+			: <span className={styles.CantChangeInfo}>Вы вошли с помощью {auth.currentUser?.providerData[0].providerId} и не можете изменить email</span>}
 		</div>
 	)
 }
