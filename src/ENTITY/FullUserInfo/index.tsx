@@ -7,7 +7,7 @@ const FullUserInfo: FC<IFullUserInfo> = ({lastSignIn, signMethod, createdAt}) =>
 		<div className={styles.UserInfo}>
 			<p>Зарегистрирован: </p> <span>{createdAt}</span>
 			<hr/>
-			<p>Последний раз входил в систему: </p> <span>{lastSignIn}</span>
+			<p>Последний вход в аккаунт: </p> <span>{lastSignIn}</span>
 			<hr/>
 			{signMethod &&<p>Метод входа: {signMethod === 'password' ? 'Email и пароль' : signMethod}</p>}
 		</div>
