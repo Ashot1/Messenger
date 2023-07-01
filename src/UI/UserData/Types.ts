@@ -4,5 +4,6 @@ export interface IUserData {
     secondaryText?: string,
     logoDopClass?: string,
     TextDopClass?: string,
-    click?: () => void
+    click?: () => void,
+    loading?: boolean
 }

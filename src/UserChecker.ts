@@ -6,7 +6,16 @@ import {AppDispatch} from "./STORE";
 
 export const UserChecker = (dispatcher: AppDispatch) => useEffect(() => {
     const Unsubscribe = onAuthStateChanged(auth, user => {
-        dispatcher(changeUser({userEmail: user?.email, userDisplayName: user?.displayName, userPhoto: user?.photoURL}))
+        if(user?.photoURL){
+            let img = new Image()
+            img.src = user.photoURL
+            img.onload = () => {
+                dispatcher(changeUser({userEmail: user?.email, userDisplayName: user?.displayName, userPhoto: user.photoURL}))
+                return
+            }
+
+        }
+        dispatcher(changeUser({userEmail: user?.email, userDisplayName: user?.displayName, userPhoto: ''}))
     })
     return () => Unsubscribe()
 }, [dispatcher])

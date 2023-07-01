@@ -1,0 +1,18 @@
+.NewsBlock
+  width: clamp(500px, 100%, 900px)
+  color: var(--MainColor)
+  h1
+    width: 100%
+    text-align: center
+    @media (max-width: 555px)
+      font-size: 1.1em
+  ul
+    list-style-type: '- '
+    gap: 10px
+    display: flex
+    flex-direction: column
+    @media (max-width: 555px)
+      font-size: .85em
+      padding-left: 20px
+  @media (max-width: 555px)
+    width: 100%

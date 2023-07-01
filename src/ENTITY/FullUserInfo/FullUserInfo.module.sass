@@ -1,11 +1,18 @@
 .UserInfo
-  width: clamp(200px, 60%, 500px)
-  background: var(--primaryBGcolor)
-  color: var(--MainColor)
-  padding: 20px
-  border-radius: 15px
+  width: 100%
+  height: 100%
   p
     opacity: .7
   @media (max-width: 768px)
     font-size: .8em
 
+.loading
+  span
+    color: transparent
+    animation: loadingAnim 1s linear infinite alternate
+
+@keyframes loadingAnim
+  from
+    background: rgb(202, 202, 202)
+  to
+    background: rgba(105,105,105,1)

@@ -1,5 +1,27 @@
 .News
-  display: grid
-  place-items: center
-  color: var(--MainColor)
+  display: flex
+  justify-content: center
   width: 100%
+
+.content
+  width: clamp(600px, 50%, 1500px)
+  position: relative
+  margin-top: 25px
+  display: flex
+  flex-direction: column
+  gap: 50px
+  @media (max-width: 1024px)
+    width: clamp(600px, 80%, 1500px)
+  @media (max-width: 620px)
+    width: 90%
+
+.loaderNews
+  color: transparent !important
+  h1, li
+    animation: loadingAnim 1s linear infinite alternate
+
+@keyframes loadingAnim
+  from
+    background: rgb(202, 202, 202)
+  to
+    background: rgba(105,105,105,1)

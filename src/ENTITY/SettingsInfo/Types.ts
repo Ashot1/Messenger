@@ -6,4 +6,5 @@ export interface IUserInfo extends Pick<IUserData, "click">{
     photo?: string,
     email?: string,
     name?: string,
+    loading?: boolean
 }

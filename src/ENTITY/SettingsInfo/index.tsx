@@ -3,11 +3,16 @@ import {FC} from 'react'
 import UserData from "../../UI/UserData";
 import {IUserInfo} from "./Types.ts";
 
-const SettingsInfo: FC<IUserInfo> = ({children, name, photo, email, click}) => {
+const SettingsInfo: FC<IUserInfo> = ({children,
+										 name,
+										 photo,
+										 email,
+										 click,
+										 loading}) => {
 
 	return (
 		<div className={styles.Info}>
-			<UserData photo={photo} secondaryText={email} name={name} logoDopClass={styles.Avatar} TextDopClass={styles.Text} click={click}/>
+			<UserData photo={photo} secondaryText={email} name={name} logoDopClass={styles.Avatar} TextDopClass={styles.Text} click={click} loading={loading}/>
 			<section className={styles.Actions}>
 				{children}
 			</section>

@@ -1,11 +1,12 @@
 import { FC } from 'react'
 import styles from './Safety.module.sass'
-import SettingsBlock from "../../ENTITY/SettingsBlock";
+import SettingsBlock from "../../ENTITY/SettingsChangeBlock";
 import {useForm} from "react-hook-form";
 import {Inputs} from "../../UI/TransparentInput";
 import {auth} from "../../firebaseInit.ts";
 import {updatePassword} from "firebase/auth";
 import PromiseNotification from "../../UI/PromiseNotification";
+import SettingsDefaultBlock from "../../UI/SettingsDefaultBlock";
 
 
 const Password: FC = () => {
@@ -42,7 +43,7 @@ const Password: FC = () => {
 				register={register}
 				type="text"
 				SubmitFunction={ChangePassword}/>
-			:	<span className={styles.CantChangeInfo}>Вы вошли с помощью {auth.currentUser?.providerData[0].providerId} и не можете изменить пароль</span>
+			:	<SettingsDefaultBlock>Вы вошли с помощью {auth.currentUser?.providerData[0].providerId} и не можете изменить пароль</SettingsDefaultBlock>
 			}
 		</div>
 )

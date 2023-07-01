@@ -36,7 +36,7 @@ const SettingsHeader: FC = () => {
 	}
 
 	const uploadAvatar = (e: any) => {
-		const storageref = ref(FBstorage, `avatars/${auth.currentUser?.email}`)
+		const storageref = ref(FBstorage, `avatars/${auth.currentUser?.uid}`)
 		if(e.target.files[0])
 			uploadBytes(storageref, e.target.files[0]).then(() => {
 				getDownloadURL(storageref).then(response => {
@@ -53,7 +53,7 @@ const SettingsHeader: FC = () => {
 	return (
 		<div className={styles.Wrapper}>
 			<input type="file" style={{display: "none"}} ref={InputFile} onChange={uploadAvatar} accept="image/*"/>
-			<SettingsInfo email={user.userEmail} name={user.userDisplayName} photo={user.userPhoto} click={changeAvatar}>
+			<SettingsInfo email={user.userEmail} name={user.userDisplayName} photo={user.userPhoto} click={changeAvatar} loading={user.loading}>
 				<>
 					<CustomButton dopClass={styles.Delete} onclick={() => setModal(true)}>Удалить аккаунт</CustomButton>
 					{Modal && <ModalWindow width={50} bgClick={() => setModal(false)}>

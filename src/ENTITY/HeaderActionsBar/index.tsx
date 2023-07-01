@@ -40,7 +40,7 @@ const HeaderActionsBar: FC<IHeaderActionsBar> = () => {
 			<UserCircle url={user.userPhoto || userPNG}
 						onclick={() => setOpenState({notif: false, user: !OpenState.user})} dopClass={styles.UserLogo}
 						style={{opacity: OpenState.user ? '.5' : '1', filter: !user.userPhoto ? 'var(--invertFilter)' : ''}}
-			onBlur={() => HideWhenBlur('user')}/>
+			onBlur={() => HideWhenBlur('user')} loading={user.loading}/>
 
 			<AnimatePresence key="NotifModal">
 				{OpenState.notif && <ModalBlock dopClass={styles.NotifModal}>В разработке</ModalBlock>}

@@ -9,11 +9,12 @@ const UserData: FC<IUserData> = ({photo,
 									 secondaryText,
 									 logoDopClass,
 									 TextDopClass,
-									 click}) => {
+									 click,
+									 loading}) => {
 	return (
 		<section className={styles.UserData}>
-			<UserCircle url={photo || userPNG} dopClass={logoDopClass} imgStyles={{filter: !photo ? 'var(--invertFilter)' : ''}} onclick={click}/>
-			<span className={TextDopClass}>
+			<UserCircle url={photo || userPNG} dopClass={logoDopClass} imgStyles={{filter: !photo ? 'var(--invertFilter)' : ''}} onclick={click} loading={loading}/>
+			<span className={`${loading ? styles.LoadingText : TextDopClass}`}>
 				<p>{name || 'Загрузка'}</p>
 				<p>{secondaryText || 'Загрузка'}</p>
 			</span>

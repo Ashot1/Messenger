@@ -37,8 +37,8 @@ const App: FC = () => {
 
     return (
         <div className={styles.app}>
-
             {UserSelector.userEmail && <AsideMenu PageList={PageList.slice(0, -2)}/>}
+
             <section className={styles.rightside}>
                 {UserSelector.userEmail
                     && <Header>
