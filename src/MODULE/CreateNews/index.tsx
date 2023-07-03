@@ -5,7 +5,7 @@ import {useAppSelector, useLocaleDate} from "../../HOOK";
 import TransparentBlock from "../../UI/TransparentBlock";
 import TransparentInput from "../../UI/TransparentInput";
 import BorderedButton from "../../UI/BorderedButton";
-import {newsType} from "../../STORE";
+import {newsType} from "../../STORE/firebaseApi.ts";
 import { collection, addDoc } from "firebase/firestore";
 import PromiseNotification from "../../UI/PromiseNotification";
 import {db} from "../../firebaseInit.ts";
