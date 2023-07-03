@@ -4,14 +4,18 @@ type InitialType = {
     userEmail: string | undefined,
     userDisplayName: string | undefined,
     userPhoto: string | undefined,
-    loading: boolean
+    loading: boolean,
+    addDeleteAdm: boolean,
+    addNews: boolean
 }
 
 const initialState: InitialType = {
     userEmail: undefined,
     userDisplayName: undefined,
     userPhoto: undefined,
-    loading: true
+    loading: true,
+    addDeleteAdm: false,
+    addNews: false,
 }
 
 const userSlice = createSlice({
@@ -23,9 +27,16 @@ const userSlice = createSlice({
             state.userDisplayName = action.payload.userDisplayName;
             state.userPhoto = action.payload.userPhoto;
             state.loading = false
+        },
+        changeAdminRights: (state, action) => {
+            state.addDeleteAdm = action.payload.addDeleteAdm
+            state.addNews = action.payload.addNews
+        },
+        stopLoading: (state) => {
+            state.loading = false
         }
     }
 })
 
-export const {changeUser} = userSlice.actions
+export const {changeUser, stopLoading, changeAdminRights} = userSlice.actions
 export default userSlice.reducer

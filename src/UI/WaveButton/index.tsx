@@ -11,3 +11,4 @@ const WaveButton: FC<IWaveButton> = ({onclick, children, color = 'rgb(196, 137, 
 	);
 }
 export default WaveButton
+export type {ICustomCSS}

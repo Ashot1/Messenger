@@ -1,0 +1,10 @@
+@mixin loadingText
+  border-radius: 15px
+  color: transparent !important
+  animation: loadingAnim 1s linear infinite alternate
+
+  @keyframes loadingAnim
+    from
+      background: rgb(202, 202, 202)
+    to
+      background: rgba(105,105,105,1)

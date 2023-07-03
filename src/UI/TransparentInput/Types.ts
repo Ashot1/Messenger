@@ -1,4 +1,4 @@
-import {ChangeEvent, HTMLAttributes} from "react";
+import {ChangeEvent, DetailedHTMLProps} from "react";
 import {Path, RegisterOptions, UseFormRegister} from "react-hook-form";
 
 export type Inputs = {
@@ -7,7 +7,7 @@ export type Inputs = {
     Password: string
 }
 
-export interface ITransparentInput extends HTMLAttributes<HTMLInputElement>{
+export interface ITransparentInput extends DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>{
     setValue?: (e: ChangeEvent<HTMLInputElement>) => void,
     Value?: string,
     TypeI?: string,

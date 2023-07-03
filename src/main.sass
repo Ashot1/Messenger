@@ -26,17 +26,31 @@ body
 \:root[data-theme='darkmode']
   --mainBGcolor: rgb(19, 19, 19)
   --primaryBGcolor: rgb(19, 19, 19)
+  --primaryBGcolorvar2: rgb(19, 19, 19)
   --hoverColor: rgba(255,255,255,0.1)
+  --transparetColor: rgba( 255, 255, 255, 0.05 )
   --secondaryColor: rgb(32, 35, 42)
   --invertFilter: invert(90%)
   --MainColor: white
+  --InvertMainColor: black
   --redColor: rgba(255,26,21,0.67)
   @media (max-width: 768px)
     --mainBGcolor: rgb(32, 35, 42)
 
 \:root[data-theme='lightmode']
+  --mainBGcolor: #e3e0de
+  --primaryBGcolor: #e3e0de
+  --secondaryColor: #ededed
+  --primaryBGcolorvar2: #aea7a9
   --invertFilter: invert(0)
-  --hoverColor: #4487a2
+  --hoverColor: rgba(0,0,0,0.2)
+  --InvertMainColor: white
+  --MainColor: black
+  --redColor: rgba(255,26,21,0.87)
+  --transparetColor: rgb(0, 0, 0, 0.05)
+  @media (max-width: 768px)
+    --mainBGcolor: #ededed
+
 
 
 //linear-gradient(90deg, #006880 10.79%, #005366 87.08%);

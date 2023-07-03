@@ -4,9 +4,11 @@ import SettingsBlock from "../../ENTITY/SettingsChangeBlock";
 import {useForm} from "react-hook-form";
 import {Inputs} from "../../UI/TransparentInput";
 import {auth} from "../../firebaseInit.ts";
-import {updatePassword} from "firebase/auth";
+import {updateEmail, updatePassword} from "firebase/auth";
 import PromiseNotification from "../../UI/PromiseNotification";
 import SettingsDefaultBlock from "../../UI/SettingsDefaultBlock";
+import {changeUser} from "../../STORE/userSlice.ts";
+import {useAppDispatch, useAppSelector} from "../../HOOK";
 
 
 const Password: FC = () => {
@@ -14,7 +16,9 @@ const Password: FC = () => {
 	const {register,
 		formState: {errors},
 		handleSubmit,
-		reset} = useForm<Inputs>({mode: "onSubmit"})
+		reset} = useForm<Inputs>({mode: "onSubmit"}),
+		dispatch = useAppDispatch(),
+		userSelector = useAppSelector(state => state.user)
 
 	const ChangePassword = (data: Inputs) => {
 		PromiseNotification({
@@ -27,6 +31,19 @@ const Password: FC = () => {
 				return <b>Пароль успешно изменен</b>
 			}
 		})
+	}
+
+	const ChangeEmail = (data: Inputs) => {
+		PromiseNotification({
+			successFunction: () => {
+				reset()
+				return <b>Email успешно изменен</b>
+			},
+			mainFunction: () => {
+				if(!auth.currentUser) return Promise.reject(new Error)
+				return updateEmail(auth.currentUser, data.Email)
+			}
+		}).then(() => dispatch(changeUser({userEmail: data.Email, userDisplayName: userSelector.userDisplayName, userPhoto: userSelector.userPhoto})))
 	}
 
 	const condition = auth.currentUser?.providerData[0].providerId === 'password'
@@ -43,8 +60,18 @@ const Password: FC = () => {
 				register={register}
 				type="text"
 				SubmitFunction={ChangePassword}/>
-			:	<SettingsDefaultBlock>Вы вошли с помощью {auth.currentUser?.providerData[0].providerId} и не можете изменить пароль</SettingsDefaultBlock>
+			:	<SettingsDefaultBlock><p className={styles.cantChangeText}>Вы вошли с помощью {auth.currentUser?.providerData[0].providerId} и не можете изменить пароль</p></SettingsDefaultBlock>
 			}
+			{condition ? <SettingsBlock
+					SubmitFunction={ChangeEmail}
+					handleSubmit={handleSubmit}
+					register={register}
+					options={{required: true}}
+					errors={errors.Email}
+					label="Email"
+					title="Изменить email"
+					type="text"/>
+				: <SettingsDefaultBlock><p className={styles.cantChangeText}>Вы вошли с помощью {auth.currentUser?.providerData[0].providerId} и не можете изменить email</p></SettingsDefaultBlock>}
 		</div>
 )
 }

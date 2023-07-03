@@ -3,5 +3,6 @@ export interface IFullUserInfo {
     lastSignIn: string,
     signMethod?: string,
     Needversion?: boolean,
-    loading?: boolean
+    loading?: boolean,
+    adminRights: string
 }

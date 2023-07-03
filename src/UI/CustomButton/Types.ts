@@ -1,6 +1,6 @@
-import {ReactNode} from "react";
+import {HTMLAttributes, ReactNode} from "react";
 
-export interface ICustomButton{
+export interface ICustomButton extends HTMLAttributes<HTMLButtonElement>{
     onclick?: () => void,
     children: ReactNode,
     dopClass?: string,

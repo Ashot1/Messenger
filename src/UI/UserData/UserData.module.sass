@@ -1,3 +1,5 @@
+@import "../../mixins"
+
 .UserData
   span
     color: var(--MainColor)
@@ -13,15 +15,9 @@
       padding: 0
       margin: 0
       &:nth-child(2)
-        color: rgba(255,255,255,0.54)
+        color: var(--MainColor)
+        opacity: .5
 
 .LoadingText
   p
-    color: transparent !important
-    animation: loadingAnim 1s linear infinite alternate
-
-@keyframes loadingAnim
-  from
-    background: rgb(202, 202, 202)
-  to
-    background: rgba(105,105,105,1)
+    @include loadingText

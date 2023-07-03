@@ -4,7 +4,12 @@ import {IFullUserInfo} from "./Types.ts";
 import {version} from '../../../package.json'
 import SettingsDefaultBlock from "../../UI/SettingsDefaultBlock";
 
-const FullUserInfo: FC<IFullUserInfo> = ({lastSignIn, signMethod, createdAt, Needversion, loading= false}) => {
+const FullUserInfo: FC<IFullUserInfo> = ({lastSignIn,
+											 signMethod,
+											 createdAt,
+											 Needversion,
+											 adminRights,
+											 loading= false}) => {
 	return (
 		<SettingsDefaultBlock>
 			<div className={loading ? styles.loading : styles.UserInfo}>
@@ -13,6 +18,7 @@ const FullUserInfo: FC<IFullUserInfo> = ({lastSignIn, signMethod, createdAt, Nee
 				<p>Последний вход в аккаунт: </p> <span>{!loading && lastSignIn}</span>
 				<hr/>
 				{signMethod &&<p>Метод входа: {!loading && (signMethod === 'password' ? 'Email и пароль' : signMethod)}</p>}
+				<p>Права администратора: {adminRights}</p>
 				{Needversion && <p>Версия приложения: {version}</p>}
 			</div>
 		</SettingsDefaultBlock>

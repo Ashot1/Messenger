@@ -1,10 +1,10 @@
 import styles from './BasicSettings.module.sass'
-import { FC } from 'react'
+import {FC, useState} from 'react'
 import SettingsBlock from "../../ENTITY/SettingsChangeBlock";
 import {useForm} from "react-hook-form";
 import {Inputs} from "../../UI/TransparentInput";
 import {auth, FBstorage} from "../../firebaseInit.ts";
-import {updateEmail, updateProfile} from "firebase/auth";
+import {updateProfile} from "firebase/auth";
 import {changeUser} from "../../STORE/userSlice.ts";
 import {useAppDispatch, useAppSelector, useLocaleDate} from "../../HOOK";
 import PromiseNotification from "../../UI/PromiseNotification";
@@ -12,7 +12,6 @@ import FullUserInfo from "../../ENTITY/FullUserInfo";
 import SettingsSwitchBlock from "../../ENTITY/SettingsSwitchBlock";
 import {ref, deleteObject} from "firebase/storage";
 import toast from "react-hot-toast";
-import SettingsDefaultBlock from "../../UI/SettingsDefaultBlock";
 
 const BasicSettings: FC = () => {
 
@@ -22,7 +21,8 @@ const BasicSettings: FC = () => {
 		reset} = useForm<Inputs>({mode: "onSubmit"}),
 		dispatch = useAppDispatch(),
 		ToLocale = useLocaleDate(),
-		userSelector = useAppSelector(state => state.user)
+		userSelector = useAppSelector(state => state.user),
+		[Theme, setTheme] = useState<string | null>(localStorage.getItem("theme"))
 
 	const ChangeName = (data: Inputs) => {
 		PromiseNotification({
@@ -36,19 +36,6 @@ const BasicSettings: FC = () => {
 			}
 		}).then(() => dispatch(changeUser({userEmail: userSelector.userEmail, userDisplayName: data.Name, userPhoto: userSelector.userPhoto})))
 
-	}
-
-	const ChangeEmail = (data: Inputs) => {
-		PromiseNotification({
-			successFunction: () => {
-							reset()
-							return <b>Email успешно изменен</b>
-						},
-			mainFunction: () => {
-				if(!auth.currentUser) return Promise.reject(new Error)
-				return updateEmail(auth.currentUser, data.Email)
-			}
-		}).then(() => dispatch(changeUser({userEmail: data.Email, userDisplayName: userSelector.userDisplayName, userPhoto: userSelector.userPhoto})))
 	}
 
 	const DeleteAvatar = () => {
@@ -81,11 +68,19 @@ const BasicSettings: FC = () => {
 	const createdAt = auth.currentUser?.metadata.creationTime,
 		lastSignIn = auth.currentUser?.metadata.lastSignInTime,
 		providerID = auth.currentUser?.providerData[0].providerId,
-		condition = auth.currentUser?.providerData[0].providerId === 'password'
+		adminRights = userSelector.addNews ? 'наивысшие'
+			: userSelector.addDeleteAdm ? 'базовые'
+				: 'отсутствуют'
 
 	if(createdAt && lastSignIn && providerID) return (
 		<div className={styles.BasicSettings}>
-			<FullUserInfo lastSignIn={ToLocale(lastSignIn)} createdAt={ToLocale(createdAt)} signMethod={providerID} Needversion loading={userSelector.loading}/>
+			<FullUserInfo
+				lastSignIn={ToLocale(lastSignIn)}
+				createdAt={ToLocale(createdAt)}
+				signMethod={providerID}
+				Needversion
+				loading={userSelector.loading}
+				adminRights={adminRights}/>
 			<SettingsBlock
 				SubmitFunction={ChangeName}
 				handleSubmit={handleSubmit}
@@ -95,19 +90,17 @@ const BasicSettings: FC = () => {
 				label="Name"
 				title="Изменить имя"
 				type="text"/>
-			{condition ? <SettingsBlock
-				SubmitFunction={ChangeEmail}
-				handleSubmit={handleSubmit}
-				register={register}
-				options={{required: true}}
-				errors={errors.Email}
-				label="Email"
-				title="Изменить email"
-				type="text"/>
-			: <SettingsDefaultBlock><p className={styles.cantChangeText}>Вы вошли с помощью {auth.currentUser?.providerData[0].providerId} и не можете изменить email</p></SettingsDefaultBlock>}
 			<SettingsSwitchBlock action={DeleteAvatar}
 			title="Удалить фото профиля"
 			dopText="Вы уверены, что хотите удалить аватарку? Восстановить её будет невозможно"/>
+			<SettingsSwitchBlock action={() => {
+				const condition = Theme === 'darkmode' ? 'lightmode' : 'darkmode'
+				localStorage.setItem('theme', condition)
+				setTheme(condition)
+				document.documentElement.dataset.theme = condition
+			}}
+			title="Изменить тему"
+			dopText={`Изменить тему на ${Theme === 'darkmode' ? 'светлую' : 'темную'}`}/>
 		</div>
 	)
 }

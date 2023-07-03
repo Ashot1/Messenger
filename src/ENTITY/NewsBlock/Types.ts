@@ -1,5 +1,6 @@
 export interface INewsBlock {
     title: string,
     content: string[],
-    dopClass?: string
+    dopClass?: string,
+    createAt: string
 }

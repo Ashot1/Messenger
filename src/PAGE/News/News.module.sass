@@ -1,3 +1,5 @@
+@import "../../mixins"
+
 .News
   display: flex
   justify-content: center
@@ -17,11 +19,7 @@
 
 .loaderNews
   color: transparent !important
-  h1, li
-    animation: loadingAnim 1s linear infinite alternate
-
-@keyframes loadingAnim
-  from
-    background: rgb(202, 202, 202)
-  to
-    background: rgba(105,105,105,1)
+  h1, li, p
+    @include loadingText
+  ul
+    padding-right: 40px
