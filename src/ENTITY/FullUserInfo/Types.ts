@@ -4,5 +4,6 @@ export interface IFullUserInfo {
     signMethod?: string,
     Needversion?: boolean,
     loading?: boolean,
-    adminRights: string
+    adminRights: string,
+    email?: string
 }

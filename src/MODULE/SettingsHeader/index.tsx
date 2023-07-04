@@ -5,17 +5,16 @@ import SettingsMenu from "../../ENTITY/SettingsMenu";
 import CustomButton from "../../UI/CustomButton";
 import ModalWindow from "../../UI/ModalWindow";
 import {useAppDispatch, useAppSelector} from "../../HOOK";
-import {useNavigate} from "react-router-dom";
-import {auth, FBstorage} from "../../firebaseInit.ts";
-import {deleteUser, updateProfile} from "firebase/auth";
+import {auth, db, FBstorage} from "../../firebaseInit.ts";
+import {deleteUser} from "firebase/auth";
 import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
 import {changeUser} from "../../STORE/userSlice.ts";
+import {doc, deleteDoc, updateDoc} from "firebase/firestore";
 
 const SettingsHeader: FC = () => {
 
 	const user = useAppSelector(state => state.user),
 		[Modal, setModal] = useState(false),
-		Navigate = useNavigate(),
 		[Error, setError] = useState(''),
 		InputFile = useRef<HTMLInputElement>(null),
 		dispatcher = useAppDispatch()
@@ -23,12 +22,15 @@ const SettingsHeader: FC = () => {
 	const userDelete = () => {
 		const currentUser = auth.currentUser
 		if(currentUser)
-			deleteUser(currentUser).then(() => {
-				Navigate('/auth')
+			deleteUser(currentUser).then(async () => {
+				deleteDoc(doc(db, "Users", currentUser.uid)).then(() => {
+					window.location.reload()
+				}).catch(e => setError(e.message))
 			}).catch((e) => {
 				if(e.message === 'Firebase: Error (auth/requires-recent-login).') return setError('Чтобы удалить пользователя необходимо перезайти на аккаунт')
 				setError(e.message)
 			});
+
 	}
 
 	const changeAvatar = () => {
@@ -41,10 +43,8 @@ const SettingsHeader: FC = () => {
 			uploadBytes(storageref, e.target.files[0]).then(() => {
 				getDownloadURL(storageref).then(response => {
 					if(auth.currentUser)
-						updateProfile(auth.currentUser, {
-							photoURL: response
-						}).then(() => {
-							dispatcher(changeUser({userEmail: user.userEmail, userDisplayName: user.userDisplayName, userPhoto: response}))
+						updateDoc(doc(db, "Users", auth.currentUser.uid), {photo: response}).then(() => {
+							dispatcher(changeUser({userEmail: user.userEmail, userDisplayName: user.userDisplayName, userPhoto: response, tag: user.tag}))
 						})
 				})
 			})
@@ -53,7 +53,7 @@ const SettingsHeader: FC = () => {
 	return (
 		<div className={styles.Wrapper}>
 			<input type="file" style={{display: "none"}} ref={InputFile} onChange={uploadAvatar} accept="image/*"/>
-			<SettingsInfo email={user.userEmail} name={user.userDisplayName} photo={user.userPhoto} click={changeAvatar} loading={user.loading}>
+			<SettingsInfo tag={`@${user.tag}`} name={user.userDisplayName} photo={user.userPhoto} click={changeAvatar} loading={user.loading}>
 				<>
 					<CustomButton dopClass={styles.Delete} onclick={() => setModal(true)}>Удалить аккаунт</CustomButton>
 					{Modal && <ModalWindow width={50} bgClick={() => setModal(false)}>

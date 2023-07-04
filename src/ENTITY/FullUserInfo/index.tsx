@@ -9,10 +9,13 @@ const FullUserInfo: FC<IFullUserInfo> = ({lastSignIn,
 											 createdAt,
 											 Needversion,
 											 adminRights,
+											 email,
 											 loading= false}) => {
 	return (
 		<SettingsDefaultBlock>
 			<div className={loading ? styles.loading : styles.UserInfo}>
+				<p>Email: </p> <span>{!loading && email}</span>
+				<hr/>
 				<p>Зарегистрирован: </p> <span>{!loading && createdAt}</span>
 				<hr/>
 				<p>Последний вход в аккаунт: </p> <span>{!loading && lastSignIn}</span>

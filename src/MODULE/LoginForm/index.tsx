@@ -22,12 +22,12 @@ const LoginForm: FC = () => {
 
 	return (
 		<form autoComplete="on" className={styles.form} onSubmit={handleSubmit(Login)}>
-			<FormField title="Email" type="email" register={register} label="Email" errors={errors.Email} options={{required: true}}/>
-			<FormField title="Пароль" type="password" register={register} label="Password" errors={errors.Password} options={{required: true}}/>
+			<FormField title="Email" type="email" register={register} label="Email" errors={errors.Email} options={{required: true}} dopClass={styles.ColorWhite}/>
+			<FormField title="Пароль" type="password" register={register} label="Password" errors={errors.Password} options={{required: true}} dopClass={styles.ColorWhite}/>
 			<CustomButton isLink url="/auth/reset" dopClass={styles.reset}>Сбросить пароль</CustomButton>
 			<p style={{color: 'red'}}>{Error}</p>
 			<div className={styles.ButtonPos}>
-				<WaveButton>Войти</WaveButton>
+				<WaveButton dopClass={styles.ColorWhiteWithoutBorder}>Войти</WaveButton>
 			</div>
 		</form>
 	)

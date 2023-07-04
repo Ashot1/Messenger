@@ -4,18 +4,22 @@ type InitialType = {
     userEmail: string | undefined,
     userDisplayName: string | undefined,
     userPhoto: string | undefined,
+    tag: string | undefined,
     loading: boolean,
-    addDeleteAdm: boolean,
-    addNews: boolean
+    addAdmin: boolean,
+    addNews: boolean,
+    ban: boolean
 }
 
 const initialState: InitialType = {
     userEmail: undefined,
     userDisplayName: undefined,
     userPhoto: undefined,
+    tag: undefined,
     loading: true,
-    addDeleteAdm: false,
+    addAdmin: false,
     addNews: false,
+    ban: false
 }
 
 const userSlice = createSlice({
@@ -26,11 +30,14 @@ const userSlice = createSlice({
             state.userEmail = action.payload.userEmail;
             state.userDisplayName = action.payload.userDisplayName;
             state.userPhoto = action.payload.userPhoto;
+            state.tag = action.payload.tag;
             state.loading = false
         },
         changeAdminRights: (state, action) => {
-            state.addDeleteAdm = action.payload.addDeleteAdm
+            state.addAdmin = action.payload.addDeleteAdm
             state.addNews = action.payload.addNews
+            state.ban = action.payload.ban
+            state.loading = false
         },
         stopLoading: (state) => {
             state.loading = false

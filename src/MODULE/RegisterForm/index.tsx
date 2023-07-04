@@ -1,48 +1,66 @@
 import {FC, useState} from 'react'
 import FormField from "../../ENTITY/FormField";
 import WaveButton from "../../UI/WaveButton";
-import {createUserWithEmailAndPassword, updateProfile} from "firebase/auth";
-import {auth} from "../../firebaseInit.ts";
-import {useNavigate} from "react-router-dom";
+import {createUserWithEmailAndPassword} from "firebase/auth";
+import {collection, doc, getDocs, query, setDoc, where} from "firebase/firestore";
+import {auth, db} from "../../firebaseInit.ts";
 import styles from "./RegisterForm.module.sass"
 import {useForm} from "react-hook-form";
 import {Inputs} from "../../UI/TransparentInput";
 
 const RegisterForm: FC = () => {
 	const [Error, setError] = useState(""),
-		Navigate = useNavigate(),
 		{
 			register,
 			handleSubmit,
 			formState: {errors},
 		} = useForm<Inputs>({mode: "onBlur"})
 
-	const CreateUser = (data: Inputs) => {
+	const CreateUser = async (data: Inputs) => {
+		const tagDocument = await getDocs(query(collection(db, "Users"), where("tag", "==", data.tag)))
+		if(tagDocument.size) return setError("Этот id уже занят")
 		createUserWithEmailAndPassword(auth, data.Email, data.Password)
-			.then(response => {
-				updateProfile(response.user, {
-					displayName: data.Name
-				}).then(() => {
-					Navigate('/')
-					window.location.reload()
-				}).catch(e => setError(e.message))
+			.then(async response => {
+				await setDoc(doc(db, "Users", response.user.uid),
+					{
+						name: data.Name,
+						photo: '',
+						tag: data.tag,
+						addAdmin: false,
+						addNews: false,
+						ban: false
+					}
+				)
 			})
-			.catch(e => setError(e.message.split('/')[1].slice(0, -2)))
+			.catch(e => setError(e.message))
 	}
 
 	return (
 		<form autoComplete="on" className={styles.form} onSubmit={handleSubmit(CreateUser)}>
-			<FormField title="Имя и фамилия" register={register} label="Name" errors={errors.Name} options={{required: true}}/>
-			<FormField title="Email" type="email" register={register} label="Email" errors={errors.Email} options={{required: true}}/>
+			<FormField title="Имя и фамилия" register={register} label="Name" errors={errors.Name} options={{required: true}} dopClass={styles.ColorWhite}/>
+			<FormField title="Email" type="email" register={register} label="Email" errors={errors.Email} options={{required: true}} dopClass={styles.ColorWhite}/>
+			<FormField title="Уникальный id"
+					   type="text"
+					   register={register}
+					   label="tag"
+					   errors={errors.tag}
+					   options={{
+						   required: true,
+						   minLength: {value: 5, message: "Минимум 5 символов"},
+						   maxLength: {value: 5, message: "Максимум 5 символов"},
+						   pattern: {value: /^[a-zA-Z0-9]+$/, message: "В id должны присутствовать только буквы и цифры"}
+					   }}
+					   dopClass={styles.ColorWhite}/>
 			<FormField title="Пароль"
 					   type="password"
 					   register={register}
 					   label="Password"
 					   errors={errors.Password}
-					   options={{required: true, minLength: { value: 6, message: 'Минимум 6 символов'} }}/>
+					   options={{required: true, minLength: { value: 6, message: 'Минимум 6 символов'} }}
+					   dopClass={styles.ColorWhite}/>
 			<p style={{color: 'red'}}>{Error}</p>
 			<div className={styles.ButtonPos}>
-				<WaveButton>Зарегистрироваться</WaveButton>
+				<WaveButton dopClass={styles.ColorWhiteWithoutBorder}>Зарегистрироваться</WaveButton>
 			</div>
 		</form>
 	)

@@ -5,4 +5,5 @@ export interface IFormField extends Pick<ITransparentInput, "label" | "register"
     title: string,
     type?: string,
     errors?: FieldError,
+    dopClass?: string
 }

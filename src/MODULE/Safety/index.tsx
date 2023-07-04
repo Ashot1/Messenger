@@ -43,7 +43,7 @@ const Password: FC = () => {
 				if(!auth.currentUser) return Promise.reject(new Error)
 				return updateEmail(auth.currentUser, data.Email)
 			}
-		}).then(() => dispatch(changeUser({userEmail: data.Email, userDisplayName: userSelector.userDisplayName, userPhoto: userSelector.userPhoto})))
+		}).then(() => dispatch(changeUser({userEmail: data.Email, userDisplayName: userSelector.userDisplayName, userPhoto: userSelector.userPhoto, tag: userSelector.tag})))
 	}
 
 	const condition = auth.currentUser?.providerData[0].providerId === 'password'

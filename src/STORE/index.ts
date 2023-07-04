@@ -3,11 +3,12 @@ import menuReducer from './menuSlice.ts'
 import userReducer from './userSlice.ts'
 import {firebaseapi} from "./firebaseApi.ts";
 
+
 const store = configureStore({
     reducer: {
         menu: menuReducer,
         user: userReducer,
-        [firebaseapi.reducerPath]: firebaseapi.reducer
+        [firebaseapi.reducerPath]: firebaseapi.reducer,
     },
     middleware: getDefaultMiddleware => getDefaultMiddleware().concat(firebaseapi.middleware)
 })

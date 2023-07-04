@@ -9,27 +9,26 @@ export const UserChecker = (dispatcher: AppDispatch) => useEffect(() => {
     const Unsubscribe = onAuthStateChanged(auth, async user => {
         if(!auth.currentUser?.uid) return dispatcher(stopLoading())
 
-        const docRef = doc(db, "AdminRights", auth.currentUser.uid)
+        const docRef = doc(db, "Users", auth.currentUser.uid)
         const document = await getDoc(docRef)
 
-        const AdminRights = document.data()
+        const UserData = document.data()
+
+        if(!UserData) return dispatcher(stopLoading())
 
         const saveUser = (photo: string | null) => {
-            dispatcher(changeUser({userEmail: user?.email, userDisplayName: user?.displayName, userPhoto: photo}))
-            if(AdminRights) {
-                dispatcher(changeAdminRights({addDeleteAdm: AdminRights.AddDeleteAdm, addNews: AdminRights.AddNews}))
-            }
+            dispatcher(changeUser({userEmail: user?.email, userDisplayName: UserData.name, userPhoto: photo, tag: UserData.tag}))
+            dispatcher(changeAdminRights({addAdmin: UserData.addAdmin, addNews: UserData.addNews, ban: UserData.ban}))
         }
 
-        if(user?.photoURL){
-            let img = new Image()
-            img.src = user.photoURL
-            img.onload = () => {
-                saveUser(user.photoURL)
-                return
-            }
+        let img = new Image()
+        img.src = UserData.photo
+        img.onload = () => {
+            saveUser(UserData.photo)
+            return
         }
-        saveUser('')
+
+        saveUser(null)
     })
     return () => Unsubscribe()
 }, [dispatcher])

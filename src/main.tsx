@@ -7,6 +7,8 @@ import store from './STORE'
 import './main.sass'
 import './firebaseInit.ts'
 import {Toaster} from "react-hot-toast";
+import ContactsList from "./MODULE/ContactsList";
+import ContactsAccept from "./MODULE/ContactsAccept";
 const Messages = lazy(() => import("./PAGE/Messages"))
 const Contacts = lazy(() => import("./PAGE/Contacts"))
 const News = lazy(() => import("./PAGE/News"))
@@ -17,7 +19,7 @@ const RegisterForm = lazy(() => import("./MODULE/RegisterForm"))
 const LoginForm = lazy(() => import("./MODULE/LoginForm"))
 const BasicSettings = lazy(() => import("./MODULE/BasicSettings"))
 const Safety = lazy(() => import("./MODULE/Safety"))
-const ResetPassword = lazy(() => import("./PAGE/ResetPassword"))
+const ResetPassword = lazy(() => import("./MODULE/ResetPassword"))
 
 const router = createBrowserRouter([
     {
@@ -29,12 +31,22 @@ const router = createBrowserRouter([
                 element: <Messages />,
             },
             {
-                path: "/contacts",
-                element: <Contacts />,
-            },
-            {
                 path: "/news",
                 element: <News />,
+            },
+            {
+                path: "/contacts",
+                element: <Contacts />,
+                children: [
+                    {
+                        path: "/contacts/list",
+                        element: <ContactsList />,
+                    },
+                    {
+                        path: "/contacts/accept",
+                        element: <ContactsAccept />,
+                    },
+                ]
             },
             {
                 path: "/settings",
@@ -71,7 +83,7 @@ const router = createBrowserRouter([
             {
                 path: "/auth/reset",
                 element: <ResetPassword />,
-            },
+            }
         ]
     }
 ])

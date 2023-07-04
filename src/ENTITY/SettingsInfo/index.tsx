@@ -6,13 +6,14 @@ import {IUserInfo} from "./Types.ts";
 const SettingsInfo: FC<IUserInfo> = ({children,
 										 name,
 										 photo,
-										 email,
+										 tag,
 										 click,
 										 loading}) => {
 
 	return (
 		<div className={styles.Info}>
-			<UserData photo={photo} secondaryText={email} name={name} logoDopClass={styles.Avatar} TextDopClass={styles.Text} click={click} loading={loading}/>
+			<UserData photo={photo} secondaryText={tag} name={name} logoDopClass={styles.Avatar}
+					  TextDopClass={styles.Text} click={click} loading={loading}/>
 			<section className={styles.Actions}>
 				{children}
 			</section>

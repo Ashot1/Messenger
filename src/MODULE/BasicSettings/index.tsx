@@ -3,8 +3,7 @@ import {FC, useState} from 'react'
 import SettingsBlock from "../../ENTITY/SettingsChangeBlock";
 import {useForm} from "react-hook-form";
 import {Inputs} from "../../UI/TransparentInput";
-import {auth, FBstorage} from "../../firebaseInit.ts";
-import {updateProfile} from "firebase/auth";
+import {auth, db, FBstorage} from "../../firebaseInit.ts";
 import {changeUser} from "../../STORE/userSlice.ts";
 import {useAppDispatch, useAppSelector, useLocaleDate} from "../../HOOK";
 import PromiseNotification from "../../UI/PromiseNotification";
@@ -12,6 +11,7 @@ import FullUserInfo from "../../ENTITY/FullUserInfo";
 import SettingsSwitchBlock from "../../ENTITY/SettingsSwitchBlock";
 import {ref, deleteObject} from "firebase/storage";
 import toast from "react-hot-toast";
+import {doc, updateDoc} from "firebase/firestore";
 
 const BasicSettings: FC = () => {
 
@@ -28,18 +28,17 @@ const BasicSettings: FC = () => {
 		PromiseNotification({
 			mainFunction: () => {
 				if(!auth.currentUser) return Promise.reject(new Error)
-				return updateProfile(auth.currentUser, {displayName: data.Name})
+				return updateDoc(doc(db, "Users", auth.currentUser.uid), {name: data.Name})
 			},
 			successFunction: () => {
 				reset()
 				return <b>Имя успешно изменено</b>
 			}
-		}).then(() => dispatch(changeUser({userEmail: userSelector.userEmail, userDisplayName: data.Name, userPhoto: userSelector.userPhoto})))
+		}).then(() => dispatch(changeUser({userEmail: userSelector.userEmail, userDisplayName: data.Name, userPhoto: userSelector.userPhoto, tag: userSelector.tag})))
 
 	}
 
 	const DeleteAvatar = () => {
-		const avatar = ref(FBstorage, userSelector.userPhoto)
 		if(!userSelector.userPhoto)
 			return toast.error("У вас отсутствует фото профиля",
 			{style: {background: 'var(--primaryBGcolor)', color: 'var(--MainColor)'}, iconTheme: {primary: '#4487a2', secondary: '#fff'}})
@@ -50,16 +49,23 @@ const BasicSettings: FC = () => {
 
 			mainFunction: () => {
 				if(!auth.currentUser) return Promise.reject(new Error)
-				return deleteObject(avatar)
+				try{
+					const avatar = ref(FBstorage, userSelector.userPhoto)
+					return deleteObject(avatar)
+				} catch(e) {
+					return Promise.resolve()
+				}
 			}
 
 		}).then(() => {
-			if (auth.currentUser) updateProfile(auth.currentUser, {photoURL: null})
+			if (!auth.currentUser) return new Error("Пользователь не найден")
+			updateDoc(doc(db, 'Users', auth.currentUser.uid), {photo: ""})
 				.then(() => {
 					dispatch(changeUser({
 						userEmail: userSelector.userEmail,
 						userDisplayName: userSelector.userDisplayName,
-						userPhoto: null
+						userPhoto: null,
+						tag: userSelector.tag
 					}))
 				})
 		})
@@ -69,8 +75,9 @@ const BasicSettings: FC = () => {
 		lastSignIn = auth.currentUser?.metadata.lastSignInTime,
 		providerID = auth.currentUser?.providerData[0].providerId,
 		adminRights = userSelector.addNews ? 'наивысшие'
-			: userSelector.addDeleteAdm ? 'базовые'
-				: 'отсутствуют'
+			: userSelector.addAdmin ? 'расширенные'
+				: userSelector.ban ? 'базовые'
+					: 'отсутствуют'
 
 	if(createdAt && lastSignIn && providerID) return (
 		<div className={styles.BasicSettings}>
@@ -80,7 +87,8 @@ const BasicSettings: FC = () => {
 				signMethod={providerID}
 				Needversion
 				loading={userSelector.loading}
-				adminRights={adminRights}/>
+				adminRights={adminRights}
+				email={userSelector.userEmail}/>
 			<SettingsBlock
 				SubmitFunction={ChangeName}
 				handleSubmit={handleSubmit}

@@ -4,7 +4,8 @@ import {Path, RegisterOptions, UseFormRegister} from "react-hook-form";
 export type Inputs = {
     Name: string,
     Email: string,
-    Password: string
+    Password: string,
+    tag: string
 }
 
 export interface ITransparentInput extends DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>{

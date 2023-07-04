@@ -10,11 +10,12 @@ const FormField: FC<IFormField> = ({
 									   label,
 									   errors,
 									   options,
+									   dopClass,
 									   ...props}) => {
 	return (
 		<label className={styles.label}>
 			{title}	<span style={{color: 'red', margin: 0}}>{errors && '*'}</span>
-			<TransparentInput TypeI={type} dopClass={styles.input} register={register} options={options} label={label} {...props}/>
+			<TransparentInput TypeI={type} dopClass={`${styles.input} ${dopClass}`} register={register} options={options} label={label} {...props}/>
 			<p style={{color: 'red', margin: 0}}>{errors?.message}</p>
 		</label>
 	)

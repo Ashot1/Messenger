@@ -33,9 +33,10 @@ const ResetPassword: FC = () => {
 					   errors={errors.Email}
 					   label="Email" register={register}
 					   options={{required: true}}
-					   type="email"/>
+					   type="email"
+					   dopClass={styles.ColorWhite}/>
 			<div className={styles.ResetBtnPosition}>
-				<WaveButton>Сбросить</WaveButton>
+				<WaveButton dopClass={styles.ColorWhiteWithoutBorder}>Сбросить</WaveButton>
 			</div>
 		</form>
 	)
