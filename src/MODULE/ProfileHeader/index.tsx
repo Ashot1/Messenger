@@ -5,6 +5,7 @@ import {IProfileHeader} from "./Types.ts";
 import {doc, getDoc} from "firebase/firestore";
 import {db} from "../../firebaseInit.ts";
 import ProfileFriendButtons from "../../ENTITY/ProfileFriendButtons";
+import BorderedButton from "../../UI/BorderedButton";
 
 export type UserInfo = {
 	name: string,
@@ -37,7 +38,12 @@ const ProfileHeader: FC<IProfileHeader> = ({id}) => {
 		return(
 			<div className={styles.Wrapper}>
 				<SettingsInfo tag="@12345" photo={undefined} name="Вазген" loading={Loading}>
-					<p></p>
+					<BorderedButton
+						BGColor="transparent"
+						color="transparent"
+						dopClass={styles.LoadingButton}>
+						Удалить из контактов
+					</BorderedButton>
 				</SettingsInfo>
 			</div>
 		)
