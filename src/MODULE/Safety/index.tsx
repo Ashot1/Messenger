@@ -4,11 +4,13 @@ import SettingsBlock from "../../ENTITY/SettingsChangeBlock";
 import {useForm} from "react-hook-form";
 import {Inputs} from "../../UI/TransparentInput";
 import {auth} from "../../firebaseInit.ts";
-import {updateEmail, updatePassword} from "firebase/auth";
+import {updateEmail} from "firebase/auth";
 import PromiseNotification from "../../UI/PromiseNotification";
-import SettingsDefaultBlock from "../../UI/SettingsDefaultBlock";
 import {changeUser} from "../../STORE/userSlice.ts";
 import {useAppDispatch, useAppSelector} from "../../HOOK";
+import SettingsSwitchBlock from "../../ENTITY/SettingsSwitchBlock";
+import {ChangePassword, SendVerifyMessage} from "./Functions.tsx";
+import CheckProvider from "../../HOC/CheckProvider";
 
 
 const Password: FC = () => {
@@ -20,19 +22,6 @@ const Password: FC = () => {
 		dispatch = useAppDispatch(),
 		userSelector = useAppSelector(state => state.user)
 
-	const ChangePassword = (data: Inputs) => {
-		PromiseNotification({
-			mainFunction: () => {
-				if(!auth.currentUser) return Promise.reject(new Error)
-				return updatePassword(auth.currentUser, data.Password)
-			},
-			successFunction: () => {
-				reset()
-				return <b>Пароль успешно изменен</b>
-			}
-		})
-	}
-
 	const ChangeEmail = (data: Inputs) => {
 		PromiseNotification({
 			successFunction: () => {
@@ -40,29 +29,26 @@ const Password: FC = () => {
 				return <b>Email успешно изменен</b>
 			},
 			mainFunction: () => {
-				if(!auth.currentUser) return Promise.reject(new Error)
+				if(!auth.currentUser) return Promise.reject(new Error('Пользователь не найден'))
 				return updateEmail(auth.currentUser, data.Email)
 			}
-		}).then(() => dispatch(changeUser({userEmail: data.Email, userDisplayName: userSelector.userDisplayName, userPhoto: userSelector.userPhoto, tag: userSelector.tag})))
+		}).then(() => dispatch(changeUser(
+			{userEmail: data.Email, userDisplayName: userSelector.userDisplayName, userPhoto: userSelector.userPhoto, tag: userSelector.tag, uid: userSelector.uid}
+		)))
 	}
 
 	const condition = auth.currentUser?.providerData[0].providerId === 'password'
 
-	return (
+	if(auth.currentUser) return (
 		<div className={styles.safetyContent}>
-			{condition
-				? <SettingsBlock
-				handleSubmit={handleSubmit}
-				title="Изменить пароль"
-				label="Password"
-				options={{required: true, minLength: {value: 6, message: "Минимум 6 символов"}}}
-				errors={errors.Password}
-				register={register}
-				type="text"
-				SubmitFunction={ChangePassword}/>
-			:	<SettingsDefaultBlock><p className={styles.cantChangeText}>Вы вошли с помощью {auth.currentUser?.providerData[0].providerId} и не можете изменить пароль</p></SettingsDefaultBlock>
-			}
-			{condition ? <SettingsBlock
+			<CheckProvider providerID={auth.currentUser.providerData[0].providerId} condition={condition} dopText="не можете изменить пароль">
+				<SettingsSwitchBlock action={ChangePassword}
+									 title="Изменить пароль"
+									 dopText="Вам отправиться письмо для изменения пароля на электронную почту"/>
+			</CheckProvider>
+
+			<CheckProvider providerID={auth.currentUser.providerData[0].providerId} condition={condition} dopText="не можете изменить email">
+				<SettingsBlock
 					SubmitFunction={ChangeEmail}
 					handleSubmit={handleSubmit}
 					register={register}
@@ -71,7 +57,14 @@ const Password: FC = () => {
 					label="Email"
 					title="Изменить email"
 					type="text"/>
-				: <SettingsDefaultBlock><p className={styles.cantChangeText}>Вы вошли с помощью {auth.currentUser?.providerData[0].providerId} и не можете изменить email</p></SettingsDefaultBlock>}
+			</CheckProvider>
+
+			<CheckProvider providerID={auth.currentUser.providerData[0].providerId} condition={condition} dopText="должны подтверждать email там">
+				<SettingsSwitchBlock action={SendVerifyMessage}
+									 title="Подтвердить email"
+									 dopText="Вам отправиться письмо с подтверждением на электронную почту"/>
+			</CheckProvider>
+
 		</div>
 )
 }

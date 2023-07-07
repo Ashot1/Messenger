@@ -28,7 +28,15 @@ const RegisterForm: FC = () => {
 						tag: data.tag,
 						addAdmin: false,
 						addNews: false,
-						ban: false
+						ban: false,
+						banList: [],
+						friendList: [],
+						acceptList: [],
+						posts: [],
+						profileSettings: {
+							canAddToFriends: true,
+							canOtherMessage: true,
+						}
 					}
 				)
 			})
@@ -37,7 +45,12 @@ const RegisterForm: FC = () => {
 
 	return (
 		<form autoComplete="on" className={styles.form} onSubmit={handleSubmit(CreateUser)}>
-			<FormField title="Имя и фамилия" register={register} label="Name" errors={errors.Name} options={{required: true}} dopClass={styles.ColorWhite}/>
+			<FormField title="Имя и фамилия"
+					   register={register}
+					   label="Name"
+					   errors={errors.Name}
+					   options={{required: true, minLength: {value: 3, message: "Минимум 3 символа"}, maxLength: {value: 40, message: "Максимум 40 символов"}}}
+					   dopClass={styles.ColorWhite}/>
 			<FormField title="Email" type="email" register={register} label="Email" errors={errors.Email} options={{required: true}} dopClass={styles.ColorWhite}/>
 			<FormField title="Уникальный id"
 					   type="text"

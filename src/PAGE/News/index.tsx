@@ -1,11 +1,12 @@
 import styles from './News.module.sass'
 import { FC } from 'react'
 import NewsBlock from "../../ENTITY/NewsBlock";
-import {newsType, useGetNewsQuery} from "../../STORE/firebaseApi.ts";
 import CreateNews from "../../MODULE/CreateNews";
+import {useGetNewsQuery} from "../../STORE/firebaseAPI2.ts";
 
 const News: FC = () => {
 	const {data, isLoading} = useGetNewsQuery('')
+
 	return (
 		<div className={styles.News}>
 			<div className={styles.content}>
@@ -25,9 +26,12 @@ const News: FC = () => {
 					'Добавлена возможно изменить '
 				]} dopClass={styles.loaderNews} createAt="01.07.20203"/>}
 				{// @ts-ignore
-					data?.toReversed().map((news: newsType) => (
-					<NewsBlock key={news.title} title={news.title} content={news.content} createAt={news.createAt}/>
-				))}
+					data?.documents.toReversed().map((news) => {
+						const DBcontent = news.fields.content.arrayValue.values
+						let content: string[] = []
+						DBcontent.forEach((item: {stringValue: string}) => content.push(item.stringValue))
+						return <NewsBlock key={news.fields.title.stringValue} title={news.fields.title.stringValue} content={content} createAt={news.fields.createAt.stringValue}/>
+					})}
 			</div>
 		</div>
 	)

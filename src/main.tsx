@@ -7,25 +7,32 @@ import store from './STORE'
 import './main.sass'
 import './firebaseInit.ts'
 import {Toaster} from "react-hot-toast";
-import ContactsList from "./MODULE/ContactsList";
-import ContactsAccept from "./MODULE/ContactsAccept";
+
 const Messages = lazy(() => import("./PAGE/Messages"))
 const Contacts = lazy(() => import("./PAGE/Contacts"))
 const News = lazy(() => import("./PAGE/News"))
 const Settings = lazy(() => import("./PAGE/Settings"))
 const NotFound = lazy(() => import("./PAGE/NotFound"))
 const Authentication = lazy(() => import("./PAGE/Authentication"))
+const UserProfile = lazy(() => import("./PAGE/UserProfile"))
+
 const RegisterForm = lazy(() => import("./MODULE/RegisterForm"))
 const LoginForm = lazy(() => import("./MODULE/LoginForm"))
 const BasicSettings = lazy(() => import("./MODULE/BasicSettings"))
 const Safety = lazy(() => import("./MODULE/Safety"))
 const ResetPassword = lazy(() => import("./MODULE/ResetPassword"))
+const ContactsList = lazy(() => import("./MODULE/ContactsList"))
+const ContactsAccept = lazy(() => import("./MODULE/ContactsAccept"))
 
 const router = createBrowserRouter([
     {
         path: "/",
         element: <App />,
         children: [
+            {
+                path: "/profile/:id",
+                element: <UserProfile/>,
+            },
             {
                 path: "/messages",
                 element: <Messages />,

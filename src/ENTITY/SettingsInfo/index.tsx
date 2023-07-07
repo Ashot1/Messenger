@@ -12,7 +12,7 @@ const SettingsInfo: FC<IUserInfo> = ({children,
 
 	return (
 		<div className={styles.Info}>
-			<UserData photo={photo} secondaryText={tag} name={name} logoDopClass={styles.Avatar}
+			<UserData photo={photo} secondaryText={tag} name={name} logoDopClass={styles.HoverAvatar}
 					  TextDopClass={styles.Text} click={click} loading={loading}/>
 			<section className={styles.Actions}>
 				{children}

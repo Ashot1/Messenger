@@ -1,21 +1,23 @@
 import {createSlice} from "@reduxjs/toolkit";
 
-type InitialType = {
+export type UserInitialType = {
     userEmail: string | undefined,
     userDisplayName: string | undefined,
     userPhoto: string | undefined,
     tag: string | undefined,
+    uid: string | undefined,
     loading: boolean,
     addAdmin: boolean,
     addNews: boolean,
     ban: boolean
 }
 
-const initialState: InitialType = {
+const initialState: UserInitialType = {
     userEmail: undefined,
     userDisplayName: undefined,
     userPhoto: undefined,
     tag: undefined,
+    uid: undefined,
     loading: true,
     addAdmin: false,
     addNews: false,
@@ -31,6 +33,7 @@ const userSlice = createSlice({
             state.userDisplayName = action.payload.userDisplayName;
             state.userPhoto = action.payload.userPhoto;
             state.tag = action.payload.tag;
+            state.uid = action.payload.uid;
             state.loading = false
         },
         changeAdminRights: (state, action) => {
@@ -41,9 +44,13 @@ const userSlice = createSlice({
         },
         stopLoading: (state) => {
             state.loading = false
-        }
+        },
     }
 })
 
-export const {changeUser, stopLoading, changeAdminRights} = userSlice.actions
+export const {
+    changeUser,
+    stopLoading,
+    changeAdminRights,
+} = userSlice.actions
 export default userSlice.reducer

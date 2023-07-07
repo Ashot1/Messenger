@@ -1,7 +1,7 @@
 import styles from './SettingsHeader.module.sass'
 import {FC, useRef, useState} from 'react'
 import SettingsInfo from "../../ENTITY/SettingsInfo";
-import SettingsMenu from "../../ENTITY/SettingsMenu";
+import Menu from "../../ENTITY/Menu";
 import CustomButton from "../../UI/CustomButton";
 import ModalWindow from "../../UI/ModalWindow";
 import {useAppDispatch, useAppSelector} from "../../HOOK";
@@ -10,6 +10,7 @@ import {deleteUser} from "firebase/auth";
 import {getDownloadURL, ref, uploadBytes} from "firebase/storage";
 import {changeUser} from "../../STORE/userSlice.ts";
 import {doc, deleteDoc, updateDoc} from "firebase/firestore";
+import BorderedButton from "../../UI/BorderedButton";
 
 const SettingsHeader: FC = () => {
 
@@ -44,7 +45,9 @@ const SettingsHeader: FC = () => {
 				getDownloadURL(storageref).then(response => {
 					if(auth.currentUser)
 						updateDoc(doc(db, "Users", auth.currentUser.uid), {photo: response}).then(() => {
-							dispatcher(changeUser({userEmail: user.userEmail, userDisplayName: user.userDisplayName, userPhoto: response, tag: user.tag}))
+							dispatcher(changeUser(
+								{userEmail: user.userEmail, userDisplayName: user.userDisplayName, userPhoto: response, tag: user.tag, uid: user.uid}
+							))
 						})
 				})
 			})
@@ -55,7 +58,7 @@ const SettingsHeader: FC = () => {
 			<input type="file" style={{display: "none"}} ref={InputFile} onChange={uploadAvatar} accept="image/*"/>
 			<SettingsInfo tag={`@${user.tag}`} name={user.userDisplayName} photo={user.userPhoto} click={changeAvatar} loading={user.loading}>
 				<>
-					<CustomButton dopClass={styles.Delete} onclick={() => setModal(true)}>Удалить аккаунт</CustomButton>
+					<BorderedButton BGColor="var(--redColor)" color="#fff" reversed click={() => setModal(true)}> Удалить аккаунт</BorderedButton>
 					{Modal && <ModalWindow width={50} bgClick={() => setModal(false)}>
 						<h2 className={styles.ModalText}>Вы уверены, что хотите удалить аккаунт?</h2>
 						<p className={styles.DopInfo}>После этого аккаунт нельзя будет восстановить</p>
@@ -67,7 +70,7 @@ const SettingsHeader: FC = () => {
 					</ModalWindow>}
 				</>
 			</SettingsInfo>
-			<SettingsMenu/>
+			<Menu content={[{url: "/settings/main", title: "Основное"}, {url: "/settings/safety", title: "Безопасность"}]}/>
 		</div>
 	)
 }

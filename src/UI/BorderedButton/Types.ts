@@ -2,5 +2,10 @@ import {ReactNode} from "react";
 
 export interface IBorderedButton {
     children: string | ReactNode,
-    click?: ()  => void
+    click?: ()  => void,
+    BGColor?: string,
+    color?: string,
+    url?: string,
+    dopClass?: string,
+    reversed?: boolean
 }

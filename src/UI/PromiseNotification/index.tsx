@@ -9,11 +9,15 @@ const PromiseNotification: (args: IPromiseNotification) => Promise<ReactNode> = 
 			{
 				loading: 'Обновление...',
 				success: successFunction(),
-				error: (e: any) => <b>Ошибка: {
-					e.message === 'Firebase: Error (auth/requires-recent-login).'
-						? 'Перед изменением необходимо перезайти на аккаунт'
-						: e.message
-				}</b>,
+				error: (e: any) => {
+					let message = e.message
+					if(!message) message = e.data.error.message
+					return <b>Ошибка: {
+						message === 'Firebase: Error (auth/requires-recent-login).'
+							? 'Перед изменением необходимо перезайти на аккаунт'
+							: message
+					}</b>
+				},
 			},
 			{style: {background: 'var(--primaryBGcolor)', color: 'var(--MainColor)'}, iconTheme: {primary: '#4487a2', secondary: '#fff'}}
 		)

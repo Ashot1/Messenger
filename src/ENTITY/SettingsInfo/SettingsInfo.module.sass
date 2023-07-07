@@ -6,20 +6,30 @@
     width: auto
     display: flex
 
-.Avatar
-  position: relative
-  width: clamp(60px, 25%, 90px)
-  aspect-ratio: 1 / 1
-  @media (max-width: 620px)
-    width: 60px
-    margin-right: 10px
-  img
-    width: 100%
-    height: 100%
+.Text
+  p
+    &:nth-child(1)
+      font-size: 25px
+      @media (max-width: 768px)
+        font-size: 16px
+    &:nth-child(2)
+      @media (max-width: 768px)
+        font-size: .7em
+
+.Actions
+  display: flex
+  align-items: center
+  justify-content: flex-end
+  flex: 1
+  max-width: 40%
+  gap: 15px
+  flex-wrap: wrap
+
+.HoverAvatar
   &::before
     z-index: 1
     transition: .3s
-    content: 'Изменить'
+    content: 'Открыть'
     width: 100%
     height: 100%
     border-radius: 50%
@@ -30,24 +40,5 @@
     opacity: 0
     color: white
     font-size: 13px
-    @media (max-width: 768px)
-      font-size: 9px
-  &:hover
-    &::before
-      opacity: 1
-
-.Text
-  p
-    &:nth-child(1)
-      font-size: 25px
-      @media (max-width: 768px)
-        font-size: 16px
-    &:nth-child(2)
-      @media (max-width: 768px)
-        font-size: 10px
-
-.Actions
-  display: flex
-  align-items: center
-  justify-content: flex-end
-  flex: 1
+  @media (max-width: 768px)
+    font-size: 9px

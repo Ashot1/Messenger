@@ -3,15 +3,14 @@ import {FC, useState} from 'react'
 import SettingsBlock from "../../ENTITY/SettingsChangeBlock";
 import {useForm} from "react-hook-form";
 import {Inputs} from "../../UI/TransparentInput";
-import {auth, db, FBstorage} from "../../firebaseInit.ts";
+import {auth, db} from "../../firebaseInit.ts";
 import {changeUser} from "../../STORE/userSlice.ts";
 import {useAppDispatch, useAppSelector, useLocaleDate} from "../../HOOK";
 import PromiseNotification from "../../UI/PromiseNotification";
 import FullUserInfo from "../../ENTITY/FullUserInfo";
 import SettingsSwitchBlock from "../../ENTITY/SettingsSwitchBlock";
-import {ref, deleteObject} from "firebase/storage";
-import toast from "react-hot-toast";
-import {doc, updateDoc} from "firebase/firestore";
+import {collection, doc, getDocs, query, updateDoc, where} from "firebase/firestore";
+import {DeleteAvatar} from "./Functions.tsx";
 
 const BasicSettings: FC = () => {
 
@@ -24,51 +23,50 @@ const BasicSettings: FC = () => {
 		userSelector = useAppSelector(state => state.user),
 		[Theme, setTheme] = useState<string | null>(localStorage.getItem("theme"))
 
+	if(userSelector.loading)
+		return 	<div className={styles.BasicSettings}>
+			<FullUserInfo
+				lastSignIn="04.07.2023, 06:33:24"
+				createdAt="04.07.2023, 06:33:24"
+				signMethod="google.com"
+				adminRights="наивысшие"
+				email="tltxdmin@mail.gg"
+				dopClass={styles.Loading}/>
+		</div>
+
+
 	const ChangeName = (data: Inputs) => {
 		PromiseNotification({
 			mainFunction: () => {
-				if(!auth.currentUser) return Promise.reject(new Error)
+				if(!auth.currentUser) return Promise.reject(new Error('Пользователь не найден'))
 				return updateDoc(doc(db, "Users", auth.currentUser.uid), {name: data.Name})
 			},
 			successFunction: () => {
 				reset()
 				return <b>Имя успешно изменено</b>
 			}
-		}).then(() => dispatch(changeUser({userEmail: userSelector.userEmail, userDisplayName: data.Name, userPhoto: userSelector.userPhoto, tag: userSelector.tag})))
-
+		}).then(() => dispatch(changeUser(
+			{userEmail: userSelector.userEmail, userDisplayName: data.Name, userPhoto: userSelector.userPhoto, tag: userSelector.tag, uid: userSelector.uid}
+		)))
 	}
-
-	const DeleteAvatar = () => {
-		if(!userSelector.userPhoto)
-			return toast.error("У вас отсутствует фото профиля",
-			{style: {background: 'var(--primaryBGcolor)', color: 'var(--MainColor)'}, iconTheme: {primary: '#4487a2', secondary: '#fff'}})
+	const changeTag = (data: Inputs) => {
 		PromiseNotification({
-			successFunction: () => {
-				return <b>Фото профиля успешно удалено</b>
+			mainFunction: async () => {
+				if(!auth.currentUser) return Promise.reject(new Error('Пользователь не найден'))
+
+				const tagDocument = await getDocs(query(collection(db, "Users"), where("tag", "==", data.tag)))
+				if(tagDocument.size) return Promise.reject(new Error('этот id уже занят'))
+
+				return updateDoc(doc(db, "Users", auth.currentUser.uid), {tag: data.tag})
+
 			},
-
-			mainFunction: () => {
-				if(!auth.currentUser) return Promise.reject(new Error)
-				try{
-					const avatar = ref(FBstorage, userSelector.userPhoto)
-					return deleteObject(avatar)
-				} catch(e) {
-					return Promise.resolve()
-				}
+			successFunction: () => {
+				reset()
+				return <b>ID успешно изменен</b>
 			}
-
-		}).then(() => {
-			if (!auth.currentUser) return new Error("Пользователь не найден")
-			updateDoc(doc(db, 'Users', auth.currentUser.uid), {photo: ""})
-				.then(() => {
-					dispatch(changeUser({
-						userEmail: userSelector.userEmail,
-						userDisplayName: userSelector.userDisplayName,
-						userPhoto: null,
-						tag: userSelector.tag
-					}))
-				})
-		})
+		}).then(() => dispatch(changeUser(
+			{userEmail: userSelector.userEmail, userDisplayName: userSelector.userDisplayName, userPhoto: userSelector.userPhoto, tag: data.tag, uid: userSelector.uid}
+		)))
 	}
 
 	const createdAt = auth.currentUser?.metadata.creationTime,
@@ -79,28 +77,38 @@ const BasicSettings: FC = () => {
 				: userSelector.ban ? 'базовые'
 					: 'отсутствуют'
 
-	if(createdAt && lastSignIn && providerID) return (
+	if(createdAt && lastSignIn && providerID && userSelector.userEmail) return (
 		<div className={styles.BasicSettings}>
 			<FullUserInfo
 				lastSignIn={ToLocale(lastSignIn)}
 				createdAt={ToLocale(createdAt)}
 				signMethod={providerID}
-				Needversion
-				loading={userSelector.loading}
 				adminRights={adminRights}
-				email={userSelector.userEmail}/>
+				email={userSelector.userEmail}
+				isVerified={auth.currentUser?.emailVerified}/>
 			<SettingsBlock
 				SubmitFunction={ChangeName}
 				handleSubmit={handleSubmit}
 				register={register}
-				options={{required: true}}
+				options={{required: true, minLength: {value: 3, message: "Минимум 3 символа"}, maxLength: {value: 40, message: "Максимум 40 символов"}}}
 				errors={errors.Name}
 				label="Name"
 				title="Изменить имя"
 				type="text"/>
-			<SettingsSwitchBlock action={DeleteAvatar}
-			title="Удалить фото профиля"
-			dopText="Вы уверены, что хотите удалить аватарку? Восстановить её будет невозможно"/>
+			<SettingsBlock
+				SubmitFunction={changeTag}
+				handleSubmit={handleSubmit}
+				register={register}
+				options={{
+					required: true,
+					minLength: {value: 5, message: "Минимум 5 символов"},
+					maxLength: {value: 5, message: "Максимум 5 символов"},
+					pattern: {value: /^[a-zA-Z0-9]+$/, message: "В id должны присутствовать только буквы и цифры"}
+				}}
+				errors={errors.tag}
+				label="tag"
+				title="Изменить id"
+				type="text"/>
 			<SettingsSwitchBlock action={() => {
 				const condition = Theme === 'darkmode' ? 'lightmode' : 'darkmode'
 				localStorage.setItem('theme', condition)
@@ -109,6 +117,9 @@ const BasicSettings: FC = () => {
 			}}
 			title="Изменить тему"
 			dopText={`Изменить тему на ${Theme === 'darkmode' ? 'светлую' : 'темную'}`}/>
+			<SettingsSwitchBlock action={() => DeleteAvatar(userSelector, dispatch)}
+			title="Удалить фото профиля"
+			dopText="Вы уверены, что хотите удалить аватарку? Восстановить её будет невозможно"/>
 		</div>
 	)
 }

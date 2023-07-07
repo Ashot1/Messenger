@@ -3,7 +3,7 @@ import { onAuthStateChanged } from "firebase/auth";
 import {auth, db} from "./firebaseInit.ts";
 import {changeAdminRights, changeUser, stopLoading} from "./STORE/userSlice.ts";
 import {AppDispatch} from "./STORE";
-import { doc, getDoc } from "firebase/firestore";
+import {doc, getDoc} from "firebase/firestore";
 
 export const UserChecker = (dispatcher: AppDispatch) => useEffect(() => {
     const Unsubscribe = onAuthStateChanged(auth, async user => {
@@ -17,8 +17,11 @@ export const UserChecker = (dispatcher: AppDispatch) => useEffect(() => {
         if(!UserData) return dispatcher(stopLoading())
 
         const saveUser = (photo: string | null) => {
-            dispatcher(changeUser({userEmail: user?.email, userDisplayName: UserData.name, userPhoto: photo, tag: UserData.tag}))
+            dispatcher(changeUser(
+                {userEmail: user?.email, userDisplayName: UserData.name, userPhoto: photo, tag: UserData.tag, uid: document.id}
+            ))
             dispatcher(changeAdminRights({addAdmin: UserData.addAdmin, addNews: UserData.addNews, ban: UserData.ban}))
+
         }
 
         let img = new Image()

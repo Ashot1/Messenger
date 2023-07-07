@@ -5,17 +5,16 @@ import {useAppSelector, useLocaleDate} from "../../HOOK";
 import TransparentBlock from "../../UI/TransparentBlock";
 import TransparentInput from "../../UI/TransparentInput";
 import BorderedButton from "../../UI/BorderedButton";
-import {newsType} from "../../STORE/firebaseApi.ts";
-import { collection, addDoc } from "firebase/firestore";
 import PromiseNotification from "../../UI/PromiseNotification";
-import {db} from "../../firebaseInit.ts";
+import {useAddNewsMutation} from "../../STORE/firebaseAPI2.ts";
 
 const CreateNews: FC = () => {
 	const user = useAppSelector(state => state.user),
 		[OpenState, setOpenState] = useState(false),
 		[InputsValues, setInputsValues] = useState<{[key: string]: string}>({}),
 		[InputsCount, setInputsCount] = useState(1),
-		getDate = useLocaleDate()
+		getDate = useLocaleDate(),
+		[addNews] = useAddNewsMutation()
 
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) =>{
 		setInputsValues(prevState =>
@@ -26,17 +25,13 @@ const CreateNews: FC = () => {
 		if(!InputsValues.title || !InputsValues.Update1) return
 		const date = new Date
 		const relativeDate = getDate(date.toString()).split(',')[0]
-		let News: newsType = {
-			createAt: relativeDate,
-			title: InputsValues.title,
-			content: []
-		}
+		let content: {stringValue: string}[] = []
 		Object.values(InputsValues).forEach(item => {
 			if(InputsValues.title === item) return
-			News.content.push(item)
+			content.push({stringValue: item})
 		})
 		return PromiseNotification({
-			mainFunction: () => addDoc(collection(db, "News"), News),
+			mainFunction: async () => await addNews({title: InputsValues.title, createAt: relativeDate, content: content}),
 			successFunction: () => <p>Новость добавлена</p>
 		})
 	}

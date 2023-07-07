@@ -1,10 +1,50 @@
 import styles from './ContactsAccept.module.sass'
 import { FC } from 'react'
+import {useAppSelector} from "../../HOOK";
+import {useGetListsQuery} from "../../STORE/firebaseAPI2.ts";
+import {useGetAcceptDataQuery, useGetAcceptFromQuery} from "../../STORE/firebaseApi.ts";
+// import ContactsListTemplate from "../../ENTITY/ContactsListTemplate";
+// import BorderedButton from "../../UI/BorderedButton";
+import UserList from "../../ENTITY/UserList";
 
 const ContactsAccept: FC = () => {
-	return (
-		<div className={styles.huy}>
 
+	const user = useAppSelector(state => state.user),
+		{data: userLists, isLoading: UserListLoading} = useGetListsQuery({id: user.uid}, {skip: !user.uid}),
+		{data: userAcceptFrom, isLoading: UserAcceptFromLoading} = useGetAcceptFromQuery(user.uid, {skip: !user.uid}),
+		{data, isLoading} = useGetAcceptDataQuery({dataTo: userLists?.acceptTo, dataFrom: userAcceptFrom}, {skip: !user.uid}),
+		fakeUsers = [
+			{photo: "", name: "Загрузка", tag: "12341", uid: "123451423123"},
+			{photo: "", name: "Загрузка", tag: "12342", uid: "123451423123"}
+		]
+
+	const loading = isLoading || UserListLoading || UserAcceptFromLoading || user.loading
+
+	if(loading)
+		return(
+			<div className={styles.ContactsAcceptWrapper}>
+				<UserList users={fakeUsers} title="Входящие" isLoading={loading}/>
+				<UserList users={fakeUsers} title="Исходящие" isLoading={loading}/>
+
+			</div>
+		)
+
+	if(data) return (
+		<div className={styles.ContactsAcceptWrapper}>
+			<UserList users={data?.acceptFrom} title="Входящие"/>
+			<UserList users={data?.acceptTo} title="Исходящие"/>
+{/*			<ContactsListTemplate data={data?.acceptFrom} title="Исходящие">
+				<BorderedButton
+					BGColor="var(--redColor)"
+					color="#fff"
+					click={() => deleteAccept({id: id, text: 'Заявка отменена', userID: userSelector.uid})}>
+					Отменить заявку
+				</BorderedButton>
+			</ContactsListTemplate>
+
+			<ContactsListTemplate data={data?.acceptTo} title="Входящие">
+
+			</ContactsListTemplate>*/}
 		</div>
 	)
 }

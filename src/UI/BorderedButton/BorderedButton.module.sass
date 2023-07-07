@@ -1,8 +1,28 @@
-.CloseButton
+.CloseButton,
+.CloseButtonReversed
   cursor: pointer
-  padding: 10px 20px
-  background: var(--primaryBGcolorvar2)
-  margin-bottom: 25px
-  border: 3px solid var(--primaryBGcolorvar2)
+  border-radius: 10px
+  padding: 8px 16px
+  background: var(--BGColor)
+  border: 2px solid var(--BGColor)
+  transition: .4s
+  color: var(--color)
+  font-weight: 600
+  opacity: .8
+  text-decoration: none
+  font-size: .8rem
+  @media (max-width: 768px)
+    font-size: .65rem
   &:hover
+    transition: .4s
     background: none
+    color: var(--BGColor)
+
+.CloseButtonReversed
+  background: transparent
+  border: 2px solid var(--BGColor)
+  color: var(--BGColor)
+  &:hover
+    color: var(--color)
+    background: var(--BGColor)
+

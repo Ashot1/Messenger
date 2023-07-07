@@ -9,6 +9,7 @@ import FriendsPhoto from "../ASSET/icon-friends.png";
 import NewsPhoto from "../ASSET/icon-news.png";
 import SettingsPhoto from "../ASSET/icon-setting.png";
 import NotFoundPhoto from "../ASSET/icon-notfound.png";
+import ProfilePhoto from "../ASSET/icon-profile.png";
 import {UserChecker} from "../UserChecker.ts";
 import {useAppDispatch, useAppSelector} from "../HOOK";
 import {ThemeChecker} from "./ThemeChecker.ts";
@@ -27,9 +28,11 @@ const App: FC = () => {
         {url: '/news', icon: NewsPhoto, alt: 'Обновления'},
         {url: '/messages', icon: MessagesPhoto, alt: 'Сообщения'},
         {url: '/contacts', icon: FriendsPhoto, alt: 'Контакты'},
+        {url: `/profile/${UserSelector.uid}`, icon: ProfilePhoto, alt: 'Профиль'},
         {url: '/settings', icon: SettingsPhoto, alt: 'Настройки'},
         {url: '/notfound', icon: NotFoundPhoto, alt: 'Страница не найдена'},
-    ], [])
+        {url: '/profile', icon: ProfilePhoto, alt: 'Профиль'},
+    ], [UserSelector.uid])
 
     if(!UserSelector.loading && !UserSelector.userEmail) return <Navigate to="/auth/login"/>
 
@@ -37,12 +40,13 @@ const App: FC = () => {
 
     return (
         <div className={styles.app}>
-            {UserSelector.userEmail && <AsideMenu PageList={PageList.slice(0, -2)}/>}
+            {UserSelector.userEmail && <AsideMenu PageList={PageList.slice(0, -3)}/>}
 
             <section className={styles.rightside}>
                 {UserSelector.userEmail
                     && <Header>
                         {PageList.map(page => {
+                            if(page.url === `/profile/${UserSelector.uid}`) return
                             if (location.pathname.includes(page.url)) {
                                 return (<Fragment key={`${page.url}header`}>
                                     <img className={styles.HeaderIcon} src={page.icon} alt={page.alt}/>

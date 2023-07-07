@@ -28,7 +28,16 @@ const OtherAuthMethods: FC<{setTagState: () => void, TagState: boolean}> = ({set
 			tag: data.tag,
 			addAdmin: false,
 			addNews: false,
-			ban: false
+			ban: false,
+			banList: [],
+			friendList: [],
+			acceptList: [],
+			posts: [],
+			profileSettings: {
+				emailDisplay: true,
+				canAddToFriends: true,
+				canOtherMessage: true,
+			}
 		})
 			.then(() => window.location.reload())
 	}
