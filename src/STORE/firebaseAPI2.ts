@@ -1,5 +1,5 @@
 import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
-import { DocumentData } from "@firebase/firestore-types";
+import { DocumentData,  } from "@firebase/firestore-types";
 
 
 // acceptTo - заявки к currentUser, acceptFrom - заявки от currentUser

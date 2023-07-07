@@ -39,3 +39,24 @@
   width: 100%
   text-align: center
   color: rgba(255,255,255,0.48)
+
+.HoverAvatar
+  &::before
+    z-index: 1
+    transition: .3s
+    content: 'Изменить'
+    width: 100%
+    height: 100%
+    border-radius: 50%
+    background: rgba(0,0,0,0.70)
+    display: grid
+    place-items: center
+    position: absolute
+    opacity: 0
+    color: white
+    font-size: 13px
+  @media (max-width: 768px)
+    font-size: 9px
+  &:hover
+    &:before
+      opacity: .9

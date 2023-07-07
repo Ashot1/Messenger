@@ -1,4 +1,4 @@
 import {useAppDispatch, useAppSelector} from "./ReduxCustomHooks.ts";
-import {useLocaleDate} from "./DateHooks.ts";
+import {useLocaleDate, useFormatDate} from "./DateHooks.ts";
 
-export {useAppDispatch, useAppSelector, useLocaleDate}
+export {useAppDispatch, useAppSelector, useLocaleDate, useFormatDate}

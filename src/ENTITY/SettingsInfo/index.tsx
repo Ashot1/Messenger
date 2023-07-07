@@ -8,11 +8,12 @@ const SettingsInfo: FC<IUserInfo> = ({children,
 										 photo,
 										 tag,
 										 click,
-										 loading}) => {
+										 loading,
+										 logoDopClass}) => {
 
 	return (
 		<div className={styles.Info}>
-			<UserData photo={photo} secondaryText={tag} name={name} logoDopClass={styles.HoverAvatar}
+			<UserData photo={photo} secondaryText={tag} name={name} logoDopClass={`${styles.HoverAvatar} ${logoDopClass}`}
 					  TextDopClass={styles.Text} click={click} loading={loading}/>
 			<section className={styles.Actions}>
 				{children}
