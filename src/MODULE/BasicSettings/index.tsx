@@ -23,7 +23,7 @@ const BasicSettings: FC = () => {
 		userSelector = useAppSelector(state => state.user),
 		[Theme, setTheme] = useState<string | null>(localStorage.getItem("theme"))
 
-	if(userSelector.loading)
+	if(userSelector.loadingInfo)
 		return 	<div className={styles.BasicSettings}>
 			<FullUserInfo
 				lastSignIn="04.07.2023, 06:33:24"

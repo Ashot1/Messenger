@@ -14,7 +14,7 @@ const Authentication: FC = () => {
 
 	UserChecker(dispatcher)
 
-	if(!user.loading && user.userEmail) {
+	if(!user.loadingInfo && user.userEmail) {
 		return <Navigate to="/"/>
 	}
 
