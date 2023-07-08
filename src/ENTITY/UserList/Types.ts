@@ -8,5 +8,6 @@ export type UserFromList = {
 export interface IUserList {
     users: UserFromList[],
     title?: string,
-    isLoading?: boolean
+    isLoading?: boolean,
+    dopClass?: string
 }

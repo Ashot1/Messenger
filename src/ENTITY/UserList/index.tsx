@@ -4,11 +4,18 @@ import {IUserList, UserFromList} from "./Types.ts";
 import {Link} from "react-router-dom";
 import UserData from "../../UI/UserData";
 
-const UserList: FC<IUserList> = ({users, title, isLoading}) => {
+const UserList: FC<IUserList> = ({users, title, isLoading, dopClass, }) => {
 	return (
-		<div className={styles.UserListWrapper}>
+		<div className={`${styles.UserListWrapper} ${dopClass}`}>
 			{title && <h1>{title}</h1>}
 			<ul>
+				{
+					users.length < 1
+					&&
+						<li style={{display: "grid", placeItems: 'center', padding: '35px 0'}}>
+							Список пуст
+						</li>
+				}
 				{users.map(item => (
 					<li key={item.tag}>
 						{!isLoading && <Link to={`/profile/${item.uid}`}>

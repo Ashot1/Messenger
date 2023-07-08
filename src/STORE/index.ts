@@ -4,6 +4,7 @@ import userReducer from './userSlice.ts'
 import {UserInitialType} from './userSlice.ts'
 import {firebaseAPI2} from "./firebaseAPI2.ts";
 import {firebaseapi} from "./firebaseApi.ts";
+import {newsAPI} from "./newsAPI.ts";
 
 const store = configureStore({
     reducer: {
@@ -11,8 +12,9 @@ const store = configureStore({
         user: userReducer,
         [firebaseAPI2.reducerPath]: firebaseAPI2.reducer,
         [firebaseapi.reducerPath]: firebaseapi.reducer,
+        [newsAPI.reducerPath]: newsAPI.reducer
     },
-    middleware: getDefaultMiddleware => getDefaultMiddleware().concat(firebaseAPI2.middleware, firebaseapi.middleware)
+    middleware: getDefaultMiddleware => getDefaultMiddleware().concat(firebaseAPI2.middleware, firebaseapi.middleware, newsAPI.middleware)
 })
 
 export default store

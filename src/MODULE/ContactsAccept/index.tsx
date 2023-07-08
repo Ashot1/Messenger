@@ -31,7 +31,7 @@ const ContactsAccept: FC = () => {
 
 	if(data) return (
 		<div className={styles.ContactsAcceptWrapper}>
-			<UserList users={data?.acceptTo} title="Входящие"/>
+			<UserList users={data?.acceptTo} title="Входящие" dopClass={styles.TopList}/>
 			<UserList users={data?.acceptFrom} title="Исходящие"/>
 {/*			<ContactsListTemplate data={data?.acceptFrom} title="Исходящие">
 				<BorderedButton

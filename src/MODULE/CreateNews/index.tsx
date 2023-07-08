@@ -6,7 +6,7 @@ import TransparentBlock from "../../UI/TransparentBlock";
 import TransparentInput from "../../UI/TransparentInput";
 import BorderedButton from "../../UI/BorderedButton";
 import PromiseNotification from "../../UI/PromiseNotification";
-import {useAddNewsMutation} from "../../STORE/firebaseAPI2.ts";
+import {useAddNewsMutation} from "../../STORE/newsAPI.ts";
 
 const CreateNews: FC = () => {
 	const user = useAppSelector(state => state.user),

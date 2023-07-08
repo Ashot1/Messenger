@@ -29,14 +29,25 @@ const RegisterForm: FC = () => {
 						addAdmin: false,
 						addNews: false,
 						ban: false,
-						banList: [],
-						friendList: [],
-						acceptList: [],
 						posts: [],
+						info: '',
 						profileSettings: {
 							canAddToFriends: true,
 							canOtherMessage: true,
+							canOtherSeePosts: true,
 						}
+					}
+				)
+				await setDoc(doc(db, "Lists", response.user.uid),
+					{
+						banList: [],
+						friendList: [],
+						acceptList: [],
+					}
+				)
+				await setDoc(doc(db, "Notifications", response.user.uid),
+					{
+						notifications: []
 					}
 				)
 			})

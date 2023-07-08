@@ -1,14 +1,17 @@
 .Background
   width: 100vw
   height: 100vh
-  background: rgba(0,0,0,0.42)
+  background: rgba(0,0,0,0.6)
   z-index: 2
   position: absolute
   display: grid
   place-items: center
 
 .content
-  background: linear-gradient(90deg, #006880 10.79%, #005366 87.08%)
+  background: var(--primaryBGcolor)
   border-radius: 15px
-  box-shadow: 0 0 10px rgba(0,0,0,1)
-  color: white
+  box-shadow: 0 0 10px var(--primaryBGcolor)
+  color: var(--MainColor)
+  padding: 15px 0
+
+  //linear-gradient(90deg, #006880 10.79%, #005366 87.08%)

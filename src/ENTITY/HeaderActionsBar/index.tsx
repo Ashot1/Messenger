@@ -6,7 +6,6 @@ import userPNG from "../../ASSET/icon-avatar.png";
 import NotifPNG from '../../ASSET/icon-notification1.png'
 import ModalBlock from "../../UI/ModalBlock";
 import {Link} from "react-router-dom";
-import {AnimatePresence} from "framer-motion";
 import { signOut } from "firebase/auth";
 import {auth} from "../../firebaseInit.ts";
 import {useAppSelector} from "../../HOOK";
@@ -42,26 +41,25 @@ const HeaderActionsBar: FC<IHeaderActionsBar> = () => {
 						style={{opacity: OpenState.user ? '.5' : '1', filter: !user.userPhoto ? 'var(--invertFilter)' : ''}}
 			onBlur={() => HideWhenBlur('user')} loading={user.loading}/>
 
-			<AnimatePresence key="NotifModal">
-				{OpenState.notif && <ModalBlock dopClass={styles.NotifModal}>В разработке</ModalBlock>}
-			</AnimatePresence>
+			<ModalBlock openState={OpenState.notif} dopClass={styles.NotifModal}>
+				В разработке
+			</ModalBlock>
 
-			<AnimatePresence key="UserModal">
-				{OpenState.user && <ModalBlock dopClass={styles.UserModal}>
-					<ul>
-						<li onClick={() => window.location.reload()}>Обновить</li>
-						<Link to="/settings/main"><li>Настройки</li></Link>
-						<li className={styles.RedButton} onClick={() => setModal(true)}>Выйти</li>
-					</ul>
-				</ModalBlock>}
-			</AnimatePresence>
-			{Modal && <ModalWindow width={30} bgClick={() => setModal(false)}>
+			<ModalBlock openState={OpenState.user} dopClass={styles.UserModal}>
+				<ul>
+					<li onClick={() => window.location.reload()}>Обновить</li>
+					<Link to="/settings/main"><li>Настройки</li></Link>
+					<li className={styles.RedButton} onClick={() => setModal(true)}>Выйти</li>
+				</ul>
+			</ModalBlock>
+
+			<ModalWindow openState={Modal} width={30} bgClick={() => setModal(false)}>
 				<h2 className={styles.ModalText}>Выйти из аккаунта?</h2>
 				<div className={styles.ModalButtons}>
 					<CustomButton onclick={SignOut} dopClass={styles.Quit}>Выход</CustomButton>
 					<CustomButton onclick={() => setModal(false)} dopClass={styles.Close}>Отмена</CustomButton>
 				</div>
-			</ModalWindow>}
+			</ModalWindow>
 		</div>
 	)
 }

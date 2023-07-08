@@ -2,9 +2,9 @@ import styles from './News.module.sass'
 import { FC } from 'react'
 import NewsBlock from "../../ENTITY/NewsBlock";
 import CreateNews from "../../MODULE/CreateNews";
-import {useGetNewsQuery} from "../../STORE/firebaseAPI2.ts";
 import {useFormatDate} from "../../HOOK";
 import {DocumentData} from "@firebase/firestore-types";
+import {useGetNewsQuery} from "../../STORE/newsAPI.ts";
 
 const News: FC = () => {
 	const {data, isLoading} = useGetNewsQuery(''),

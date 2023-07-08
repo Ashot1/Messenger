@@ -1,16 +1,27 @@
 import styles from './ModalBlock.module.sass'
 import { FC } from 'react'
 import {IModalBlock} from "./Types.ts";
-import { motion } from "framer-motion";
+import {AnimatePresence, motion} from "framer-motion";
 import {createPortal} from "react-dom";
 
-const ModalBlock: FC<IModalBlock> = ({children, dopClass, ...props}) => {
+const ModalBlock: FC<IModalBlock> = ({children, dopClass, openState, ...props}) => {
 	const modalRoot = document.querySelector('#modal')
 
+	const variant = {
+		animate: {y: 0, opacity: 1},
+		initial: {y: -10, opacity: .6},
+		exit: {y: -10, opacity: 0}
+	}
+
 	if(modalRoot) return (
-		createPortal(<motion.div className={`${styles.Modal} ${dopClass}`} initial={{y: -15, opacity: .6}} animate={{y: 0, opacity: 1}} exit={{y: -15, opacity: 0}} {...props}>
-			{children}
-		</motion.div>, modalRoot)
+		createPortal(
+			<AnimatePresence>
+				{openState && <motion.div className={`${styles.Modal} ${dopClass}`} variants={variant} initial="initial"
+							 animate="animate" exit="exit" {...props}>
+					{children}
+				</motion.div>}
+			</AnimatePresence>
+			, modalRoot)
 	)
 }
 

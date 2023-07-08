@@ -4,6 +4,7 @@ import UserList from "../../ENTITY/UserList";
 import {useGetListsQuery} from "../../STORE/firebaseAPI2.ts";
 import {useAppSelector} from "../../HOOK";
 import {useGetContactsQuery} from "../../STORE/firebaseApi.ts";
+import SettingsDefaultBlock from "../../UI/SettingsDefaultBlock";
 
 const ContactsList: FC = () => {
 	const user = useAppSelector(state => state.user),
@@ -25,7 +26,9 @@ const ContactsList: FC = () => {
 	if(!Contacts?.length)
 		return (
 			<div style={{display: 'grid', placeItems: 'center', width: '100%'}}>
-				<h1>Список пуст</h1>
+				<SettingsDefaultBlock dopClass={styles.Center}>
+					Список пуст
+				</SettingsDefaultBlock>
 			</div>
 		)
 

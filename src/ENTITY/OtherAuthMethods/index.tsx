@@ -22,23 +22,36 @@ const OtherAuthMethods: FC<{setTagState: () => void, TagState: boolean}> = ({set
 		const tagDocument = await getDocs(query(collection(db, "Users"), where("tag", "==", data.tag)))
 		if(tagDocument.size) return setError("Этот id уже занят")
 
-		if(UserUID) setDoc(doc(db, "Users", UserUID), {
-			name: auth.currentUser?.displayName,
-			photo: auth.currentUser?.photoURL,
-			tag: data.tag,
-			addAdmin: false,
-			addNews: false,
-			ban: false,
-			banList: [],
-			friendList: [],
-			acceptList: [],
-			posts: [],
-			profileSettings: {
-				emailDisplay: true,
-				canAddToFriends: true,
-				canOtherMessage: true,
+		if(!UserUID) return setError("Пользователь не найден")
+		await setDoc(doc(db, "Users", UserUID),
+			{
+				name: auth.currentUser?.displayName,
+				photo: auth.currentUser?.photoURL,
+				tag: data.tag,
+				addAdmin: false,
+				addNews: false,
+				ban: false,
+				posts: [],
+				info: '',
+				profileSettings: {
+					canAddToFriends: true,
+					canOtherMessage: true,
+					canOtherSeePosts: true,
+				}
 			}
-		})
+		)
+		await setDoc(doc(db, "Lists", UserUID),
+			{
+				banList: [],
+				friendList: [],
+				acceptList: [],
+			}
+		)
+		await setDoc(doc(db, "Notifications", UserUID),
+			{
+				notifications: []
+			}
+		)
 			.then(() => window.location.reload())
 	}
 

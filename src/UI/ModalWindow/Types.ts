@@ -3,5 +3,6 @@ import {HTMLAttributes, ReactNode} from "react";
 export interface IModalWindow extends HTMLAttributes<HTMLDivElement> {
     width: number,
     children: string | ReactNode,
-    bgClick?: () => void
+    bgClick?: () => void,
+    openState: boolean
 }
