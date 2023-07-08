@@ -56,7 +56,7 @@ const SettingsHeader: FC = () => {
 	return (
 		<div className={styles.Wrapper}>
 			<input type="file" style={{display: "none"}} ref={InputFile} onChange={uploadAvatar} accept="image/*"/>
-			<SettingsInfo tag={`@${user.tag}`} name={user.userDisplayName} photo={user.userPhoto} click={changeAvatar} loading={user.loading} logoDopClass={styles.HoverAvatar}>
+			<SettingsInfo tag={`@${user.tag}`} name={user.userDisplayName} photo={user.userPhoto} click={changeAvatar} loading={user.loadingInfo} logoDopClass={styles.HoverAvatar}>
 				<>
 					<BorderedButton BGColor="var(--redColor)" color="#fff" reversed click={() => setModal(true)}> Удалить аккаунт</BorderedButton>
 					<ModalWindow openState={Modal} width={50} bgClick={() => setModal(false)}>

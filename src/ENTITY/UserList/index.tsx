@@ -10,9 +10,7 @@ const UserList: FC<IUserList> = ({users, title, isLoading, dopClass, }) => {
 			{title && <h1>{title}</h1>}
 			<ul>
 				{
-					users.length < 1
-					&&
-						<li style={{display: "grid", placeItems: 'center', padding: '35px 0'}}>
+					users.length < 1 && <li style={{display: "grid", placeItems: 'center', padding: '35px 0'}}>
 							Список пуст
 						</li>
 				}

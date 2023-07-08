@@ -10,8 +10,6 @@ const News: FC = () => {
 	const {data, isLoading} = useGetNewsQuery(''),
 		DateFormat = useFormatDate()
 
-
-
 	return (
 		<div className={styles.News}>
 			<div className={styles.content}>

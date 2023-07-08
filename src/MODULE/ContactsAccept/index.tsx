@@ -1,8 +1,7 @@
 import styles from './ContactsAccept.module.sass'
 import { FC } from 'react'
 import {useAppSelector} from "../../HOOK";
-import {useGetListsQuery} from "../../STORE/firebaseAPI2.ts";
-import {useGetAcceptDataQuery, useGetAcceptFromQuery} from "../../STORE/firebaseApi.ts";
+import {useGetAcceptDataQuery} from "../../STORE/firebaseApi.ts";
 // import ContactsListTemplate from "../../ENTITY/ContactsListTemplate";
 // import BorderedButton from "../../UI/BorderedButton";
 import UserList from "../../ENTITY/UserList";
@@ -10,15 +9,13 @@ import UserList from "../../ENTITY/UserList";
 const ContactsAccept: FC = () => {
 
 	const user = useAppSelector(state => state.user),
-		{data: userLists, isLoading: UserListLoading} = useGetListsQuery({id: user.uid}, {skip: !user.uid}),
-		{data: userAcceptFrom, isLoading: UserAcceptFromLoading} = useGetAcceptFromQuery(user.uid, {skip: !user.uid}),
-		{data, isLoading} = useGetAcceptDataQuery({dataTo: userLists?.acceptTo, dataFrom: userAcceptFrom}, {skip: !user.uid}),
+		{data, isLoading} = useGetAcceptDataQuery({dataTo: user.acceptListTo, dataFrom: user.acceptListFrom}, {skip: !user.uid}),
 		fakeUsers = [
 			{photo: "", name: "Загрузка", tag: "12341", uid: "123451423123"},
 			{photo: "", name: "Загрузка", tag: "12342", uid: "123451423123"}
 		]
 
-	const loading = isLoading || UserListLoading || UserAcceptFromLoading || user.loading
+	const loading = isLoading || user.loadingInfo || user.loadingLists || user.loadingAcceptFrom
 
 	if(loading)
 		return(

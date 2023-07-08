@@ -6,10 +6,16 @@ export type UserInitialType = {
     userPhoto: string | undefined,
     tag: string | undefined,
     uid: string | undefined,
-    loading: boolean,
+    loadingInfo: boolean,
+    loadingLists: boolean,
+    loadingAcceptFrom: boolean,
     addAdmin: boolean,
     addNews: boolean,
-    ban: boolean
+    ban: boolean,
+    acceptListTo: string[],
+    acceptListFrom: string[],
+    banList: string[],
+    friendList: string[],
 }
 
 const initialState: UserInitialType = {
@@ -18,10 +24,16 @@ const initialState: UserInitialType = {
     userPhoto: undefined,
     tag: undefined,
     uid: undefined,
-    loading: true,
+    loadingInfo: true,
+    loadingLists: true,
+    loadingAcceptFrom: true,
     addAdmin: false,
     addNews: false,
-    ban: false
+    ban: false,
+    friendList: [],
+    banList: [],
+    acceptListTo: [],
+    acceptListFrom: [],
 }
 
 const userSlice = createSlice({
@@ -34,23 +46,39 @@ const userSlice = createSlice({
             state.userPhoto = action.payload.userPhoto;
             state.tag = action.payload.tag;
             state.uid = action.payload.uid;
-            state.loading = false
         },
         changeAdminRights: (state, action) => {
             state.addAdmin = action.payload.addDeleteAdm
             state.addNews = action.payload.addNews
             state.ban = action.payload.ban
-            state.loading = false
         },
-        stopLoading: (state) => {
-            state.loading = false
+        changeLists: (state, action) => {
+            state.acceptListTo = action.payload.acceptListTo
+            state.friendList = action.payload.friendList
+            state.banList = action.payload.banList
+        },
+        changeAcceptFromList: (state, action) => {
+            state.acceptListFrom = action.payload.acceptListFrom
+        },
+        stopLoadingInfo: (state) => {
+            state.loadingInfo = false
+        },
+        stopLoadingLists: (state) => {
+            state.loadingLists = false
+        },
+        stopLoadingAcceptFrom: (state) => {
+            state.loadingAcceptFrom = false
         },
     }
 })
 
 export const {
     changeUser,
-    stopLoading,
+    stopLoadingInfo,
+    stopLoadingLists,
+    stopLoadingAcceptFrom,
     changeAdminRights,
+    changeLists,
+    changeAcceptFromList,
 } = userSlice.actions
 export default userSlice.reducer

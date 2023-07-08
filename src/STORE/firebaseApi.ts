@@ -1,7 +1,6 @@
 import {createApi, fakeBaseQuery} from "@reduxjs/toolkit/query/react";
-import {collection, query, getDocs, getDoc, doc, where, updateDoc} from "firebase/firestore";
+import {getDoc, doc} from "firebase/firestore";
 import {db} from "../firebaseInit.ts";
-import CustomNotification from "../UI/CustomNotification";
 import {UserFromList} from "../ENTITY/UserList";
 
 export type newsType = {
@@ -12,60 +11,9 @@ export type newsType = {
 
 export const firebaseapi = createApi({
     reducerPath: 'firebase',
-    tagTypes: ["AcceptFrom"],
+    tagTypes: [],
     baseQuery: fakeBaseQuery(),
     endpoints: (build) => ({
-        getAcceptFrom: build.query({
-            providesTags: ['AcceptFrom'],
-            queryFn: async (id: string | undefined)=>  {
-                if(!id) return {}
-                try{
-                    const result = await getDocs(query(collection(db, "Lists"), where("acceptList", "array-contains", id)))
-                    let list: string[] = []
-                    result.forEach(item => list.push(item.id))
-                    return {data: list}
-                } catch (e) {
-                    return{ error: e}
-                }
-            }
-        }),
-        deleteAcceptFrom: build.mutation({
-            invalidatesTags: ['AcceptFrom'],
-            queryFn: async ({id, text, userID}: {id: string | undefined, text: string, userID: string | undefined}) => {
-                if(!id || !userID) return {error: 'Ошибка'}
-                try {
-                    await getDoc(doc(db, "Lists", id))
-                        .then(response => {
-                            updateDoc(doc(db, "Lists", id), {
-                                acceptList: response.data()?.acceptList.filter((item: string) => item !== userID)
-                            })
-                        })
-                    CustomNotification(text)
-                    return {data: text}
-                } catch (err) {
-                    return {error: err}
-                }
-
-            }
-        }),
-        addAcceptFrom: build.mutation({
-            invalidatesTags: ['AcceptFrom'],
-            queryFn: async ({id, text, userID}: {id: string, text: string, userID: string | undefined}) => {
-                if(!id || !userID) return {error: 'Ошибка'}
-                try{
-                    await getDoc(doc(db, "Lists", id))
-                        .then(async (response) => {
-                            await updateDoc(doc(db, "Lists", id), {
-                                acceptList: response.data()?.acceptList.concat(userID)
-                            })
-                        })
-                    CustomNotification(text)
-                    return {data: text}
-                } catch (err) {
-                    return {error: err}
-                }
-            }
-        }),
         getContacts: build.query({
             queryFn: async ({data}: {data: string[] | undefined}) => {
                 if(!data) return {data: []}
@@ -125,8 +73,5 @@ export const firebaseapi = createApi({
 })
 
 export const {
-    useGetAcceptFromQuery,
-    useDeleteAcceptFromMutation,
-    useAddAcceptFromMutation,
     useGetContactsQuery,
     useGetAcceptDataQuery} = firebaseapi

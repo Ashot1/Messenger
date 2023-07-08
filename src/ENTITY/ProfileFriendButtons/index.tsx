@@ -1,23 +1,25 @@
-import {FC} from 'react'
+import {FC, useEffect, useState} from 'react'
 import BorderedButton from "../../UI/BorderedButton";
 import {useAppSelector} from "../../HOOK";
 import {IProfileFriendsButton} from "./Types.ts";
-import {useAddToListMutation, useGetListsQuery} from "../../STORE/firebaseAPI2.ts";
-import {useAddAcceptFromMutation, useDeleteAcceptFromMutation, useGetAcceptFromQuery} from "../../STORE/firebaseApi.ts";
+import {useAddToListMutation} from "../../STORE/firebaseAPI2.ts";
 import styles from "./ProfileFriendButtons.module.sass"
 import CustomNotification from "../../UI/CustomNotification";
+import {doc, getDoc} from "firebase/firestore";
+import {db} from "../../firebaseInit.ts";
 
 const ProfileFriendButtons: FC<IProfileFriendsButton> = ({id, User}) => {
 
 	const userSelector = useAppSelector(state => state.user),
-		{data: CurrentUser, isLoading: loadingCurrentUserData} = useGetListsQuery({id: userSelector.uid}, {skip: userSelector.uid === undefined}),
-		{data: PageUser, isLoading: loadingPageUserData} = useGetListsQuery({id: id}),
-		{data: AcceptFrom, isLoading: loadingAcceptFromData} = useGetAcceptFromQuery(userSelector.uid, {skip: userSelector.uid === undefined}),
-		[deleteAccept,  ] = useDeleteAcceptFromMutation(),
 		[changeParam] = useAddToListMutation(),
-		[addToFriend] = useAddAcceptFromMutation()
+		[PageUser, setPageUser] = useState<{friends: string[], acceptTo: string[]}>({acceptTo: [], friends: []})
 
-	if(userSelector.loading || loadingCurrentUserData || loadingPageUserData || loadingAcceptFromData) //srZ8agTqkjcaMAC4IgSFUM0o46y2
+	useEffect(() => {
+		getDoc(doc(db, "Lists", id))
+			.then(response => setPageUser({acceptTo: response.data()?.acceptList, friends: response.data()?.friendList}))
+	}, [id])
+
+	if(userSelector.loadingInfo || userSelector.loadingLists)
 		return <BorderedButton
 			BGColor="transparent"
 			color="transparent"
@@ -25,7 +27,7 @@ const ProfileFriendButtons: FC<IProfileFriendsButton> = ({id, User}) => {
 			Удалить из контактов
 		</BorderedButton>
 
-	if(!User || !AcceptFrom || !PageUser)
+	if(!User)
 		return <BorderedButton
 		BGColor="#4487a2"
 		color="#fff">
@@ -41,27 +43,32 @@ const ProfileFriendButtons: FC<IProfileFriendsButton> = ({id, User}) => {
 			Настройки
 		</BorderedButton>
 
-	else if(CurrentUser?.friends.includes(id))
+	else if(userSelector.friendList.includes(id))
 		return <BorderedButton
 			BGColor="var(--redColor)"
 			color="#fff"
 			click={() => {
 				if(!userSelector.uid) return
-				changeParam({
-					id: userSelector.uid,
-					massive: 'friendList',
-					values: CurrentUser.friends.filter(item => item !== id).map(guy => ({stringValue: guy}))
-				})
-				changeParam({
-					id: id,
-					massive: 'friendList',
-					values: PageUser.friends.filter(item => item !== userSelector.uid).map(guy => ({stringValue: guy}))
-				})
+				try {
+					changeParam({
+						id: userSelector.uid,
+						massive: 'friendList',
+						values: userSelector.friendList.filter(item => item !== id).map(guy => ({stringValue: guy}))
+					})
+					changeParam({
+						id: id,
+						massive: 'friendList',
+						values: PageUser.friends.filter(item => item !== userSelector.uid).map(guy => ({stringValue: guy}))
+					})
+					CustomNotification('Пользователь удален из контактов')
+				} catch (err) {
+					CustomNotification(`Ошибка: ${err}`, 'error')
+				}
 			}}>
 			Удалить из контактов
 		</BorderedButton>
 
-	else if(CurrentUser?.acceptTo.includes(id))
+	else if(userSelector.acceptListTo.includes(id))
 		return (
 			<>
 				<BorderedButton
@@ -69,26 +76,33 @@ const ProfileFriendButtons: FC<IProfileFriendsButton> = ({id, User}) => {
 					color="#fff"
 					click={() => {
 						if(!userSelector.uid) return
-						changeParam({
-							id: userSelector.uid,
-							massive: 'acceptList',
-							values: CurrentUser.acceptTo.filter(item => item !== id).map(guy => ({stringValue: guy}))
-						})
-						changeParam({
-							id: id,
-							massive: 'acceptList',
-							values: PageUser.acceptTo.filter(item => item !== userSelector.uid).map(guy => ({stringValue: guy}))
-						})
-						changeParam({
-							id: userSelector.uid,
-							massive: 'friendList',
-							values: CurrentUser.friends.concat(id).map(guy => ({stringValue: guy}))
-						})
-						changeParam({
-							id: id,
-							massive: 'friendList',
-							values: PageUser.friends.concat(userSelector.uid).map(guy => ({stringValue: guy}))
-						})
+						try {
+							changeParam({
+								id: userSelector.uid,
+								massive: 'acceptList',
+								values: userSelector.acceptListTo.filter(item => item !== id).map(guy => ({stringValue: guy}))
+							})
+							changeParam({
+								id: id,
+								massive: 'acceptList',
+								values: PageUser.acceptTo.filter(item => item !== userSelector.uid).map(guy => ({stringValue: guy}))
+							})
+							changeParam({
+								id: userSelector.uid,
+								massive: 'friendList',
+								values: userSelector.friendList.concat(id).map(guy => ({stringValue: guy}))
+							})
+							changeParam({
+								id: id,
+								massive: 'friendList',
+								values: PageUser.friends.concat(userSelector.uid).map(guy => ({stringValue: guy}))
+							})
+
+							CustomNotification('Пользователь добавлен в контакты')
+
+						} catch (err) {
+							CustomNotification(`Ошибка: ${err}`, 'error')
+						}
 					}}>
 					Принять заявку
 				</BorderedButton>
@@ -96,13 +110,18 @@ const ProfileFriendButtons: FC<IProfileFriendsButton> = ({id, User}) => {
 					reversed
 					BGColor="var(--redColor)"
 					color="#fff"
-					click={() =>
-						changeParam({
-							id: userSelector.uid,
-							massive: 'acceptList',
-							values: CurrentUser.acceptTo.filter(item => item !== id).map(guy => ({stringValue: guy}))
-						})
-							.then(() => CustomNotification('Заявка отклонена'))
+					click={() => {
+						try{
+							changeParam({
+								id: userSelector.uid,
+								massive: 'acceptList',
+								values: userSelector.acceptListTo.filter(item => item !== id).map(guy => ({stringValue: guy}))
+							})
+							CustomNotification('Заявка отклонена')
+						} catch (err) {
+							CustomNotification(`Ошибка: ${err}`, 'error')
+						}
+					}
 					}>
 					Отклонить заявку
 				</BorderedButton>
@@ -116,18 +135,43 @@ const ProfileFriendButtons: FC<IProfileFriendsButton> = ({id, User}) => {
 			Пользователь запретил добавлять его в друзья
 		</BorderedButton>
 
-	else if( AcceptFrom.includes(id) )
+	else if( userSelector.acceptListFrom.includes(id) )
 		return <BorderedButton
 				BGColor="var(--redColor)"
 				color="#fff"
-				click={() => deleteAccept({id: id, text: 'Заявка отменена', userID: userSelector.uid})}>
+				click={() => {
+					if(!userSelector.uid) return
+					try {
+						changeParam({
+							id: id,
+							massive: 'acceptList',
+							values: PageUser.acceptTo.filter(item => item !== userSelector.uid).map(guy => ({stringValue: guy}))
+						})
+						CustomNotification('Заявка отменена')
+					} catch (e) {
+						CustomNotification('Ошибка', 'error')
+					}
+				}}>
 				Отменить заявку
 			</BorderedButton>
 
 	else return <BorderedButton
 			BGColor="#4487a2"
 			color="#fff"
-			click={() => addToFriend({id: id, text: 'Заявка отправлена', userID: userSelector.uid})}>
+			click={() => {
+				if(!userSelector.uid) return
+				try {
+					changeParam({
+						id: id,
+						massive: 'acceptList',
+						values: PageUser.acceptTo.concat(userSelector.uid).map(guy => ({stringValue: guy}))
+					})
+					CustomNotification('Заявка отправлена')
+
+				} catch (err) {
+					CustomNotification(`Ошибка: ${err}`, 'error')
+				}
+			}}>
 			Добавить в контакты
 		</BorderedButton>
 

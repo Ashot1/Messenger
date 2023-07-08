@@ -1,25 +1,23 @@
 import styles from './ContactsList.module.sass'
 import {FC} from 'react'
 import UserList from "../../ENTITY/UserList";
-import {useGetListsQuery} from "../../STORE/firebaseAPI2.ts";
 import {useAppSelector} from "../../HOOK";
 import {useGetContactsQuery} from "../../STORE/firebaseApi.ts";
 import SettingsDefaultBlock from "../../UI/SettingsDefaultBlock";
 
 const ContactsList: FC = () => {
 	const user = useAppSelector(state => state.user),
-		{data, isLoading} = useGetListsQuery({id: user.uid}, {skip: user.uid === undefined}),
-		{data: Contacts, isLoading: ContactsLoading} = useGetContactsQuery({data: data?.friends}, {skip: data === undefined}),
+		{data: Contacts, isLoading: ContactsLoading} = useGetContactsQuery({data: user.friendList}),
 		fakeUsers = [
 			{photo: "", name: "Загрузка", tag: "12341", uid: "123451423123"},
 			{photo: "", name: "Загрузка", tag: "12342", uid: "123451423123"},
 			{photo: "", name: "Загрузка", tag: "12343", uid: "123451423123"},
 		]
 
-	if(isLoading || ContactsLoading)
+	if(ContactsLoading)
 		return (
 				<div className={styles.WrapperContactsList}>
-					<UserList users={fakeUsers} isLoading={isLoading || ContactsLoading}/>
+					<UserList users={fakeUsers} isLoading={ContactsLoading}/>
 				</div>
 			)
 
