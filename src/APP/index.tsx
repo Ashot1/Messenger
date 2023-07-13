@@ -10,7 +10,7 @@ import NewsPhoto from "../ASSET/icon-news.png";
 import SettingsPhoto from "../ASSET/icon-setting.png";
 import NotFoundPhoto from "../ASSET/icon-notfound.png";
 import ProfilePhoto from "../ASSET/icon-profile.png";
-import {UserChecker, UserListAnotherChecker, UserListFromChecker} from "../UserChecker.ts";
+import {UserChecker, UserListAnotherChecker, UserListFromChecker, UserNotificationsChecker} from "../UserChecker.ts";
 import {useAppDispatch, useAppSelector} from "../HOOK";
 import {ThemeChecker} from "./ThemeChecker.ts";
 
@@ -24,6 +24,7 @@ const App: FC = () => {
 
     UserListFromChecker(UserSelector.uid, dispatcher)
     UserListAnotherChecker(UserSelector.uid, dispatcher)
+    UserNotificationsChecker(UserSelector.uid, dispatcher)
 
     ThemeChecker()
 
@@ -37,7 +38,7 @@ const App: FC = () => {
         {url: '/profile', icon: ProfilePhoto, alt: 'Профиль'},
     ], [UserSelector.uid])
 
-    if(!UserSelector.loadingInfo && !UserSelector.userEmail) return <Navigate to="/auth/login"/>
+    if(!UserSelector.loading.loadingInfo && !UserSelector.userEmail) return <Navigate to="/auth/login"/>
 
     if(location.pathname === '/' && UserSelector.userEmail) return <Navigate to="/news"/>
 

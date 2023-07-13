@@ -6,9 +6,7 @@ export type UserInitialType = {
     userPhoto: string | undefined,
     tag: string | undefined,
     uid: string | undefined,
-    loadingInfo: boolean,
-    loadingLists: boolean,
-    loadingAcceptFrom: boolean,
+    loading: { [key: string]: boolean }
     addAdmin: boolean,
     addNews: boolean,
     ban: boolean,
@@ -16,6 +14,9 @@ export type UserInitialType = {
     acceptListFrom: string[],
     banList: string[],
     friendList: string[],
+    settings: {canAddToFriends: boolean, canOtherMessage: boolean, canOtherSeePosts: boolean},
+    posts: {title: string, content: string, createAt: string}[],
+    notifications: {text: string, createAt: string, icon: string}[]
 }
 
 const initialState: UserInitialType = {
@@ -24,9 +25,13 @@ const initialState: UserInitialType = {
     userPhoto: undefined,
     tag: undefined,
     uid: undefined,
-    loadingInfo: true,
-    loadingLists: true,
-    loadingAcceptFrom: true,
+    loading: {
+        loadingInfo: true,
+        loadingLists: true,
+        loadingAcceptFrom: true,
+        loadingPosts: true,
+        loadingNotifications: true
+    },
     addAdmin: false,
     addNews: false,
     ban: false,
@@ -34,6 +39,9 @@ const initialState: UserInitialType = {
     banList: [],
     acceptListTo: [],
     acceptListFrom: [],
+    settings: {canAddToFriends: false, canOtherMessage: false, canOtherSeePosts: false},
+    posts: [],
+    notifications: []
 }
 
 const userSlice = createSlice({
@@ -57,28 +65,32 @@ const userSlice = createSlice({
             state.friendList = action.payload.friendList
             state.banList = action.payload.banList
         },
+        changeSettings: (state, action) => {
+            state.settings = action.payload.settings
+        },
         changeAcceptFromList: (state, action) => {
             state.acceptListFrom = action.payload.acceptListFrom
         },
-        stopLoadingInfo: (state) => {
-            state.loadingInfo = false
+        changePosts: (state, action) => {
+            state.posts = action.payload.posts
         },
-        stopLoadingLists: (state) => {
-            state.loadingLists = false
+        changeNotifications: (state, action) => {
+            state.notifications = action.payload.notifications
         },
-        stopLoadingAcceptFrom: (state) => {
-            state.loadingAcceptFrom = false
+        stopLoading: (state, action) => {
+            state.loading[action.payload] = false
         },
     }
 })
 
 export const {
     changeUser,
-    stopLoadingInfo,
-    stopLoadingLists,
-    stopLoadingAcceptFrom,
+    stopLoading,
     changeAdminRights,
     changeLists,
     changeAcceptFromList,
+    changeSettings,
+    changePosts,
+    changeNotifications,
 } = userSlice.actions
 export default userSlice.reducer

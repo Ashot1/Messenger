@@ -13,7 +13,7 @@ import {ChangePassword, SendVerifyMessage} from "./Functions.tsx";
 import CheckProvider from "../../HOC/CheckProvider";
 
 
-const Password: FC = () => {
+const SettingsSafety: FC = () => {
 
 	const {register,
 		formState: {errors},
@@ -69,4 +69,4 @@ const Password: FC = () => {
 )
 }
 
-export default Password
+export default SettingsSafety

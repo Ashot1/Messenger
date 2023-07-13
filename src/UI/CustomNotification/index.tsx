@@ -1,6 +1,7 @@
 import toast from "react-hot-toast";
+import {ICustomNotification} from "./Types.ts";
 
-const CustomNotification = (text: string, type: string = 'success') => {
+const CustomNotification: ICustomNotification = (text, type = 'success') => {
 
 	if(type === 'error')
 		return toast.error(text, {style: {background: 'var(--primaryBGcolor)', color: 'var(--MainColor)'}, iconTheme: {primary: '#4487a2', secondary: '#fff'}})

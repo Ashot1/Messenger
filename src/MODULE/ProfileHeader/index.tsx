@@ -1,38 +1,11 @@
 import styles from './ProfileHeader.module.sass'
-import {FC, useEffect, useState} from 'react'
+import {FC} from 'react'
 import SettingsInfo from "../../ENTITY/SettingsInfo";
-import {IProfileHeader} from "./Types.ts";
-import {doc, getDoc} from "firebase/firestore";
-import {db} from "../../firebaseInit.ts";
+import {IProfileHeader, UserInfo} from "./Types.ts";
 import ProfileFriendButtons from "../../ENTITY/ProfileFriendButtons";
 import BorderedButton from "../../UI/BorderedButton";
 
-export type UserInfo = {
-	name: string,
-	tag: string,
-	photo: string,
-	settings: {canAddToFriends: boolean, canOtherMessage: boolean},
-	posts: string[]
-}
-
-const ProfileHeader: FC<IProfileHeader> = ({id}) => {
-
-	const [Loading, setLoading] = useState(true),
-		[User, setUser] = useState<UserInfo>()
-
-	useEffect(() => {
-		getDoc(doc(db, "Users", id))
-			.then(response => {
-				setUser({
-					name: response.data()?.name,
-					tag: response.data()?.tag,
-					photo: response.data()?.photo,
-					settings: response.data()?.profileSettings,
-					posts: response.data()?.posts
-				})
-				setLoading(false)
-			})
-	}, [id])
+const ProfileHeader: FC<IProfileHeader> = ({User, Loading, id}) => {
 
 	if(Loading)
 		return(
@@ -58,3 +31,4 @@ const ProfileHeader: FC<IProfileHeader> = ({id}) => {
 }
 
 export default ProfileHeader
+export type {UserInfo}

@@ -24,9 +24,14 @@ const SettingsHeader: FC = () => {
 		const currentUser = auth.currentUser
 		if(currentUser)
 			deleteUser(currentUser).then(async () => {
-				deleteDoc(doc(db, "Users", currentUser.uid)).then(() => {
-					window.location.reload()
-				}).catch(e => setError(e.message))
+				Promise.all([
+					deleteDoc(doc(db, "Users", currentUser.uid)).catch(e => setError(e.message)),
+					deleteDoc(doc(db, "Lists", currentUser.uid)).catch(e => setError(e.message)),
+					deleteDoc(doc(db, "Notifications", currentUser.uid)).catch(e => setError(e.message))
+				])
+					.then(() => window.location.reload())
+					.catch((e) => setError(e.message))
+
 			}).catch((e) => {
 				if(e.message === 'Firebase: Error (auth/requires-recent-login).') return setError('Чтобы удалить пользователя необходимо перезайти на аккаунт')
 				setError(e.message)
@@ -56,7 +61,7 @@ const SettingsHeader: FC = () => {
 	return (
 		<div className={styles.Wrapper}>
 			<input type="file" style={{display: "none"}} ref={InputFile} onChange={uploadAvatar} accept="image/*"/>
-			<SettingsInfo tag={`@${user.tag}`} name={user.userDisplayName} photo={user.userPhoto} click={changeAvatar} loading={user.loadingInfo} logoDopClass={styles.HoverAvatar}>
+			<SettingsInfo tag={`@${user.tag}`} name={user.userDisplayName} photo={user.userPhoto} click={changeAvatar} loading={user.loading.loadingInfo} logoDopClass={styles.HoverAvatar}>
 				<>
 					<BorderedButton BGColor="var(--redColor)" color="#fff" reversed click={() => setModal(true)}> Удалить аккаунт</BorderedButton>
 					<ModalWindow openState={Modal} width={50} bgClick={() => setModal(false)}>
@@ -70,7 +75,7 @@ const SettingsHeader: FC = () => {
 					</ModalWindow>
 				</>
 			</SettingsInfo>
-			<Menu content={[{url: "/settings/main", title: "Основное"}, {url: "/settings/safety", title: "Безопасность"}]}/>
+			<Menu content={[{url: "/settings/main", title: "Основное"}, {url: "/settings/safety", title: "Безопасность"}, {url: "/settings/privacy", title: "Приватность"}]}/>
 		</div>
 	)
 }

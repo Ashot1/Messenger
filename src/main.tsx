@@ -7,6 +7,7 @@ import store from './STORE'
 import './main.sass'
 import './firebaseInit.ts'
 import {Toaster} from "react-hot-toast";
+import UserProfileError from "./PAGE/UserProfileError";
 
 const Messages = lazy(() => import("./PAGE/Messages"))
 const Contacts = lazy(() => import("./PAGE/Contacts"))
@@ -18,11 +19,12 @@ const UserProfile = lazy(() => import("./PAGE/UserProfile"))
 
 const RegisterForm = lazy(() => import("./MODULE/RegisterForm"))
 const LoginForm = lazy(() => import("./MODULE/LoginForm"))
-const BasicSettings = lazy(() => import("./MODULE/BasicSettings"))
-const Safety = lazy(() => import("./MODULE/Safety"))
+const SettingsBasic = lazy(() => import("./MODULE/SettingsBasic"))
+const SettingsSafety = lazy(() => import("./MODULE/SettingsSafety"))
 const ResetPassword = lazy(() => import("./MODULE/ResetPassword"))
 const ContactsList = lazy(() => import("./MODULE/ContactsList"))
 const ContactsAccept = lazy(() => import("./MODULE/ContactsAccept"))
+const SettingsPrivacy = lazy(() => import("./MODULE/SettingsPrivacy"))
 
 const router = createBrowserRouter([
     {
@@ -32,6 +34,7 @@ const router = createBrowserRouter([
             {
                 path: "/profile/:id",
                 element: <UserProfile/>,
+                errorElement: <UserProfileError/>
             },
             {
                 path: "/messages",
@@ -61,11 +64,15 @@ const router = createBrowserRouter([
                 children: [
                     {
                         path: "/settings/main",
-                        element: <BasicSettings />,
+                        element: <SettingsBasic />,
                     },
                     {
                         path: "/settings/safety",
-                        element: <Safety />,
+                        element: <SettingsSafety />,
+                    },
+                    {
+                      path: "/settings/privacy",
+                      element: <SettingsPrivacy />,
                     },
                 ]
             },

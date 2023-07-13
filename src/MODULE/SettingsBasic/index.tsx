@@ -12,7 +12,7 @@ import SettingsSwitchBlock from "../../ENTITY/SettingsSwitchBlock";
 import {collection, doc, getDocs, query, updateDoc, where} from "firebase/firestore";
 import {DeleteAvatar} from "./Functions.tsx";
 
-const BasicSettings: FC = () => {
+const SettingsBasic: FC = () => {
 
 	const {register,
 		formState: {errors},
@@ -23,7 +23,7 @@ const BasicSettings: FC = () => {
 		userSelector = useAppSelector(state => state.user),
 		[Theme, setTheme] = useState<string | null>(localStorage.getItem("theme"))
 
-	if(userSelector.loadingInfo)
+	if(userSelector.loading.loadingInfo)
 		return 	<div className={styles.BasicSettings}>
 			<FullUserInfo
 				lastSignIn="04.07.2023, 06:33:24"
@@ -124,4 +124,4 @@ const BasicSettings: FC = () => {
 	)
 }
 
-export default BasicSettings
+export default SettingsBasic

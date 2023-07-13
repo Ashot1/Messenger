@@ -10,19 +10,76 @@
     gap: 25px
 
 .NotifModal
-  width: 250px
+  width: 350px
   background: var(--primaryBGcolor)
   height: 250px
   right: 65px
   border-radius: 15px
-  color: white
-  place-items: center
-  display: grid
   top: 70px
+  ul
+    list-style: none
+    padding: 10px
+    overflow-y: scroll
+    max-height: 80%
+    &::-webkit-scrollbar
+      background: transparent
+      max-width: 10px
+    &::-webkit-scrollbar-thumb
+      background: var(--secondaryTextColor)
+      opacity: .3
+      border-radius: 2px
+    li
+      display: flex
+      align-items: center
+      gap: 15px
+      cursor: pointer
+      padding: 5px
+      border-radius: 10px
+      transition: .3s
+      button
+        transition: .3s
+        opacity: 0
+        border: none
+        outline: none
+        background: none
+        cursor: pointer
+        img
+          width: 20px
+          height: 20px
+          filter: var(--invertFilter)
+      &:hover
+        transition: .3s
+        background: var(--hoverColor)
+        button
+          opacity: 1
+      .SystemImg
+        margin: 0 7.5px
+        width: 25px
+        height: 25px
+        filter: var(--invertFilter)
+      .UserImg
+        width: 40px
+        height: 40px
+        border-radius: 50%
+
   @media (max-width: 768px)
     top: 55px
+  @media (max-width: 500px)
+    width: 75%
   @media (max-width: 350px)
-    right: 10px
+    width: 90%
+    right: 20px
+
+.NotifText
+  color: var(--MainColor)
+
+  flex: 1
+  p
+    margin: 0
+    font-size: .85rem
+  span
+    opacity: .5
+    font-size: .75rem
 
 .UserModal
   width: 125px
@@ -78,13 +135,13 @@
       width: 20px
       height: 20px
   &::after
-    content: '0'
+    display: grid
+    content: attr(data-count)
     position: absolute
     color: white
     font-size: 12px
-    width: 18px
     height: 16px
-    display: grid
+    width: 16px
     place-items: center
     border-radius: 50%
     margin-top: -10px
@@ -92,7 +149,7 @@
     background: red
     @media (max-width: 500px)
       font-size: 11px
-      width: 16px
+      width: 15px
       height: 14px
 
 .UserLogo
@@ -122,12 +179,14 @@
     animation: none
     opacity: .8
     @media (max-width: 500px)
-      font-size: 14px
+      font-size: .7rem
 
 .ModalText
   width: 100%
   text-align: center
-  font-size: 22px
+  font-size: 1.2rem
+  @media (max-width: 500px)
+    font-size: 1rem
 
 .Quit
   color: white

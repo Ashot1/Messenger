@@ -7,6 +7,9 @@ import TransparentInput from "../../UI/TransparentInput";
 import BorderedButton from "../../UI/BorderedButton";
 import PromiseNotification from "../../UI/PromiseNotification";
 import {useAddNewsMutation} from "../../STORE/newsAPI.ts";
+import CreateButton from "../../UI/CreateButton";
+import {collection, doc, getDocs, query, updateDoc} from "firebase/firestore";
+import {db} from "../../firebaseInit.ts";
 
 const CreateNews: FC = () => {
 	const user = useAppSelector(state => state.user),
@@ -23,17 +26,34 @@ const CreateNews: FC = () => {
 
 	const sendNews = () => {
 		if(!InputsValues.title || !InputsValues.Update1) return
+
 		const date = new Date
-		const relativeDate = getDate(date.toString()).split(',')[0]
+		const relativeDate = getDate(date.toString())
+
 		let content: {stringValue: string}[] = []
+
 		Object.values(InputsValues).forEach(item => {
 			if(InputsValues.title === item) return
 			content.push({stringValue: item})
 		})
+
 		return PromiseNotification({
-			mainFunction: async () => await addNews({title: InputsValues.title, createAt: relativeDate, content: content}),
-			successFunction: () => <p>Новость добавлена</p>
+			mainFunction: async () => await addNews({title: InputsValues.title, createAt: relativeDate.split(',')[0], content: content}),
+			successFunction: () => <b>Новость добавлена</b>
 		})
+			.then(async () => {
+				return PromiseNotification({
+					mainFunction: async () => {
+						const result = await getDocs(query(collection(db, "Notifications")))
+						return result.docs.map(async (item) => (
+							await updateDoc(doc(db, "Notifications", item.id), {
+								notifications: [...item.data()?.notifications, {text: `Вышло ${InputsValues.title.toLowerCase()}`, createAt: relativeDate, icon: 'newsIcon'}]
+							})
+						))
+					},
+					successFunction: () => <b>Уведомления отправлены</b>
+				})
+			})
 	}
 
 	const Inputs = () => {
@@ -53,7 +73,6 @@ const CreateNews: FC = () => {
 			delete state[`Update${InputsCount}`]
 			return state
 		})
-		// setInputsValues(prevState => )
 		setInputsCount(prev => prev - 1)
 	}
 
@@ -61,8 +80,7 @@ const CreateNews: FC = () => {
 		<>
 			{user.addNews && !OpenState &&
 				<div className={styles.CreateNewsButtonPosition}>
-					<CustomButton dopClass={styles.createButton}
-					onclick={() => setOpenState(true)}>+</CustomButton>
+					<CreateButton Click={() => setOpenState(true)}/>
 				</div>}
 			{OpenState && <TransparentBlock dopClass={styles.CreateBlock}>
 				<TransparentInput setValue={handleChange}

@@ -15,7 +15,7 @@ const ContactsAccept: FC = () => {
 			{photo: "", name: "Загрузка", tag: "12342", uid: "123451423123"}
 		]
 
-	const loading = isLoading || user.loadingInfo || user.loadingLists || user.loadingAcceptFrom
+	const loading = isLoading || user.loading.loadingInfo || user.loading.loadingLists || user.loading.loadingAcceptFrom
 
 	if(loading)
 		return(
