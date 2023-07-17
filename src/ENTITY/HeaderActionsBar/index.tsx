@@ -14,12 +14,13 @@ import CustomButton from "../../UI/CustomButton";
 import newsIco from "../../ASSET/icon-news.png"
 import deleteIco from "../../ASSET/icon-delete.png"
 import {doc, updateDoc} from "firebase/firestore";
+import BorderedButton from "../../UI/BorderedButton";
 
 const HeaderActionsBar: FC<IHeaderActionsBar> = () => {
 
 	const [OpenState, setOpenState] = useState<{[key: string]: boolean}>({notif: false, user: false}),
 	 	user = useAppSelector(state => state.user),
-	 	[Modal, setModal] = useState(false);
+	 	[Modal, setModal] = useState(false)
 
 	const SignOut = () => {
 		signOut(auth)
@@ -28,9 +29,10 @@ const HeaderActionsBar: FC<IHeaderActionsBar> = () => {
 	}
 
 	const HideWhenBlur = (state: string) => setTimeout(() => setOpenState(prevState => {
-		if (prevState[state]) return {notif: false, user: false}
-		return prevState
-	}), 250)
+			if (prevState[state]) return {notif: false, user: false}
+			return prevState
+		}), 250)
+
 
 	const deleteNotification = async (notif: {text: string, createAt: string, icon: string}) => {
 		if(!user?.uid) return
@@ -39,21 +41,34 @@ const HeaderActionsBar: FC<IHeaderActionsBar> = () => {
 		})
 	}
 
+	const clearNotifications = async () => {
+		if(!user?.uid) return
+		await updateDoc(doc(db, "Notifications", user.uid), {
+			notifications: []
+		})
+	}
+
 	return (
 		<div className={styles.actions}>
 			<UserCircle url={NotifPNG}
-						onclick={() => setOpenState({notif: !OpenState.notif, user: false})} dopClass={styles.Notification}
+						onclick={() => setOpenState({notif: !OpenState.notif, user: false})}
+						dopClass={styles.Notification}
 						style={{opacity: OpenState.notif ? '.5' : '1'}}
 						data-count={user.notifications.length > 9 ? "9+" : user.notifications.length}/>
+
 			<UserCircle url={user.userPhoto || userPNG}
-						onclick={() => setOpenState({notif: false, user: !OpenState.user})} dopClass={styles.UserLogo}
+						onclick={() => setOpenState({notif: false, user: !OpenState.user})}
+						dopClass={styles.UserLogo}
 						style={{opacity: OpenState.user ? '.5' : '1', filter: !user.userPhoto ? 'var(--invertFilter)' : ''}}
-			onBlur={() => HideWhenBlur('user')} loading={user.loading.loadingInfo}/>
+						onBlur={() => HideWhenBlur('user')}
+						loading={user.loading.loadingInfo}/>
 
 			<ModalBlock openState={OpenState.notif} dopClass={styles.NotifModal}>
 				{user.notifications.length < 1
-					&& <p style={{width: '100%', height: '93%', display: 'grid', placeItems: 'center', color: 'var(--MainColor)'}}>Пусто</p>}
-				<ul>
+					&& <p className={styles.ClearText}>Пусто</p>}
+
+				{user.notifications.length >= 1
+					&& <ul onBlur={() => HideWhenBlur('notif')}>
 					{user.notifications.map((notif, index) => {
 						let src = notif.icon
 						const systems = ['newsIcon']
@@ -62,7 +77,7 @@ const HeaderActionsBar: FC<IHeaderActionsBar> = () => {
 						return <li key={index} onClick={() => deleteNotification(notif)}>
 								{systems.includes(notif.icon)
 									? <img src={src} alt="фото" className={styles.SystemImg}/>
-									: <img src={src || userPNG} alt="фото" className={styles.UserImg}/>}
+									: <img src={src || userPNG} alt="фото" className={styles.UserImg} style={{filter: !src ? 'var(--invertFilter)' : ''}}/>}
 								<div className={styles.NotifText}>
 									<p>{notif.text}</p>
 									<span>{notif.createAt}</span>
@@ -72,7 +87,14 @@ const HeaderActionsBar: FC<IHeaderActionsBar> = () => {
 								</button>
 							</li>
 					})}
-				</ul>
+				</ul>}
+
+				{user.notifications.length >= 1
+					&& <div className={styles.ButtonPosition}>
+					<BorderedButton click={clearNotifications} BGColor="var(--MainColor)" color="var(--InvertMainColor)" reversed>
+						Очистить все
+					</BorderedButton>
+				</div>}
 			</ModalBlock>
 
 			<ModalBlock openState={OpenState.user} dopClass={styles.UserModal}>

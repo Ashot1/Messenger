@@ -70,7 +70,7 @@ const Contacts: FC = () => {
 				<form onSubmit={handleSubmit(Submit)}>
 					<Search register={register}/>
 				</form>
-				<Menu content={[{url: '/contacts/list', title: 'Список'}, {url: '/contacts/accept', title: 'Заявки'}]}/>
+				<Menu content={[{url: '/contacts/list', title: 'Контакты'}, {url: '/contacts/accept', title: 'Заявки'}]}/>
 				{!SearchParams.get('search') && <Outlet/>}
 				{SearchParams.get('search') && <UserList users={UserListDB} title="Результаты поиска"/>}
 				{SearchParams.get('search') && <div style={{width: '100%', display: 'grid', placeItems: 'center', marginTop: '50px'}}>

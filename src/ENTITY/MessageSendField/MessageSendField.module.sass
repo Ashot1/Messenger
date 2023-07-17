@@ -1,0 +1,52 @@
+.sendButton
+  border: 2px solid var(--primaryBGcolorvar2)
+  rotate: 90deg
+  color: var(--primaryBGcolor)
+  aspect-ratio: 1 / 1
+  font-size: 1.25rem
+  border-radius: 50%
+  display: grid
+  place-items: center
+  padding: 3px 6px
+  background: var(--primaryBGcolorvar2)
+  cursor: pointer
+  transition: .3s
+  @media (max-width: 500px)
+    font-size: 1rem
+  &:hover
+    transition: .3s
+    background: var(--primaryBGcolor)
+    color: var(--primaryBGcolorvar2)
+
+.sendMessage
+  width: 100%
+  min-height: 70px
+  max-height: 150px
+  display: flex
+  justify-content: space-between
+  padding: 5px 25px
+  box-sizing: border-box
+  border-top: 2px solid var(--hoverColor)
+  gap: 20px
+  textarea
+    padding: 10px
+    width: 90%
+    resize: none
+    border: none
+    border-radius: 15px
+    font-size: 1.1rem
+    color: rgba(255,255,255,0.54)
+    background: var(--primaryBGcolorvar2)
+    scrollbar-color: var(--hoverColor) transparent
+    &::-webkit-scrollbar
+      background: transparent
+    &::-webkit-scrollbar-thumb
+      background: var(--hoverColor)
+      border-radius: 15px
+    @media (max-width: 500px)
+      font-size: .8rem
+
+.SendButtonPos
+  height: 100%
+  display: grid
+  place-items: center

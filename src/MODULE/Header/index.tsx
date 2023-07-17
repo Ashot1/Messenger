@@ -5,8 +5,12 @@ import HeaderInfoBar from "../../ENTITY/HeaderInfoBar";
 import HeaderActionsBar from "../../ENTITY/HeaderActionsBar";
 
 const Header: FC<IHeader> = ({children}) => {
+	const HeaderPos = localStorage.getItem("headerPos")
+
+
+
 	return (
-		<header className={styles.Header}>
+		<header className={`${styles.Header} ${HeaderPos === 'sticky' ? styles.HeaderSticky : ''}`}>
 			<HeaderInfoBar>
 				{children}
 			</HeaderInfoBar>

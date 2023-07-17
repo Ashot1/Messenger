@@ -28,19 +28,18 @@ const News: FC = () => {
 					'Добавлена возможно удалить ',
 					'Добавлена возможно изменить '
 				]} dopClass={styles.loaderNews} createAt="01.07.20203"/>}
-				{// @ts-ignore
-					data
-						?.documents
-						.toSorted((a: DocumentData, b: DocumentData) => (
-							new Date(DateFormat(b.fields.createAt.stringValue)).getTime() - new Date(DateFormat(a.fields.createAt.stringValue)).getTime())
-						)
-						.map((news: DocumentData) => {
-						const DBcontent = news.fields.content.arrayValue.values
+				{data
+					?.documents
+					.toSorted((a: DocumentData, b: DocumentData) => (
+						new Date(DateFormat(b.fields.createAt.stringValue)).getTime() - new Date(DateFormat(a.fields.createAt.stringValue)).getTime())
+					)
+					.map((news: DocumentData) => {
+					const DBcontent = news.fields.content.arrayValue.values
 
-						let content: string[] = []
-						DBcontent.forEach((item: {stringValue: string}) => content.push(item.stringValue))
-						return <NewsBlock key={news.fields.title.stringValue} title={news.fields.title.stringValue} content={content} createAt={news.fields.createAt.stringValue}/>
-					})}
+					let content: string[] = []
+					DBcontent.forEach((item: {stringValue: string}) => content.push(item.stringValue))
+					return <NewsBlock key={news.fields.title.stringValue} title={news.fields.title.stringValue} content={content} createAt={news.fields.createAt.stringValue}/>
+				})}
 			</div>
 		</div>
 	)

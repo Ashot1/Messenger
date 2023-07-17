@@ -1,0 +1,28 @@
+.adminLabel
+  cursor: pointer
+  width: 15px
+  height: 15px
+  border: 2px solid var(--MainColor)
+  transition: .3s
+
+.CustomInput:not(:checked) + .adminLabel:hover
+  transition: .3s
+  background: var(--greenColor)
+  border: 2px solid var(--greenColor)
+  box-shadow: 0 0 10px var(--greenColor)
+
+.CustomInput:checked + .adminLabel:hover
+  transition: .3s
+  border-bottom: 2px solid var(--redColor)
+  border-right: 2px solid var(--redColor)
+
+.CustomInput
+  display: none
+
+.CustomInput:checked + .adminLabel
+  border-bottom: 2px solid var(--greenColor)
+  border-right: 2px solid var(--greenColor)
+  border-top: none
+  border-left: none
+  height: 20px
+  rotate: 35deg

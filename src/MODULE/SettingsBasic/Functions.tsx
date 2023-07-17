@@ -39,3 +39,11 @@ export const DeleteAvatar = (userSelector: UserInitialType, dispatch: AppDispatc
     })
 }
 
+export const changeHeader = () => {
+    const headerPos = localStorage.getItem('headerPos')
+
+    localStorage.setItem('headerPos', `${headerPos === 'sticky' ? 'basic' : 'sticky'}`)
+
+    window.location.reload()
+}
+

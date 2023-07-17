@@ -5,7 +5,7 @@ import {createApi, fetchBaseQuery} from "@reduxjs/toolkit/query/react";
 
 export const firebaseAPI2 = createApi({
     reducerPath: 'firebaseAPI',
-    tagTypes: ['Lists', 'AcceptFrom'],
+    tagTypes: ['Lists'],
     baseQuery: fetchBaseQuery({
         baseUrl: 'https://firestore.googleapis.com/v1/projects/messenger-c10e5/databases/(default)/documents'
     }),

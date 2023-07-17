@@ -60,34 +60,7 @@ const ProfilePosts: FC<IProfilePosts> = ({id, User, Loading, currentUserID}) => 
 			})
 	}
 
-	if(Loading) return (
-		<div className={styles.PostsWrapper}>
-			<h1 className={styles.PostTitle}>Посты</h1>
-			<ProfileCreatePost createPost={createPost}/>
-			<SettingsDefaultBlock>
-				<div className={styles.titlePostWrapper}>
-					<h1 className={styles.LoadingText}>Заголовок</h1>
-					<span className={styles.LoadingText} style={{marginTop: '15px'}}>
-						13.07.2023, 8:28:10
-					</span>
-				</div>
-				<p className={`${styles.PostContent} ${styles.LoadingText}`}>
-					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad architecto beatae cupiditate, deserunt doloremque inventore laboriosam laborum maiores molestiae necessitatibus obcaecati optio perferendis perspiciatis provident, quasi repellendus sapiente voluptas voluptates.
-				</p>
-			</SettingsDefaultBlock>
-			<SettingsDefaultBlock>
-				<div className={styles.titlePostWrapper}>
-					<h1 className={styles.LoadingText}>Заголовок</h1>
-					<span className={styles.LoadingText} style={{marginTop: '15px'}}>
-						13.07.2023, 8:28:10
-					</span>
-				</div>
-				<p className={`${styles.PostContent} ${styles.LoadingText}`}>
-					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad architecto beatae cupiditate, deserunt doloremque inventore laboriosam laborum maiores molestiae necessitatibus obcaecati optio perferendis perspiciatis provident, quasi repellendus sapiente voluptas voluptates.
-				</p>
-			</SettingsDefaultBlock>
-		</div>
-	)
+	if(Loading) return <LoadingPosts/>
 
 	return (
 		<div className={styles.PostsWrapper}>
@@ -95,7 +68,9 @@ const ProfilePosts: FC<IProfilePosts> = ({id, User, Loading, currentUserID}) => 
 			{currentUserID === id && <ProfileCreatePost createPost={createPost}/>}
 
 			{User?.posts && User.posts.length < 1 &&
-				<SettingsDefaultBlock><p style={{width: '100%', display: 'flex', justifyContent: 'center'}}>Постов нет</p></SettingsDefaultBlock>}
+				<SettingsDefaultBlock>
+					<p className={styles.ClearText}>Постов нет</p>
+				</SettingsDefaultBlock>}
 
 			{User?.posts.map((post, index) => (
 				<SettingsDefaultBlock key={index}>
@@ -117,10 +92,41 @@ const ProfilePosts: FC<IProfilePosts> = ({id, User, Loading, currentUserID}) => 
 					</p>
 				</SettingsDefaultBlock>
 			))}
-
 		</div>
 	)
 }
 
 
 export default ProfilePosts
+
+
+const LoadingPosts: FC = () => {
+	return (
+		<div className={styles.PostsWrapper}>
+			<h1 className={styles.PostTitle}>Посты</h1>
+			<ProfileCreatePost createPost={() => Promise.resolve()}/>
+			<SettingsDefaultBlock>
+				<div className={styles.titlePostWrapper}>
+					<h1 className={styles.LoadingText}>Заголовок</h1>
+					<span className={styles.LoadingText} style={{marginTop: '15px'}}>
+						13.07.2023, 8:28:10
+					</span>
+				</div>
+				<p className={`${styles.PostContent} ${styles.LoadingText}`}>
+					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad architecto beatae cupiditate, deserunt doloremque inventore laboriosam laborum maiores molestiae necessitatibus obcaecati optio perferendis perspiciatis provident, quasi repellendus sapiente voluptas voluptates.
+				</p>
+			</SettingsDefaultBlock>
+			<SettingsDefaultBlock>
+				<div className={styles.titlePostWrapper}>
+					<h1 className={styles.LoadingText}>Заголовок</h1>
+					<span className={styles.LoadingText} style={{marginTop: '15px'}}>
+						13.07.2023, 8:28:10
+					</span>
+				</div>
+				<p className={`${styles.PostContent} ${styles.LoadingText}`}>
+					Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad architecto beatae cupiditate, deserunt doloremque inventore laboriosam laborum maiores molestiae necessitatibus obcaecati optio perferendis perspiciatis provident, quasi repellendus sapiente voluptas voluptates.
+				</p>
+			</SettingsDefaultBlock>
+		</div>
+	)
+}

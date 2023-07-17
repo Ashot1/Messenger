@@ -2,6 +2,12 @@
   display: flex
   justify-content: space-between
   height: 70px
+  z-index: 5
   border-bottom: var(--border)
   @media (max-width: 768px)
     height: 55px
+
+.HeaderSticky
+  position: sticky
+  top: 0
+  backdrop-filter: blur(10px)

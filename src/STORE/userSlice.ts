@@ -1,5 +1,14 @@
 import {createSlice} from "@reduxjs/toolkit";
 
+export type messageType = {
+    date: string,
+    isChecked: boolean,
+    text: string,
+    media?: string,
+    mediaGroup?: string[],
+    from: string
+}
+
 export type UserInitialType = {
     userEmail: string | undefined,
     userDisplayName: string | undefined,
@@ -9,6 +18,7 @@ export type UserInitialType = {
     loading: { [key: string]: boolean }
     addAdmin: boolean,
     addNews: boolean,
+    canBanUsers: boolean,
     ban: boolean,
     acceptListTo: string[],
     acceptListFrom: string[],
@@ -16,7 +26,8 @@ export type UserInitialType = {
     friendList: string[],
     settings: {canAddToFriends: boolean, canOtherMessage: boolean, canOtherSeePosts: boolean},
     posts: {title: string, content: string, createAt: string}[],
-    notifications: {text: string, createAt: string, icon: string}[]
+    notifications: {text: string, createAt: string, icon: string}[],
+    messages: {id: string, users: string[], type: string, message: messageType[]}[]
 }
 
 const initialState: UserInitialType = {
@@ -30,10 +41,12 @@ const initialState: UserInitialType = {
         loadingLists: true,
         loadingAcceptFrom: true,
         loadingPosts: true,
-        loadingNotifications: true
+        loadingNotifications: true,
+        loadingMessages: true
     },
     addAdmin: false,
     addNews: false,
+    canBanUsers: false,
     ban: false,
     friendList: [],
     banList: [],
@@ -41,7 +54,8 @@ const initialState: UserInitialType = {
     acceptListFrom: [],
     settings: {canAddToFriends: false, canOtherMessage: false, canOtherSeePosts: false},
     posts: [],
-    notifications: []
+    notifications: [],
+    messages: []
 }
 
 const userSlice = createSlice({
@@ -54,11 +68,12 @@ const userSlice = createSlice({
             state.userPhoto = action.payload.userPhoto;
             state.tag = action.payload.tag;
             state.uid = action.payload.uid;
+            state.ban = action.payload.ban
         },
         changeAdminRights: (state, action) => {
-            state.addAdmin = action.payload.addDeleteAdm
+            state.addAdmin = action.payload.addAdmin
             state.addNews = action.payload.addNews
-            state.ban = action.payload.ban
+            state.canBanUsers = action.payload.canBanUsers
         },
         changeLists: (state, action) => {
             state.acceptListTo = action.payload.acceptListTo
@@ -73,6 +88,9 @@ const userSlice = createSlice({
         },
         changePosts: (state, action) => {
             state.posts = action.payload.posts
+        },
+        changeMessages: (state, action) => {
+            state.messages = action.payload.messages
         },
         changeNotifications: (state, action) => {
             state.notifications = action.payload.notifications
@@ -92,5 +110,6 @@ export const {
     changeSettings,
     changePosts,
     changeNotifications,
+    changeMessages,
 } = userSlice.actions
 export default userSlice.reducer

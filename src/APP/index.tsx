@@ -10,7 +10,13 @@ import NewsPhoto from "../ASSET/icon-news.png";
 import SettingsPhoto from "../ASSET/icon-setting.png";
 import NotFoundPhoto from "../ASSET/icon-notfound.png";
 import ProfilePhoto from "../ASSET/icon-profile.png";
-import {UserChecker, UserListAnotherChecker, UserListFromChecker, UserNotificationsChecker} from "../UserChecker.ts";
+import {
+    UserChecker,
+    UserListAnotherChecker,
+    UserListFromChecker,
+    UserMessagesChecker,
+    UserNotificationsChecker
+} from "../UserChecker.ts";
 import {useAppDispatch, useAppSelector} from "../HOOK";
 import {ThemeChecker} from "./ThemeChecker.ts";
 
@@ -25,6 +31,7 @@ const App: FC = () => {
     UserListFromChecker(UserSelector.uid, dispatcher)
     UserListAnotherChecker(UserSelector.uid, dispatcher)
     UserNotificationsChecker(UserSelector.uid, dispatcher)
+    UserMessagesChecker(UserSelector.uid, dispatcher)
 
     ThemeChecker()
 

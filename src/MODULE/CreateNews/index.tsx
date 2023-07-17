@@ -8,8 +8,9 @@ import BorderedButton from "../../UI/BorderedButton";
 import PromiseNotification from "../../UI/PromiseNotification";
 import {useAddNewsMutation} from "../../STORE/newsAPI.ts";
 import CreateButton from "../../UI/CreateButton";
-import {collection, doc, getDocs, query, updateDoc} from "firebase/firestore";
+import {collection, getDocs, query} from "firebase/firestore";
 import {db} from "../../firebaseInit.ts";
+import {useCreateNotificationMutation} from "../../STORE/firebaseApi.ts";
 
 const CreateNews: FC = () => {
 	const user = useAppSelector(state => state.user),
@@ -17,7 +18,8 @@ const CreateNews: FC = () => {
 		[InputsValues, setInputsValues] = useState<{[key: string]: string}>({}),
 		[InputsCount, setInputsCount] = useState(1),
 		getDate = useLocaleDate(),
-		[addNews] = useAddNewsMutation()
+		[addNews] = useAddNewsMutation(),
+		[createNotifServer] = useCreateNotificationMutation()
 
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) =>{
 		setInputsValues(prevState =>
@@ -46,8 +48,12 @@ const CreateNews: FC = () => {
 					mainFunction: async () => {
 						const result = await getDocs(query(collection(db, "Notifications")))
 						return result.docs.map(async (item) => (
-							await updateDoc(doc(db, "Notifications", item.id), {
-								notifications: [...item.data()?.notifications, {text: `Вышло ${InputsValues.title.toLowerCase()}`, createAt: relativeDate, icon: 'newsIcon'}]
+							createNotifServer({
+								toId: item.id,
+								getDate: getDate,
+								text: `Вышло ${InputsValues.title.toLowerCase()}`,
+								fromPhoto: 'newsIcon',
+								url: ''
 							})
 						))
 					},

@@ -4,7 +4,7 @@ import {auth, db} from "./firebaseInit.ts";
 import {
     changeAcceptFromList,
     changeAdminRights,
-    changeLists, changeNotifications, changePosts, changeSettings,
+    changeLists, changeMessages, changeNotifications, changePosts, changeSettings,
     changeUser, stopLoading,
 } from "./STORE/userSlice.ts";
 import {AppDispatch} from "./STORE";
@@ -24,9 +24,9 @@ export const UserChecker = (dispatcher: AppDispatch) => useEffect(() => {
 
         const saveUser = (photo: string | null) => {
             dispatcher(changeUser(
-                {userEmail: user?.email, userDisplayName: UserData.name, userPhoto: photo, tag: UserData.tag, uid: document.id}
+                {userEmail: user?.email, userDisplayName: UserData.name, userPhoto: photo, tag: UserData.tag, uid: document.id, ban: UserData.ban}
             ))
-            dispatcher(changeAdminRights({addAdmin: UserData.addAdmin, addNews: UserData.addNews, ban: UserData.ban}))
+            dispatcher(changeAdminRights({addAdmin: UserData.addAdmin, addNews: UserData.addNews, canBanUsers: UserData.canBanUsers}))
             dispatcher(changeSettings({settings: UserData.profileSettings}))
             dispatcher(stopLoading('loadingInfo'))
 
@@ -89,4 +89,23 @@ export const UserNotificationsChecker = (id: string | undefined, dispatcher: App
     }, (err) => console.log(err))
 
     return () => Unsubscribe()
+}, [dispatcher, id])
+
+
+export const UserMessagesChecker = (id: string | undefined, dispatcher: AppDispatch) => useEffect(() => {
+    if(!id) return
+    const unsubscribe = onSnapshot(query(
+        collection(db, "Messages"),
+        where("members", "array-contains", id),
+        where("type", "==", 'private')
+    ), snapshot => {
+            const message = snapshot.docs.map(item => (
+                {id: item.id, users: item.data()?.members, type: item.data()?.type, message: item.data()?.message}
+            ))
+            dispatcher(changeMessages({messages: message}))
+
+            dispatcher(stopLoading('loadingMessages'))
+
+        }, (err) => console.log(err))
+    return () => unsubscribe()
 }, [dispatcher, id])

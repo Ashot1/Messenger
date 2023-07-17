@@ -10,19 +10,20 @@ const FullUserInfo: FC<IFullUserInfo> = ({lastSignIn,
 											 adminRights,
 											 email,
 											 dopClass,
-										 isVerified = false}) => {
+											 isVerified = false,
+											 needVersion = true}) => {
 	return (
 		<SettingsDefaultBlock>
 			<div className={`${styles.UserInfo} ${dopClass}`}>
-				<p>Email: </p> <span>{email} ({isVerified ? 'подтвержден' : 'не подтвержден'})</span>
-				<hr/>
-				<p>Зарегистрирован: </p> <span>{createdAt}</span>
-				<hr/>
-				<p>Последний вход в аккаунт: </p> <span>{lastSignIn}</span>
-				<hr/>
+				{email && <><p>Email: </p> <span>{email} ({isVerified ? 'подтвержден' : 'не подтвержден'})</span>
+				<hr/></>}
+				{createdAt && <><p>Зарегистрирован: </p> <span>{createdAt}</span>
+				<hr/></>}
+				{lastSignIn && <><p>Последний вход в аккаунт: </p> <span>{lastSignIn}</span>
+				<hr/></>}
 				{signMethod &&<p>Метод входа: {(signMethod === 'password' ? 'Email и пароль' : signMethod)}</p>}
 				<p>Права администратора: {adminRights}</p>
-				{<p>Версия приложения: {version}</p>}
+				{needVersion && <p>Версия приложения: {version}</p>}
 			</div>
 		</SettingsDefaultBlock>
 	)

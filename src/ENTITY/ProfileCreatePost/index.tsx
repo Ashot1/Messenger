@@ -16,7 +16,7 @@ const ProfileCreatePost: FC<ICreatePost> = ({createPost}) => {
 				<SettingsDefaultBlock>
 					<form onSubmit={createPost}>
 						<TransparentInput placeholder="Название" dopClass={styles.Title} required/>
-						<textarea className={styles.Content} required></textarea>
+						<Content/>
 						<div className={styles.ButtonPosition}>
 							<BorderedButton color="var(--InvertMainColor)"
 											BGColor="var(--MainColor)">Опубликовать</BorderedButton>
@@ -32,3 +32,18 @@ const ProfileCreatePost: FC<ICreatePost> = ({createPost}) => {
 }
 
 export default ProfileCreatePost
+
+const Content: FC = () => {
+
+	const [Symbols, setSymbols] = useState(0)
+
+	return (
+		<div style={{position: 'relative'}}>
+			<textarea className={styles.Content}
+					  required
+					  onChange={(e) => setSymbols(e.target.value.length)}
+						maxLength={5000}></textarea>
+			<span className={styles.symbolNumber}>{Symbols}/5000</span>
+		</div>
+	)
+}

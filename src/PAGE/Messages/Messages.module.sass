@@ -1,5 +1,17 @@
-.Messages
-  display: grid
-  place-items: center
-  color: var(--MainColor)
+.messages
   width: 100%
+  display: flex
+  flex-direction: column
+  align-items: center
+
+.content
+  display: flex
+  padding-top: 50px
+  width: clamp(600px, 90%, 1500px)
+  @media (max-width: 1024px)
+    width: clamp(600px, 80%, 1500px)
+  @media (max-width: 768px)
+    width: 95%
+    flex-direction: column
+  @media (max-width: 500px)
+    padding-top: 20px

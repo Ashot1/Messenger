@@ -30,9 +30,11 @@ const OtherAuthMethods: FC<{setTagState: () => void, TagState: boolean}> = ({set
 				tag: data.tag,
 				addAdmin: false,
 				addNews: false,
+				canBanUsers: false,
 				ban: false,
 				posts: [],
 				info: '',
+				lastEntry: '',
 				profileSettings: {
 					canAddToFriends: true,
 					canOtherMessage: true,

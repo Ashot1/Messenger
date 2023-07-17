@@ -1,5 +1,5 @@
 import {createApi, fakeBaseQuery} from "@reduxjs/toolkit/query/react";
-import {getDoc, doc} from "firebase/firestore";
+import {getDoc, doc, updateDoc} from "firebase/firestore";
 import {db} from "../firebaseInit.ts";
 import {UserFromList} from "../ENTITY/UserList";
 
@@ -67,6 +67,25 @@ export const firebaseapi = createApi({
 
                 return {data: {acceptTo: acceptTo, acceptFrom: acceptFrom}}
             }
+        }),
+        createNotification: build.mutation({
+            queryFn: async ({toId, getDate, text, fromPhoto, url}: {toId: string, getDate: (item: string) => string, text: string, fromPhoto: string | undefined, url: string}) => {
+                try{
+                    getDoc(doc(db, "Notifications", toId))
+                        .then((response) => {
+                            const date = new Date()
+                            return updateDoc(doc(db, "Notifications", toId), {
+                                notifications: [...response.data()?.notifications,
+                                    {text: text, createAt: getDate(date.toString()), icon: fromPhoto || '', url: url}]
+                            })
+                        })
+                    return {data: true}
+                }
+                catch(err: unknown) {
+                    throw new Error((err as Error).message)
+                }
+
+            }
         })
 
     })
@@ -74,4 +93,5 @@ export const firebaseapi = createApi({
 
 export const {
     useGetContactsQuery,
-    useGetAcceptDataQuery} = firebaseapi
+    useGetAcceptDataQuery,
+useCreateNotificationMutation} = firebaseapi

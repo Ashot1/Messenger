@@ -24,7 +24,10 @@ const UserProfile: FC = () => {
 				tag: userSelector.tag,
 				photo: userSelector.userPhoto,
 				settings: userSelector.settings,
-				posts: userSelector.posts
+				posts: userSelector.posts,
+				canBanUsers: userSelector.canBanUsers,
+				addNews: userSelector.addNews,
+				addAdmin: userSelector.addAdmin
 			})
 			return setLoading(false)
 		}
@@ -36,26 +39,32 @@ const UserProfile: FC = () => {
 					tag: response.data()?.tag,
 					photo: response.data()?.photo,
 					settings: response.data()?.profileSettings,
-					posts: response.data()?.posts
+					posts: response.data()?.posts,
+					canBanUsers: response.data()?.canBanUsers,
+					addNews: response.data()?.addNews,
+					addAdmin: response.data()?.addAdmin
 				})
 				setLoading(false)
 			})
 	}, [id, userSelector])
 
-	const condition = User?.settings.canOtherSeePosts || id === userSelector.uid
+	const changeAdm = (add: UserInfo) => {
+		setUser(prev => ({...prev, ...add}))
+	}
+
+	const condition = (User?.settings.canOtherSeePosts || userSelector.friendList.includes(id)) || id === userSelector.uid
 
 	return (
 		<div className={styles.Settings}>
 			<div className={styles.content}>
-				<ProfileHeader id={id} Loading={Loading} User={User}/>
+				<ProfileHeader id={id} Loading={Loading} User={User} setUser={changeAdm}/>
 				{Loading && <ProfilePosts id={id} User={User} Loading={Loading} currentUserID={userSelector.uid}/>}
-
 				{condition
 					? <ProfilePosts id={id} User={User} Loading={Loading} currentUserID={userSelector.uid}/>
 
 					: !Loading && <div style={{width: '100%', display: 'flex', justifyContent: 'center', marginTop: '50px'}}>
 							<SettingsDefaultBlock>
-								<p style={{width: '100%', display: 'flex', justifyContent: 'center', fontSize: '1rem'}}>Пользователь скрыл свои посты</p>
+								<p className={styles.ClearText}>Пользователь скрыл свои посты</p>
 							</SettingsDefaultBlock>
 						</div>}
 			</div>

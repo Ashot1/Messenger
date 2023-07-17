@@ -10,7 +10,7 @@ import PromiseNotification from "../../UI/PromiseNotification";
 import FullUserInfo from "../../ENTITY/FullUserInfo";
 import SettingsSwitchBlock from "../../ENTITY/SettingsSwitchBlock";
 import {collection, doc, getDocs, query, updateDoc, where} from "firebase/firestore";
-import {DeleteAvatar} from "./Functions.tsx";
+import {changeHeader, DeleteAvatar} from "./Functions.tsx";
 
 const SettingsBasic: FC = () => {
 
@@ -21,7 +21,8 @@ const SettingsBasic: FC = () => {
 		dispatch = useAppDispatch(),
 		ToLocale = useLocaleDate(),
 		userSelector = useAppSelector(state => state.user),
-		[Theme, setTheme] = useState<string | null>(localStorage.getItem("theme"))
+		[Theme, setTheme] = useState<string | null>(localStorage.getItem("theme")),
+		header = localStorage.getItem("headerPos")
 
 	if(userSelector.loading.loadingInfo)
 		return 	<div className={styles.BasicSettings}>
@@ -74,7 +75,7 @@ const SettingsBasic: FC = () => {
 		providerID = auth.currentUser?.providerData[0].providerId,
 		adminRights = userSelector.addNews ? 'наивысшие'
 			: userSelector.addAdmin ? 'расширенные'
-				: userSelector.ban ? 'базовые'
+				: userSelector.canBanUsers ? 'базовые'
 					: 'отсутствуют'
 
 	if(createdAt && lastSignIn && providerID && userSelector.userEmail) return (
@@ -120,6 +121,9 @@ const SettingsBasic: FC = () => {
 			<SettingsSwitchBlock action={() => DeleteAvatar(userSelector, dispatch)}
 			title="Удалить фото профиля"
 			dopText="Вы уверены, что хотите удалить аватарку? Восстановить её будет невозможно"/>
+			<SettingsSwitchBlock action={changeHeader}
+			title={`Сделать заголовок ${header === 'sticky' ? 'обычным' : 'нескрываемым'}`}
+			dopText="Страница будет перзагружена"/>
 		</div>
 	)
 }

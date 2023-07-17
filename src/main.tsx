@@ -8,6 +8,7 @@ import './main.sass'
 import './firebaseInit.ts'
 import {Toaster} from "react-hot-toast";
 import UserProfileError from "./PAGE/UserProfileError";
+import MessagesDialogWindow from "./MODULE/MessagesDialogWindow";
 
 const Messages = lazy(() => import("./PAGE/Messages"))
 const Contacts = lazy(() => import("./PAGE/Contacts"))
@@ -39,6 +40,12 @@ const router = createBrowserRouter([
             {
                 path: "/messages",
                 element: <Messages />,
+                children: [
+                    {
+                        path: "/messages/:id",
+                        element: <MessagesDialogWindow/>
+                    }
+                ]
             },
             {
                 path: "/news",

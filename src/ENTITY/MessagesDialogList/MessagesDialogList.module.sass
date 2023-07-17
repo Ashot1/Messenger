@@ -1,0 +1,75 @@
+.Messages
+  width: 100%
+  flex: 1 1 auto
+  overflow-y: auto
+  scrollbar-gutter: stable
+  scrollbar-color: var(--primaryBGcolorvar2) transparent
+  &::-webkit-scrollbar
+    background: transparent
+  &::-webkit-scrollbar-thumb
+    background: var(--primaryBGcolorvar2)
+    border-radius: 5px
+  ul
+    list-style: none
+    padding: 0
+    display: flex
+    flex-direction: column
+    gap: 15px
+    li
+      width: 100%
+      display: flex
+      padding: 0 15px
+      box-sizing: border-box
+
+.messageWrapper
+  display: flex
+  flex-direction: column
+  max-width: 60%
+  p
+    opacity: .6
+    margin: 0
+    word-break: break-all
+    padding: 10px
+    box-sizing: border-box
+    border-radius: 15px
+    font-size: 1rem
+    color: var(--MainColor)
+    @media (max-width: 500px)
+      font-size: .8rem
+  span
+    font-size: .7rem
+    color: var(--MainColor)
+    opacity: .5
+    @media (max-width: 500px)
+      font-size: .6rem
+
+.avatarDialog
+  margin-top: 15px
+  img
+    width: 40px
+    height: 40px
+    @media (max-width: 500px)
+      width: 30px
+      height: 30px
+
+.messageFrom
+  justify-content: flex-start
+  flex-direction: row-reverse
+  .messageWrapper
+    p
+      margin-right: 5px
+      text-align: end
+      background: linear-gradient(90deg, #006880 10.79%, #005366 87.08%)
+      color: #fff
+    span
+      text-align: start
+
+
+.messageTo
+  justify-content: flex-start
+  .messageWrapper
+    p
+      margin-left: 5px
+      background: rgba(82,82,82,0.31)
+    span
+      text-align: end

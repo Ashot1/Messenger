@@ -1,26 +1,19 @@
-import {FC, useEffect, useState} from 'react'
+import {FC} from 'react'
 import BorderedButton from "../../UI/BorderedButton";
 import {useAppSelector, useLocaleDate} from "../../HOOK";
 import {IProfileFriendsButton} from "./Types.ts";
 import {useAddToListMutation} from "../../STORE/firebaseAPI2.ts";
 import styles from "./ProfileFriendButtons.module.sass"
 import CustomNotification from "../../UI/CustomNotification";
-import {doc, getDoc} from "firebase/firestore";
-import {db} from "../../firebaseInit.ts";
-import {createNotifServer, deleteContact} from "./Functions.ts";
+import {deleteContact} from "./Functions.ts";
+import {useCreateNotificationMutation} from "../../STORE/firebaseApi.ts";
 
-const ProfileFriendButtons: FC<IProfileFriendsButton> = ({id, User}) => {
+const ProfileFriendButtons: FC<IProfileFriendsButton> = ({id, User, PageUser}) => {
 
 	const userSelector = useAppSelector(state => state.user),
 		[changeParam] = useAddToListMutation(),
-		[PageUser, setPageUser]
-			= useState<{friends: string[], acceptTo: string[]}>({acceptTo: [], friends: []}),
-		getDate = useLocaleDate()
-
-	useEffect(() => {
-		getDoc(doc(db, "Lists", id))
-			.then(response => setPageUser({acceptTo: response.data()?.acceptList, friends: response.data()?.friendList}))
-	}, [id])
+		getDate = useLocaleDate(),
+		[createNotifServer] = useCreateNotificationMutation()
 
 	if(userSelector.loading.loadingInfo || userSelector.loading.loadingLists)
 		return <BorderedButton
@@ -52,13 +45,13 @@ const ProfileFriendButtons: FC<IProfileFriendsButton> = ({id, User}) => {
 			color="#fff"
 			click={() => {
 				deleteContact(userSelector, changeParam, id, PageUser)
-				createNotifServer(
-					{
+				createNotifServer({
 						toId: id,
 						fromPhoto: userSelector.userPhoto,
 						getDate: getDate,
-						text: `${User.name} удалил вас из контактов`}
-				)
+						text: `${User.name} удалил вас из контактов`,
+						url: ''
+					})
 			}}>
 			Удалить из контактов
 		</BorderedButton>
@@ -98,7 +91,9 @@ const ProfileFriendButtons: FC<IProfileFriendsButton> = ({id, User}) => {
 									toId: id,
 									fromPhoto: userSelector.userPhoto,
 									getDate: getDate,
-									text: `${User.name} принял вашу заявку в контакты`}
+									text: `${User.name} принял вашу заявку в контакты`,
+									url: ''
+								}
 							)
 
 							CustomNotification('Пользователь добавлен в контакты')
@@ -110,7 +105,6 @@ const ProfileFriendButtons: FC<IProfileFriendsButton> = ({id, User}) => {
 					Принять заявку
 				</BorderedButton>
 				<BorderedButton
-					reversed
 					BGColor="var(--redColor)"
 					color="#fff"
 					click={() => {
@@ -125,8 +119,9 @@ const ProfileFriendButtons: FC<IProfileFriendsButton> = ({id, User}) => {
 									toId: id,
 									fromPhoto: userSelector.userPhoto,
 									getDate: getDate,
-									text: `${User.name} отклонил вашу заявку в контакты`}
-							)
+									text: `${User.name} отклонил вашу заявку в контакты`,
+									url: ''
+								})
 							CustomNotification('Заявка отклонена')
 						} catch (err) {
 							CustomNotification(`Ошибка: ${err}`, 'error')
@@ -182,8 +177,9 @@ const ProfileFriendButtons: FC<IProfileFriendsButton> = ({id, User}) => {
 							toId: id,
 							fromPhoto: userSelector.userPhoto,
 							getDate: getDate,
-							text: `${userSelector.userDisplayName} отправил вам заявку в контакты`}
-					)
+							text: `${userSelector.userDisplayName} отправил вам заявку в контакты`,
+							url: ''
+						})
 					CustomNotification('Заявка отправлена')
 
 				} catch (err) {

@@ -1,0 +1,30 @@
+@mixin stroke
+  content: ''
+  width: 100%
+  height: 2px
+  position: absolute
+  transition: .5s
+  background: var(--MainColor)
+  opacity: .6
+
+.cross
+  width: 25px
+  height: 25px
+  border: none
+  background: none
+  position: relative
+  display: grid
+  place-items: center
+  cursor: pointer
+  transition: .5s
+  &:hover
+    &::before, &::after
+      transition: .5s
+      background: var(--redColor)
+  &::before
+    @include stroke
+    rotate: 45deg
+  &::after
+    @include stroke
+    rotate: -45deg
+

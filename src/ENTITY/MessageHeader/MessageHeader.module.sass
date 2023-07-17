@@ -1,0 +1,41 @@
+.Head
+  padding-top: 5px
+  display: flex
+  justify-content: space-between
+  border-bottom: 1px solid var(--hoverColor)
+
+.CloseButtonPos
+  display: grid
+  place-items: center
+  width: 20%
+
+.dataWrapper
+  margin: 0 0 0 35px
+  padding: 5px 30px
+  opacity: 1
+  animation: none
+  display: flex
+  &:hover
+    background: var(--hoverColor)
+  @media (max-width: 768px)
+    padding: 5px 10px
+    width: 80%
+    margin: 0 0 0 15px
+
+.LogoDialog
+  width: 60px
+  height: 60px
+  @media (max-width: 500px)
+    width: 45px
+    height: 45px
+
+.TextDialog
+  p
+    &:nth-child(1)
+      font-size: 1rem
+      @media (max-width: 500px)
+        font-size: .85rem
+    &:nth-child(2)
+      font-size: .85rem
+      @media (max-width: 500px)
+        font-size: .65rem

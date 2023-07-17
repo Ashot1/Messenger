@@ -28,9 +28,11 @@ const RegisterForm: FC = () => {
 						tag: data.tag,
 						addAdmin: false,
 						addNews: false,
+						canBanUsers: false,
 						ban: false,
 						posts: [],
 						info: '',
+						lastEntry: '',
 						profileSettings: {
 							canAddToFriends: true,
 							canOtherMessage: true,

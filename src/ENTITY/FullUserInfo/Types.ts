@@ -1,9 +1,10 @@
 export interface IFullUserInfo {
-    createdAt: string,
+    createdAt?: string,
     lastSignIn?: string,
     signMethod?: string,
     adminRights: string,
-    email: string,
+    email?: string,
     dopClass?: string,
-    isVerified?: boolean
+    isVerified?: boolean,
+    needVersion?: boolean
 }
