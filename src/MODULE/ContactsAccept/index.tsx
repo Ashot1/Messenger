@@ -2,9 +2,7 @@ import styles from './ContactsAccept.module.sass'
 import { FC } from 'react'
 import {useAppSelector} from "../../HOOK";
 import {useGetAcceptDataQuery} from "../../STORE/firebaseApi.ts";
-// import ContactsListTemplate from "../../ENTITY/ContactsListTemplate";
-// import BorderedButton from "../../UI/BorderedButton";
-import UserList from "../../ENTITY/UserList";
+import ContactsListTemplate from "../../ENTITY/ContactsListTemplate";
 
 const ContactsAccept: FC = () => {
 
@@ -20,28 +18,26 @@ const ContactsAccept: FC = () => {
 	if(loading)
 		return(
 			<div className={styles.ContactsAcceptWrapper}>
-				<UserList users={fakeUsers} title="Входящие" isLoading={loading}/>
-				<UserList users={fakeUsers} title="Исходящие" isLoading={loading}/>
 
+				<ContactsListTemplate data={fakeUsers} type="acceptTo" loading={true}>
+					Входящие
+				</ContactsListTemplate>
+
+				<ContactsListTemplate data={fakeUsers} type="acceptFrom" loading={true}>
+					Исходящие
+				</ContactsListTemplate>
 			</div>
 		)
 
 	if(data) return (
 		<div className={styles.ContactsAcceptWrapper}>
-			<UserList users={data?.acceptTo} title="Входящие" dopClass={styles.TopList}/>
-			<UserList users={data?.acceptFrom} title="Исходящие"/>
-{/*			<ContactsListTemplate data={data?.acceptFrom} title="Исходящие">
-				<BorderedButton
-					BGColor="var(--redColor)"
-					color="#fff"
-					click={() => deleteAccept({id: id, text: 'Заявка отменена', userID: userSelector.uid})}>
-					Отменить заявку
-				</BorderedButton>
+			<ContactsListTemplate data={data?.acceptTo} type="acceptTo">
+				Входящие
 			</ContactsListTemplate>
 
-			<ContactsListTemplate data={data?.acceptTo} title="Входящие">
-
-			</ContactsListTemplate>*/}
+			<ContactsListTemplate data={data?.acceptFrom} type="acceptFrom">
+				Исходящие
+			</ContactsListTemplate>
 		</div>
 	)
 }

@@ -7,11 +7,18 @@ const UserCircle: FC<IUserCircle> = ({url,
 										 dopClass,
 										 imgStyles,
 										 loading = false,
+										 isButton = true,
 										 ...props}) => {
-	return (
+	if(isButton) return (
 		<button type="button" className={`${styles.Avatar} ${dopClass}`} onClick={onclick} {...props}>
 			<img src={loading ? '' : url} alt="" style={imgStyles} className={loading ? styles.Loading : undefined}/>
 		</button>
+	)
+
+	return (
+		<div className={`${styles.Avatar} ${dopClass}`}>
+			<img src={loading ? '' : url} alt="" style={imgStyles} className={loading ? styles.Loading : undefined}/>
+		</div>
 	)
 }
 

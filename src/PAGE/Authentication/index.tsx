@@ -5,6 +5,8 @@ import {useAppDispatch, useAppSelector} from "../../HOOK";
 import {UserChecker} from "../../UserChecker.ts";
 import LogRegLinks from "../../ENTITY/LogRegLinks";
 import OtherAuthMethods from "../../ENTITY/OtherAuthMethods";
+import LoadingAuth from "./LoadingAuth.tsx"
+
 
 const Authentication: FC = () => {
 
@@ -30,3 +32,4 @@ const Authentication: FC = () => {
 }
 
 export default Authentication
+export {LoadingAuth}

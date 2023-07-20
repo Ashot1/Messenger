@@ -1,7 +1,75 @@
+@import 'https://fonts.googleapis.com/css2?family=Mulish:wght@200&display=swap'
+
 .section
-  background: var(--primaryBGcolor)
-  padding: 15px
   h1
     text-transform: uppercase
-    font-family: 'Russo One', sans-serif
     font-weight: 300
+    font-family: 'Mulish', sans-serif
+    font-size: 1.2rem
+    @media (max-width: 768px)
+      font-size: 1rem
+  ul
+    list-style: none
+    display: flex
+    flex-direction: column
+    @media (max-width: 768px)
+      padding-left: 10px
+      gap: 45px
+    li
+      display: flex
+      &::before
+        content: ''
+        display: block
+        width: 25px
+        height: 25px
+        border-bottom: 3px solid var(--MainColor)
+        border-left: 3px solid var(--MainColor)
+        opacity: .5
+        margin-right: 15px
+        margin-top: 30px
+        @media (max-width: 768px)
+          margin-right: 10px
+          width: 15px
+          height: 15px
+          margin-top: 20px
+
+.UserInfo
+  display: flex
+  flex: 1 1 auto
+  justify-content: space-between
+  @media (max-width: 768px)
+    flex-direction: column
+    gap: 5px
+
+.actions
+  align-items: center
+  display: flex
+  justify-content: flex-end
+  flex-wrap: wrap
+  gap: 15px
+  @media (max-width: 768px)
+    justify-content: flex-start
+    padding-left: 25px
+
+.AvatarList
+  margin-right: 0
+  img
+    width: 65px
+    height: 65px
+    @media (max-width: 768px)
+      width: 45px
+      height: 45px
+
+.TextDataList
+  margin-left: 0 !important
+
+.UserLink
+  text-decoration: none
+  padding: 5px 35px 5px 15px
+  border-radius: 15px
+  transition: .3s
+  @media (max-width: 768px)
+    padding: 5px 10px 5px 5px
+  &:hover
+    transition: .3s
+    background: var(--hoverColor)

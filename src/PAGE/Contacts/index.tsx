@@ -10,6 +10,7 @@ import UserList from "../../ENTITY/UserList";
 import {UserFromList} from "../../ENTITY/UserList";
 import BorderedButton from "../../UI/BorderedButton";
 import {DocumentData, QuerySnapshot} from "@firebase/firestore";
+import LoadinContacts from "./LoadinContacts.tsx"
 
 const Contacts: FC = () => {
 
@@ -72,7 +73,9 @@ const Contacts: FC = () => {
 				</form>
 				<Menu content={[{url: '/contacts/list', title: 'Контакты'}, {url: '/contacts/accept', title: 'Заявки'}]}/>
 				{!SearchParams.get('search') && <Outlet/>}
+
 				{SearchParams.get('search') && <UserList users={UserListDB} title="Результаты поиска"/>}
+
 				{SearchParams.get('search') && <div style={{width: '100%', display: 'grid', placeItems: 'center', marginTop: '50px'}}>
 					<BorderedButton click={loadNext} reversed>Показать больше</BorderedButton>
 				</div>}
@@ -82,3 +85,4 @@ const Contacts: FC = () => {
 }
 
 export default Contacts
+export {LoadinContacts}

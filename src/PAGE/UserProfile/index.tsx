@@ -7,6 +7,8 @@ import {useAppSelector} from "../../HOOK";
 import {doc, getDoc} from "firebase/firestore";
 import {db} from "../../firebaseInit.ts";
 import SettingsDefaultBlock from "../../UI/SettingsDefaultBlock";
+import LoadingUserProfile from "./LoadingUserProfile.tsx"
+
 
 const UserProfile: FC = () => {
 	const {id} = useParams()
@@ -58,9 +60,9 @@ const UserProfile: FC = () => {
 		<div className={styles.Settings}>
 			<div className={styles.content}>
 				<ProfileHeader id={id} Loading={Loading} User={User} setUser={changeAdm}/>
-				{Loading && <ProfilePosts id={id} User={User} Loading={Loading} currentUserID={userSelector.uid}/>}
+				{Loading && <ProfilePosts id={id} User={User} Loading={Loading} currentUserID={userSelector.uid} setUser={setUser}/>}
 				{condition
-					? <ProfilePosts id={id} User={User} Loading={Loading} currentUserID={userSelector.uid}/>
+					? <ProfilePosts id={id} User={User} Loading={Loading} currentUserID={userSelector.uid} setUser={setUser}/>
 
 					: !Loading && <div style={{width: '100%', display: 'flex', justifyContent: 'center', marginTop: '50px'}}>
 							<SettingsDefaultBlock>
@@ -73,3 +75,5 @@ const UserProfile: FC = () => {
 }
 
 export default UserProfile
+
+export {LoadingUserProfile}

@@ -14,7 +14,10 @@ const ProfileCreatePost: FC<ICreatePost> = ({createPost}) => {
 			{!OpenState && <CreateButton Click={() => setOpenState(true)}/>}
 			{OpenState &&
 				<SettingsDefaultBlock>
-					<form onSubmit={createPost}>
+					<form onSubmit={(e) => {
+						createPost(e)
+						setOpenState(false)
+					}}>
 						<TransparentInput placeholder="Название" dopClass={styles.Title} required/>
 						<Content/>
 						<div className={styles.ButtonPosition}>

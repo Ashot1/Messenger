@@ -3,6 +3,11 @@ import { FC } from 'react'
 import {ISearch} from "./Types.ts";
 
 const Search: FC<ISearch> = ({register}) => {
+	if(!register) return (
+		<div className={styles.SearchWrapper}>
+			<input type="search" className={styles.Search} placeholder="Искать..." autoCorrect="off"/>
+		</div>
+	)
 	return (
 		<div className={styles.SearchWrapper}>
 			<input type="search" className={styles.Search} placeholder="Искать..." autoCorrect="off" {...register("Search")}/>

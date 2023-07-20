@@ -2,7 +2,7 @@ import styles from './AsideMenu.module.sass'
 import { FC } from 'react'
 import AsideMenuContent from "../../ENTITY/AsideMenuContent";
 import {IAsideMenu} from "./Types.ts";
-import { useAppSelector } from "../../HOOK/ReduxCustomHooks.ts";
+import { useAppSelector } from "../../HOOK";
 import AsideMenuBurger from "../../ENTITY/AsideMenuBurger";
 
 

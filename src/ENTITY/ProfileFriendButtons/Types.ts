@@ -5,3 +5,8 @@ export interface IProfileFriendsButton {
     User: UserInfo,
     PageUser: {friends: string[], acceptTo: string[]}
 }
+
+export interface IAcceptDenyButton {
+    id: string,
+    PageUser?: {friends: string[], acceptTo: string[]}
+}

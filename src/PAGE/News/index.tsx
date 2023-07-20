@@ -5,6 +5,7 @@ import CreateNews from "../../MODULE/CreateNews";
 import {useFormatDate} from "../../HOOK";
 import {DocumentData} from "@firebase/firestore-types";
 import {useGetNewsQuery} from "../../STORE/newsAPI.ts";
+import LoadingNews from "./LoadingNews.tsx"
 
 const News: FC = () => {
 	const {data, isLoading} = useGetNewsQuery(''),
@@ -46,3 +47,4 @@ const News: FC = () => {
 }
 
 export default News
+export {LoadingNews}

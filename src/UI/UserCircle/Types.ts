@@ -5,5 +5,6 @@ export interface IUserCircle extends HTMLAttributes<HTMLButtonElement>{
     onclick?: () => void,
     dopClass?: string,
     imgStyles?: CSSProperties,
-    loading?: boolean
+    loading?: boolean,
+    isButton?: boolean
 }

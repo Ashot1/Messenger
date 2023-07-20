@@ -20,6 +20,7 @@ import {
 import {useAppDispatch, useAppSelector} from "../HOOK";
 import {ThemeChecker} from "./ThemeChecker.ts";
 
+
 const App: FC = () => {
 
     const location = useLocation(),
@@ -51,23 +52,22 @@ const App: FC = () => {
 
     return (
         <div className={styles.app}>
-            {UserSelector.userEmail && <AsideMenu PageList={PageList.slice(0, -3)}/>}
+            <AsideMenu PageList={PageList.slice(0, -3)}/>
 
             <section className={styles.rightside}>
-                {UserSelector.userEmail
-                    && <Header>
-                        {PageList.map(page => {
-                            if(page.url === `/profile/${UserSelector.uid}`) return
-                            if (location.pathname.includes(page.url)) {
-                                return (<Fragment key={`${page.url}header`}>
-                                    <img className={styles.HeaderIcon} src={page.icon} alt={page.alt}/>
-                                    <h2 className={styles.HeaderTitle}>
-                                        {page.alt}
-                                    </h2>
-                                </Fragment>)
-                            }
-                        })}
-                    </Header>}
+                <Header>
+                    {PageList.map(page => {
+                        if(page.url === `/profile/${UserSelector.uid}`) return
+                        if (location.pathname.includes(page.url)) {
+                            return (<Fragment key={`${page.url}header`}>
+                                <img className={styles.HeaderIcon} src={page.icon} alt={page.alt}/>
+                                <h2 className={styles.HeaderTitle}>
+                                    {page.alt}
+                                </h2>
+                            </Fragment>)
+                        }
+                    })}
+            </Header>
                 <Main>
                     <Outlet/>
                 </Main>

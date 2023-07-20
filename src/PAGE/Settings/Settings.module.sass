@@ -1,3 +1,5 @@
+@import "../../mixins"
+
 .Settings
   display: flex
   justify-content: center
@@ -9,3 +11,7 @@
     width: clamp(600px, 80%, 1500px)
   @media (max-width: 620px)
     width: 90%
+
+.Loading
+  p, span
+    +loadingText

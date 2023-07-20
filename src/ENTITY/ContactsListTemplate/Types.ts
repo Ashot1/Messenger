@@ -5,5 +5,5 @@ export interface IContactsLIstTemplate {
     children: ReactNode | string,
     data: UserFromList[],
     loading?: boolean,
-    title?: string
+    type?: "acceptTo" | "acceptFrom"
 }

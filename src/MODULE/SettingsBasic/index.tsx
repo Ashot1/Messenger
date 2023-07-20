@@ -73,8 +73,8 @@ const SettingsBasic: FC = () => {
 	const createdAt = auth.currentUser?.metadata.creationTime,
 		lastSignIn = auth.currentUser?.metadata.lastSignInTime,
 		providerID = auth.currentUser?.providerData[0].providerId,
-		adminRights = userSelector.addNews ? 'наивысшие'
-			: userSelector.addAdmin ? 'расширенные'
+		adminRights = userSelector.addAdmin ? 'наивысшие'
+			: userSelector.addNews ? 'расширенные'
 				: userSelector.canBanUsers ? 'базовые'
 					: 'отсутствуют'
 

@@ -1,5 +1,5 @@
 import styles from './MessagesDialogList.module.sass'
-import { FC } from 'react'
+import {FC, useEffect} from 'react'
 import {IMessagesDialogList} from "./Types.ts";
 import UserCircle from "../../UI/UserCircle";
 import {useAppSelector} from "../../HOOK";
@@ -10,6 +10,11 @@ const MessagesDialogList: FC<IMessagesDialogList> = ({messages, PageUser, loadin
 	const currentUser = useAppSelector(state => state.user)
 
 	if(loading) return <section className={styles.Messages}></section>
+
+	useEffect(() => {
+		const section = document.querySelector(`.${styles.Messages}`)
+		if(section && messages) section.scrollTo({top: section.scrollHeight})
+	}, [messages])
 
 	return (
 		<section className={styles.Messages}>

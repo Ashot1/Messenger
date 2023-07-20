@@ -1,11 +1,24 @@
 $transitionMS: .2s
 
+.loadingColor
+  background: black
+  &::before
+    background: black
+  &::after
+    background: black
+
+.basicColor
+  background: var(--MainColor)
+  &::before
+    background: var(--MainColor)
+  &::after
+    background: var(--MainColor)
+
 =BurgerBA
   transition: $transitionMS
   content: ''
   width: 100%
   height: 2px
-  background: var(--MainColor)
   display: block
   position: absolute
 
@@ -25,7 +38,6 @@ $transitionMS: .2s
   transition: .1s
   width: 100%
   height: 2px
-  background: var(--MainColor)
   display: block
   &::before
     +BurgerBA

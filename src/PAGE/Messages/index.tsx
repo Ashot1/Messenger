@@ -4,7 +4,7 @@ import MessagesList from "../../MODULE/MessagesList";
 import {Outlet} from "react-router-dom";
 import {useGetContactsQuery} from "../../STORE/firebaseApi.ts";
 import {useAppSelector} from "../../HOOK";
-
+import LoadingMessages from "./LoadingMessages.tsx"
 
 const Messages: FC = () => {
 
@@ -24,7 +24,7 @@ const Messages: FC = () => {
 		getUserList();
 	}, [user.messages]);
 
-	if(data) return (
+	return (
 		<div className={styles.messages}>
 			<div className={styles.content}>
 				<MessagesList data={data} loading={isLoading || user.loading.loadingMessages}/>
@@ -35,3 +35,4 @@ const Messages: FC = () => {
 }
 
 export default Messages
+export {LoadingMessages}

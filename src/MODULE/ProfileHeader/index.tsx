@@ -18,6 +18,7 @@ const ProfileHeader: FC<IProfileHeader> = ({User, Loading, id, setUser}) => {
 		navigate = useNavigate()
 
 	useEffect(() => {
+		if(!id) return
 		getDoc(doc(db, "Lists", id))
 			.then(response => setPageUser({acceptTo: response.data()?.acceptList, friends: response.data()?.friendList}))
 	}, [id])

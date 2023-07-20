@@ -2,9 +2,15 @@
   width: 100%
   display: flex
   gap: 10px
+  @media (max-width: 500px)
+    flex-direction: column
+    gap: 25px
   section
     width: auto
     display: flex
+    @media (max-width: 500px)
+      width: 100%
+      justify-content: center
 
 .Text
   p
@@ -25,3 +31,6 @@
   max-width: 40%
   gap: 15px
   flex-wrap: wrap
+  @media (max-width: 500px)
+    max-width: 100%
+    flex-direction: column

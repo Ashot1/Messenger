@@ -7,7 +7,7 @@ import {UserFromList} from "../../ENTITY/UserList";
 import {useParams} from "react-router-dom";
 
 
-const MessagesList: FC<{ data: UserFromList[], loading: boolean }> = ({data, loading}) => {
+const MessagesList: FC<{ data: UserFromList[] | undefined, loading: boolean }> = ({data, loading}) => {
 
 	const user = useAppSelector(state => state.user),
 		params = useParams(),
@@ -17,24 +17,25 @@ const MessagesList: FC<{ data: UserFromList[], loading: boolean }> = ({data, loa
 	
 	if(loading) return <LoadingMessageList/>
 
-	if(!data || data.length <= 0) return (
+	if((!data || data.length <= 0) && !loading) return (
 		<div className={styles.nonInfo}>
 			У вас пока нет диалогов
 		</div>
 	)
 
-	else return (
+	else if(data) return (
 		<div className={styles.MessageList}>
 		<ul>
 			{data.map(dataUser => {
 
 				let url = ''
-				let lastWord = ''
+				let lastWord = 'Напишите сообщение'
 				user.messages.forEach(chat => {
 					if (chat.users.includes(dataUser.uid) && chat.type === 'private') {
 						url = chat.id
+						if(!chat.message.length) return
 						const who = chat.message.at(-1)?.from === user.uid ? 'Вы:' : ''
-						lastWord = `${who} ${chat.message.at(-1)?.text}` || ' '
+						lastWord = `${who} ${chat.message.at(-1)?.text}` || 'Напишите сообщение'
 					}
 				})
 
@@ -46,7 +47,8 @@ const MessagesList: FC<{ data: UserFromList[], loading: boolean }> = ({data, loa
 							photo={dataUser.photo}
 							secondaryText={lastWord}
 							logoDopClass={styles.logoUser}
-							TextDopClass={styles.textUser}/>
+							TextDopClass={styles.textUser}
+							isButton={false}/>
 					</CustomButton>
 				</li>
 			})}
@@ -62,33 +64,36 @@ const LoadingMessageList: FC = () => {
 		<div className={styles.MessageList}>
 			<ul>
 				<li>
-					<CustomButton dopClass={styles.MessageButton}>
+					<CustomButton dopClass={`${styles.MessageButton} ${styles.bg}`}>
 						<UserData
 							name="Загрузка"
 							photo=" "
 							secondaryText="Загрузка"
 							logoDopClass={`${styles.logoUser} ${styles.loadingLogo}`}
-							TextDopClass={`${styles.textUser} ${styles.loadingText}`}/>
+							TextDopClass={`${styles.textUser} ${styles.loadingText}`}
+							isButton={false}/>
 					</CustomButton>
 				</li>
 				<li>
-					<CustomButton dopClass={styles.MessageButton}>
+					<CustomButton dopClass={`${styles.MessageButton} ${styles.bg}`}>
 						<UserData
 							name="Загрузка"
 							photo=" "
 							secondaryText="Загрузка"
 							logoDopClass={`${styles.logoUser} ${styles.loadingLogo}`}
-							TextDopClass={`${styles.loadingText}`}/>
+							TextDopClass={`${styles.loadingText}`}
+							isButton={false}/>
 					</CustomButton>
 				</li>
 				<li>
-					<CustomButton dopClass={styles.MessageButton}>
+					<CustomButton dopClass={`${styles.MessageButton} ${styles.bg}`}>
 						<UserData
 							name="Загрузка"
 							photo=" "
 							secondaryText="Загрузка"
 							logoDopClass={`${styles.logoUser} ${styles.loadingLogo}`}
-							TextDopClass={`${styles.loadingText}`}/>
+							TextDopClass={`${styles.loadingText}`}
+							isButton={false}/>
 					</CustomButton>
 				</li>
 			</ul>

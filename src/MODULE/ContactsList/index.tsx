@@ -12,12 +12,13 @@ const ContactsList: FC = () => {
 			{photo: "", name: "Загрузка", tag: "12341", uid: "123451423123"},
 			{photo: "", name: "Загрузка", tag: "12342", uid: "123451423123"},
 			{photo: "", name: "Загрузка", tag: "12343", uid: "123451423123"},
-		]
+		],
+		loading = ContactsLoading || user.loading.loadingLists
 
-	if(ContactsLoading)
+	if(loading)
 		return (
 				<div className={styles.WrapperContactsList}>
-					<UserList users={fakeUsers} isLoading={ContactsLoading}/>
+					<UserList users={fakeUsers} isLoading={loading}/>
 				</div>
 			)
 

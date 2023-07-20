@@ -48,6 +48,13 @@ const HeaderActionsBar: FC<IHeaderActionsBar> = () => {
 		})
 	}
 
+	if(user.loading.loadingInfo || user.loading.loadingAcceptFrom) return (
+		<div className={styles.actions}>
+			<UserCircle url='' loading={true} dopClass={styles.UserLogo}/>
+			<UserCircle url='' loading={true} dopClass={styles.UserLogo}/>
+		</div>
+	)
+
 	return (
 		<div className={styles.actions}>
 			<UserCircle url={NotifPNG}
@@ -69,7 +76,8 @@ const HeaderActionsBar: FC<IHeaderActionsBar> = () => {
 
 				{user.notifications.length >= 1
 					&& <ul onBlur={() => HideWhenBlur('notif')}>
-					{user.notifications.map((notif, index) => {
+					{//@ts-ignore
+						user.notifications.toReversed().map((notif, index) => {
 						let src = notif.icon
 						const systems = ['newsIcon']
 						if(systems[0] === src) src = newsIco

@@ -1,5 +1,5 @@
 import styles from './ProfilePosts.module.sass'
-import {FC} from 'react'
+import {FC, useMemo} from 'react'
 import ProfileCreatePost from "../../ENTITY/ProfileCreatePost";
 import {doc, updateDoc} from "firebase/firestore";
 import {db} from "../../firebaseInit.ts";
@@ -11,12 +11,14 @@ import SettingsDefaultBlock from "../../UI/SettingsDefaultBlock";
 import deleteIcon from '../../ASSET/icon-delete.png'
 // import editIcon from '../../ASSET/icon-edit.png'
 import BorderedButton from "../../UI/BorderedButton";
+import toast from "react-hot-toast";
 
 
-const ProfilePosts: FC<IProfilePosts> = ({id, User, Loading, currentUserID}) => {
+const ProfilePosts: FC<IProfilePosts> = ({id, User, Loading, currentUserID, setUser}) => {
 
 	const getDate = useLocaleDate(),
 		dispatch = useAppDispatch()
+
 
 	const createPost = async (e: any) => {
 		e.preventDefault()
@@ -45,19 +47,31 @@ const ProfilePosts: FC<IProfilePosts> = ({id, User, Loading, currentUserID}) => 
 	const deletePost = (post: {title: string, content: string, createAt: string}) => {
 		if(currentUserID !== id) return
 		if(!User?.posts) return
-		const filteredPosts = User.posts.filter(item => item !== post)
+		const postToRemove = post
+		const filteredPosts = User.posts.filter(item => item !== postToRemove)
 
-		PromiseNotification({
-			mainFunction: async () => {
+		dispatch(changePosts({posts: filteredPosts}))
+
+
+		toast((t) => {
+
+			const timerForDelete = useMemo(() => setTimeout(async () => {
 				await updateDoc(doc(db, "Users", id), {
 					posts: filteredPosts
 				})
-			},
-			successFunction: () => <b>Пост удален</b>
-		})
-			.then(() => {
-				dispatch(changePosts({posts: filteredPosts}))
-			})
+			}, 3500), [filteredPosts, id])
+
+			return <span className={styles.DeletePostNotif}>
+				<b>Пост удален</b>
+				<button onClick={() => {
+					toast.dismiss(t.id)
+					clearTimeout(timerForDelete)
+					dispatch(changePosts({posts: [...filteredPosts, postToRemove]}))
+					setUser({...User, posts: [...filteredPosts, postToRemove]})
+				}}>Отменить</button>
+			</span>
+		}, {style: {background: 'var(--primaryBGcolor)', color: 'var(--MainColor)'}, duration: 2500})
+
 	}
 
 	if(Loading) return <LoadingPosts/>
