@@ -8,7 +8,7 @@ import {doc, getDoc} from "firebase/firestore";
 import {db} from "../../firebaseInit.ts";
 import {useCreateNotificationMutation} from "../../STORE/firebaseApi.ts";
 
-const CancelButton: FC<IAcceptDenyButton> = ({id, PageUser}) => {
+const CancelButton: FC<IAcceptDenyButton> = ({id, PageUserLists}) => {
 
     const userSelector = useAppSelector(state => state.user),
         [changeParam] = useAddToListMutation(),
@@ -21,13 +21,14 @@ const CancelButton: FC<IAcceptDenyButton> = ({id, PageUser}) => {
             BGColor="var(--redColor)"
             color="#fff"
             click={() => {
-                if(PageUser) CancelAccept(userSelector, changeParam, id, PageUser, createNotifServer, getDate)
+                if(PageUserLists) CancelAccept(userSelector, changeParam, id, PageUserLists, createNotifServer, getDate)
                 else {
                     getDoc(doc(db, "Lists", id))
                         .then(response => {
                             CancelAccept(userSelector, changeParam, id, {
                                 acceptTo: response.data()?.acceptList,
-                                friends: response.data()?.friendList
+                                friends: response.data()?.friendList,
+                                banList: response.data()?.banList
                             }, createNotifServer, getDate)
                         })
                 }

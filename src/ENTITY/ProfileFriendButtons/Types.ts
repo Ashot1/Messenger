@@ -9,7 +9,7 @@ export interface IProfileFriendsButton {
 
 export interface IAcceptDenyButton {
     id: string,
-    PageUserLists?: PageUserType
+    PageUserLists?: PageUserType,
 }
 
 export interface IDeleteFromContactsFunction {

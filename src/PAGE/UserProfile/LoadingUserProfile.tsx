@@ -5,7 +5,7 @@ const LoadingUserProfile = () => {
     return (
         <div className={styles.Settings}>
             <div className={styles.content}>
-                <ProfileHeader id='' Loading={true} User={undefined} setUser={() => 'lol'}/>
+                <ProfileHeader id='' Loading={true} User={undefined} setUser={() => 'lol'} PageUserLists={{friends: [], acceptTo: [], banList: []}}/>
             </div>
         </div>
     )

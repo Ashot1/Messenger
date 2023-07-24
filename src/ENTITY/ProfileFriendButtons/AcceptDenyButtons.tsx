@@ -9,7 +9,7 @@ import {acceptContact} from "./Functions.ts";
 import {doc, getDoc} from "firebase/firestore";
 import {db} from "../../firebaseInit.ts";
 
-const AcceptDenyButtons: FC<IAcceptDenyButton> = ({id, PageUser}) => {
+const AcceptDenyButtons: FC<IAcceptDenyButton> = ({id, PageUserLists}) => {
 
     const userSelector = useAppSelector(state => state.user),
         getDate = useLocaleDate(),
@@ -22,13 +22,14 @@ const AcceptDenyButtons: FC<IAcceptDenyButton> = ({id, PageUser}) => {
                 BGColor="#4487a2"
                 color="#fff"
                 click={() => {
-                    if(PageUser) acceptContact(userSelector, changeParam, id, PageUser, createNotifServer, getDate)
+                    if(PageUserLists) acceptContact(userSelector, changeParam, id, PageUserLists, createNotifServer, getDate)
                     else {
                         getDoc(doc(db, "Lists", id))
                             .then(response => {
                                 acceptContact(userSelector, changeParam, id, {
                                     acceptTo: response.data()?.acceptList,
-                                    friends: response.data()?.friendList
+                                    friends: response.data()?.friendList,
+                                    banList: response.data()?.banList
                                 }, createNotifServer, getDate)
                             })
                     }
@@ -51,7 +52,7 @@ const AcceptDenyButtons: FC<IAcceptDenyButton> = ({id, PageUser}) => {
                                 fromPhoto: userSelector.userPhoto,
                                 getDate: getDate,
                                 text: `${userSelector.userDisplayName} отклонил вашу заявку в контакты`,
-                                url: '/contacts/accept'
+                                url: `/profile/${userSelector.uid}`
                             })
                         CustomNotification('Заявка отклонена')
                     } catch (err) {
