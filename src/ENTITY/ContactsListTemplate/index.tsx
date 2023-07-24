@@ -11,7 +11,7 @@ const ContactsListTemplate: FC<IContactsLIstTemplate> = ({children, data, loadin
 		<section className={styles.section}>
 			<h1>{children}</h1>
 			{
-				data.length < 1 && <p style={{display: "grid", placeItems: 'center', padding: '35px 0'}}>
+				data.length < 1 && <p className={styles.ClearText}>
 					Список пуст
 				</p>
 			}

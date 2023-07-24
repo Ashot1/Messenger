@@ -5,10 +5,13 @@ import {
     changeAcceptFromList,
     changeAdminRights,
     changeLists, changeMessages, changeNotifications, changePosts, changeSettings,
-    changeUser, stopLoading,
+    changeUser, stopLoading, UserInitialType,
 } from "./STORE/userSlice.ts";
 import {AppDispatch} from "./STORE";
 import {collection, doc, getDoc, onSnapshot, query, where} from "firebase/firestore";
+// import {CreateBrowserNotification} from "./notificationsAPI.ts";
+// import {SystemsNotifications} from "./ENTITY/HeaderActionsBar";
+// import newsIco from "./ASSET/icon-news.png"
 
 export const UserChecker = (dispatcher: AppDispatch) => useEffect(() => {
 
@@ -78,9 +81,9 @@ export const UserListAnotherChecker = (id: string | undefined, dispatcher: AppDi
     return () => Unsubscribe()
 }, [dispatcher, id])
 
-export const UserNotificationsChecker = (id: string | undefined, dispatcher: AppDispatch) => useEffect(() => {
-    if(!id) return
-    const Unsubscribe = onSnapshot(doc(db, "Notifications", id), (shot) => {
+export const UserNotificationsChecker = (User: UserInitialType | undefined, dispatcher: AppDispatch) => useEffect(() => {
+    if(!User?.uid) return
+    const Unsubscribe = onSnapshot(doc(db, "Notifications", User.uid), (shot) => {
 
         dispatcher(changeNotifications({notifications: shot.data()?.notifications}))
 
@@ -89,7 +92,7 @@ export const UserNotificationsChecker = (id: string | undefined, dispatcher: App
     }, (err) => console.log(err))
 
     return () => Unsubscribe()
-}, [dispatcher, id])
+}, [dispatcher, User?.uid])
 
 
 export const UserMessagesChecker = (id: string | undefined, dispatcher: AppDispatch) => useEffect(() => {

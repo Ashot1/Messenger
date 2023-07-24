@@ -8,21 +8,21 @@ import {useGetNewsQuery} from "../../STORE/newsAPI.ts";
 import LoadingNews from "./LoadingNews.tsx"
 
 const News: FC = () => {
-	const {data, isLoading} = useGetNewsQuery(''),
+	const {data, isLoading, isFetching} = useGetNewsQuery(''),
 		DateFormat = useFormatDate()
 
 	return (
 		<div className={styles.News}>
 			<div className={styles.content}>
 				<CreateNews/>
-				{isLoading && <NewsBlock title="Обновление X.X" content={[
+				{isLoading && isFetching && <NewsBlock title="Обновление X.X" content={[
 					'Добавлена плавная загрузка данных',
 					'Добавлена страница с ',
 					'Добавлено отображение ',
 					'Добавлена возможно удалить ',
 					'Добавлена возможно изменить '
 				]} dopClass={styles.loaderNews} createAt="01.07.20203"/>}
-				{isLoading && <NewsBlock title="Обновление X.X" content={[
+				{isLoading && isFetching && <NewsBlock title="Обновление X.X" content={[
 					'Добавлена плавная загрузка данных',
 					'Добавлена страница с ',
 					'Добавлено отображение ',

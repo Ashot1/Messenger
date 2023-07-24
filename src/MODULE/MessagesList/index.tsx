@@ -34,8 +34,11 @@ const MessagesList: FC<{ data: UserFromList[] | undefined, loading: boolean }> =
 					if (chat.users.includes(dataUser.uid) && chat.type === 'private') {
 						url = chat.id
 						if(!chat.message.length) return
+
 						const who = chat.message.at(-1)?.from === user.uid ? 'Вы:' : ''
-						lastWord = `${who} ${chat.message.at(-1)?.text}` || 'Напишите сообщение'
+						const checked = chat.message.at(-1)?.from !== user.uid && !chat.message.at(-1)?.isChecked ? '•' : ''
+
+						lastWord = `${who} ${chat.message.at(-1)?.text} ${checked}` || 'Напишите сообщение'
 					}
 				})
 

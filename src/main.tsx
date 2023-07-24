@@ -9,11 +9,13 @@ import {Toaster} from "react-hot-toast";
 import {router} from "./Router.tsx";
 
 
+const mediaQuery = window.matchMedia("(max-width: 768px)").matches
+
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <StrictMode>
       <Provider store={store}>
           <Toaster
-              position="top-center"
+              position={mediaQuery ? "bottom-center" : "top-center"}
               reverseOrder={true}
           />
           <RouterProvider router={router} />

@@ -5,53 +5,42 @@ import UserCircle from "../../UI/UserCircle";
 import userPNG from "../../ASSET/icon-avatar.png";
 import NotifPNG from '../../ASSET/icon-notification1.png'
 import ModalBlock from "../../UI/ModalBlock";
-import {Link} from "react-router-dom";
-import { signOut } from "firebase/auth";
-import {auth, db} from "../../firebaseInit.ts";
+import {Link, useLocation, useNavigate} from "react-router-dom";
 import {useAppSelector} from "../../HOOK";
 import ModalWindow from "../../UI/ModalWindow";
 import CustomButton from "../../UI/CustomButton";
 import newsIco from "../../ASSET/icon-news.png"
 import deleteIco from "../../ASSET/icon-delete.png"
-import {doc, updateDoc} from "firebase/firestore";
 import BorderedButton from "../../UI/BorderedButton";
+import {clearNotifications, deleteNotification, SignOut} from "./Functions.ts";
+
+export const SystemsNotifications =  ['newsIcon']
 
 const HeaderActionsBar: FC<IHeaderActionsBar> = () => {
 
 	const [OpenState, setOpenState] = useState<{[key: string]: boolean}>({notif: false, user: false}),
 	 	user = useAppSelector(state => state.user),
-	 	[Modal, setModal] = useState(false)
-
-	const SignOut = () => {
-		signOut(auth)
-			.then(() => window.location.reload())
-			.catch((e) => alert(e))
-	}
+	 	[Modal, setModal] = useState(false),
+		location = useLocation(),
+		navigate = useNavigate()
 
 	const HideWhenBlur = (state: string) => setTimeout(() => setOpenState(prevState => {
-			if (prevState[state]) return {notif: false, user: false}
-			return prevState
-		}), 250)
+		if (prevState[state]) return {notif: false, user: false}
+		return prevState
+	}), 250)
 
-
-	const deleteNotification = async (notif: {text: string, createAt: string, icon: string}) => {
-		if(!user?.uid) return
-		await updateDoc(doc(db, "Notifications", user.uid), {
-			notifications: user.notifications.filter(notification => notification !== notif)
-		})
-	}
-
-	const clearNotifications = async () => {
-		if(!user?.uid) return
-		await updateDoc(doc(db, "Notifications", user.uid), {
-			notifications: []
-		})
-	}
 
 	if(user.loading.loadingInfo || user.loading.loadingAcceptFrom) return (
 		<div className={styles.actions}>
-			<UserCircle url='' loading={true} dopClass={styles.UserLogo}/>
-			<UserCircle url='' loading={true} dopClass={styles.UserLogo}/>
+			<UserCircle url={NotifPNG} dopClass={styles.Notification}/>
+			<UserCircle url='' loading={true} dopClass={styles.UserLogo} onclick={() => setOpenState({notif: false, user: !OpenState.user})}/>
+			<ModalBlock openState={OpenState.user} dopClass={styles.UserModal}>
+				<ul>
+					<li onClick={() => window.location.reload()}>Обновить</li>
+					<Link to="/settings/main"><li>Настройки</li></Link>
+					<li className={styles.RedButton}>Выйти</li>
+				</ul>
+			</ModalBlock>
 		</div>
 	)
 
@@ -79,18 +68,24 @@ const HeaderActionsBar: FC<IHeaderActionsBar> = () => {
 					{//@ts-ignore
 						user.notifications.toReversed().map((notif, index) => {
 						let src = notif.icon
-						const systems = ['newsIcon']
-						if(systems[0] === src) src = newsIco
+						if(SystemsNotifications[0] === src) src = newsIco
 
-						return <li key={index} onClick={() => deleteNotification(notif)}>
-								{systems.includes(notif.icon)
+						return <li key={index} onClick={() => {
+								let url = notif.url
+								if(url === '' || !url) url = location.pathname
+								navigate(url)
+							}}>
+								{SystemsNotifications.includes(notif.icon)
 									? <img src={src} alt="фото" className={styles.SystemImg}/>
 									: <img src={src || userPNG} alt="фото" className={styles.UserImg} style={{filter: !src ? 'var(--invertFilter)' : ''}}/>}
 								<div className={styles.NotifText}>
 									<p>{notif.text}</p>
 									<span>{notif.createAt}</span>
 								</div>
-								<button>
+								<button onClick={e => {
+									e.stopPropagation()
+									deleteNotification(notif, user)
+								}}>
 									<img src={deleteIco} alt="Удалить уведомление"/>
 								</button>
 							</li>
@@ -99,7 +94,7 @@ const HeaderActionsBar: FC<IHeaderActionsBar> = () => {
 
 				{user.notifications.length >= 1
 					&& <div className={styles.ButtonPosition}>
-					<BorderedButton click={clearNotifications} BGColor="var(--MainColor)" color="var(--InvertMainColor)" reversed>
+					<BorderedButton click={() => clearNotifications(user)} BGColor="var(--MainColor)" color="var(--InvertMainColor)" reversed>
 						Очистить все
 					</BorderedButton>
 				</div>}

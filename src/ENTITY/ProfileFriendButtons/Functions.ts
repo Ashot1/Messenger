@@ -1,7 +1,15 @@
 import CustomNotification from "../../UI/CustomNotification";
 import {listsMutationType, notificationSendType, UserInitialType} from "../../STORE";
+import {PageUserType} from "../../MODULE/ProfileHeader";
+import {IDeleteFromContactsFunction} from "./Types.ts";
 
-export const deleteContact = (userSelector: UserInitialType, changeParam: listsMutationType, id: string, PageUser: {friends: string[], acceptTo: string[]}) => {
+export const deleteContact = ({createNotifServer,
+                                  getDate,
+                                  id,
+                                  PageUserLists,
+                                  userSelector,
+                                  changeParam}: IDeleteFromContactsFunction) => {
+
     if(!userSelector.uid) return
     try {
         changeParam({
@@ -12,9 +20,18 @@ export const deleteContact = (userSelector: UserInitialType, changeParam: listsM
         changeParam({
             id: id,
             massive: 'friendList',
-            values: PageUser.friends.filter(item => item !== userSelector.uid).map(guy => ({stringValue: guy}))
+            values: PageUserLists.friends.filter(item => item !== userSelector.uid).map(guy => ({stringValue: guy}))
         })
         CustomNotification('Пользователь удален из контактов')
+
+        if(createNotifServer) createNotifServer({
+            toId: id,
+            fromPhoto: userSelector.userPhoto,
+            getDate: getDate,
+            text: `${userSelector.userDisplayName} удалил вас из контактов`,
+            url: `/profile/${userSelector.uid}`
+        })
+
     } catch (err) {
         CustomNotification(`Ошибка: ${err}`, 'error')
     }
@@ -23,7 +40,7 @@ export const deleteContact = (userSelector: UserInitialType, changeParam: listsM
 export const acceptContact = (userSelector: UserInitialType,
                               changeParam: listsMutationType,
                               id: string,
-                              PageUser: {friends: string[], acceptTo: string[]},
+                              PageUser: PageUserType,
                               createNotifServer: notificationSendType,
                               getDate: (arg: string) => string) => {
     if(!userSelector.uid) return
@@ -55,7 +72,7 @@ export const acceptContact = (userSelector: UserInitialType,
                 fromPhoto: userSelector.userPhoto,
                 getDate: getDate,
                 text: `${userSelector.userDisplayName} принял вашу заявку в контакты`,
-                url: ''
+                url: '/contacts/list'
             }
         )
 
@@ -66,7 +83,14 @@ export const acceptContact = (userSelector: UserInitialType,
     }
 }
 
-export const CancelAccept = (userSelector: UserInitialType, changeParam: listsMutationType, id: string, PageUser: {friends: string[], acceptTo: string[]}) => {
+export const CancelAccept = (
+    userSelector: UserInitialType,
+    changeParam: listsMutationType,
+    id: string,
+    PageUser: PageUserType,
+    createNotifServer: notificationSendType,
+    getDate: (arg: string) => string) => {
+
     if(!userSelector.uid) return
     try {
         changeParam({
@@ -74,6 +98,15 @@ export const CancelAccept = (userSelector: UserInitialType, changeParam: listsMu
             massive: 'acceptList',
             values: PageUser.acceptTo.filter(item => item !== userSelector.uid).map(guy => ({stringValue: guy}))
         })
+        createNotifServer(
+            {
+                toId: id,
+                fromPhoto: userSelector.userPhoto,
+                getDate: getDate,
+                text: `${userSelector.userDisplayName} отклонил вашу заявку в контакты`,
+                url: `/profile/${userSelector.uid}`
+            }
+        )
         CustomNotification('Заявка отменена')
     } catch (e) {
         CustomNotification('Ошибка', 'error')

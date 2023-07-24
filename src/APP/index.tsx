@@ -31,8 +31,10 @@ const App: FC = () => {
 
     UserListFromChecker(UserSelector.uid, dispatcher)
     UserListAnotherChecker(UserSelector.uid, dispatcher)
-    UserNotificationsChecker(UserSelector.uid, dispatcher)
+    UserNotificationsChecker(UserSelector, dispatcher)
     UserMessagesChecker(UserSelector.uid, dispatcher)
+
+    // Notification.requestPermission()
 
     ThemeChecker()
 

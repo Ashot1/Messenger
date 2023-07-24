@@ -6,9 +6,9 @@ import {AnimatePresence, motion} from "framer-motion";
 const ModalBlock: FC<IModalBlock> = ({children, dopClass, openState, ...props}) => {
 
 	const variant = {
-		animate: {y: 0, opacity: 1},
-		initial: {y: -10, opacity: .6},
-		exit: {y: -10, opacity: 0}
+		animate: {y: -5, opacity: 1, duration: 20},
+		initial: {y: 0, opacity: .9, duration: 20},
+		exit: {y: 0, opacity: 0, duration: 20, }
 	}
 
 	return (

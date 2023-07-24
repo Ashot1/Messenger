@@ -11,12 +11,13 @@ import AcceptDenyButtons from "./AcceptDenyButtons.tsx";
 import CancelButton from "./CancelButton.tsx";
 
 
-const ProfileFriendButtons: FC<IProfileFriendsButton> = ({id, User, PageUser}) => {
+const ProfileFriendButtons: FC<IProfileFriendsButton> = ({id, User, PageUserLists}) => {
 
 	const userSelector = useAppSelector(state => state.user),
 		[changeParam] = useAddToListMutation(),
 		getDate = useLocaleDate(),
 		[createNotifServer] = useCreateNotificationMutation()
+
 
 	if(userSelector.loading.loadingInfo || userSelector.loading.loadingLists)
 		return <BorderedButton
@@ -24,6 +25,13 @@ const ProfileFriendButtons: FC<IProfileFriendsButton> = ({id, User, PageUser}) =
 			color="transparent"
 			dopClass={styles.LoadingButton}>
 			Загрузка данных
+		</BorderedButton>
+
+	if(userSelector?.uid && PageUserLists.banList.includes(userSelector.uid))
+		return <BorderedButton
+			BGColor="#4487a2"
+			color="#fff">
+			Вы забанены пользователем
 		</BorderedButton>
 
 	if(!User)
@@ -46,21 +54,19 @@ const ProfileFriendButtons: FC<IProfileFriendsButton> = ({id, User, PageUser}) =
 		return <BorderedButton
 			BGColor="var(--redColor)"
 			color="#fff"
-			click={() => {
-				deleteContact(userSelector, changeParam, id, PageUser)
-				createNotifServer({
-						toId: id,
-						fromPhoto: userSelector.userPhoto,
-						getDate: getDate,
-						text: `${User.name} удалил вас из контактов`,
-						url: ''
-					})
-			}}>
+			click={() => deleteContact({
+				createNotifServer: createNotifServer,
+				getDate: getDate,
+				id: id,
+				PageUserLists: PageUserLists,
+				changeParam: changeParam,
+				userSelector: userSelector
+			})}>
 			Удалить из контактов
 		</BorderedButton>
 
 	else if(userSelector.acceptListTo.includes(id))
-		return <AcceptDenyButtons id={id} PageUser={PageUser}/>
+		return <AcceptDenyButtons id={id} PageUserLists={PageUserLists}/>
 
 	else if(!User.settings.canAddToFriends)
 		return <BorderedButton
@@ -70,7 +76,7 @@ const ProfileFriendButtons: FC<IProfileFriendsButton> = ({id, User, PageUser}) =
 		</BorderedButton>
 
 	else if( userSelector.acceptListFrom.includes(id) )
-		return <CancelButton id={id} PageUser={PageUser}/>
+		return <CancelButton id={id} PageUserLists={PageUserLists}/>
 
 	else return <BorderedButton
 			BGColor="#4487a2"
@@ -82,7 +88,7 @@ const ProfileFriendButtons: FC<IProfileFriendsButton> = ({id, User, PageUser}) =
 					changeParam({
 						id: id,
 						massive: 'acceptList',
-						values: PageUser.acceptTo.concat(userSelector.uid).map(guy => ({stringValue: guy}))
+						values: PageUserLists.acceptTo.concat(userSelector.uid).map(guy => ({stringValue: guy}))
 					})
 					createNotifServer(
 						{
@@ -90,7 +96,7 @@ const ProfileFriendButtons: FC<IProfileFriendsButton> = ({id, User, PageUser}) =
 							fromPhoto: userSelector.userPhoto,
 							getDate: getDate,
 							text: `${userSelector.userDisplayName} отправил вам заявку в контакты`,
-							url: ''
+							url: '/contacts/accept'
 						})
 					CustomNotification('Заявка отправлена')
 
@@ -107,4 +113,4 @@ const ProfileFriendButtons: FC<IProfileFriendsButton> = ({id, User, PageUser}) =
 
 export default ProfileFriendButtons
 
-export {AcceptDenyButtons, CancelButton}
+export {AcceptDenyButtons, CancelButton, deleteContact}

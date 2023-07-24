@@ -1,6 +1,6 @@
 import styles from './UserProfile.module.sass'
 import {FC, useEffect, useState} from 'react'
-import ProfileHeader, {UserInfo} from "../../MODULE/ProfileHeader";
+import ProfileHeader, {PageUserType, UserInfo} from "../../MODULE/ProfileHeader";
 import {Navigate, useParams} from "react-router-dom";
 import ProfilePosts from "../../MODULE/ProfilePosts";
 import {useAppSelector} from "../../HOOK";
@@ -16,7 +16,17 @@ const UserProfile: FC = () => {
 
 	const [Loading, setLoading] = useState(true),
 		[User, setUser] = useState<UserInfo>(),
-		userSelector = useAppSelector(state => state.user)
+		userSelector = useAppSelector(state => state.user),
+		[PageUserLists, setPageUserLists] 
+			= useState<PageUserType>({acceptTo: [], friends: [], banList: []})
+
+	useEffect(() => {
+		if(!id) return
+		getDoc(doc(db, "Lists", id))
+			.then(response => setPageUserLists(
+				{acceptTo: response.data()?.acceptList, friends: response.data()?.friendList, banList: response.data()?.banList}
+			))
+	}, [id])
 
 	useEffect(() => {
 		if(!userSelector.userDisplayName || !userSelector.tag) return
@@ -44,7 +54,8 @@ const UserProfile: FC = () => {
 					posts: response.data()?.posts,
 					canBanUsers: response.data()?.canBanUsers,
 					addNews: response.data()?.addNews,
-					addAdmin: response.data()?.addAdmin
+					addAdmin: response.data()?.addAdmin,
+					ban: response.data()?.ban
 				})
 				setLoading(false)
 			})
@@ -54,13 +65,17 @@ const UserProfile: FC = () => {
 		setUser(prev => ({...prev, ...add}))
 	}
 
-	const condition = (User?.settings.canOtherSeePosts || userSelector.friendList.includes(id)) || id === userSelector.uid
+	const postPrivacyAllowUser = User?.settings.canOtherSeePosts || userSelector.friendList.includes(id),
+		userWasBanned = userSelector.uid && PageUserLists.banList.includes(userSelector.uid) || false,
+		condition = (postPrivacyAllowUser && !userWasBanned) || id === userSelector.uid
 
 	return (
 		<div className={styles.Settings}>
 			<div className={styles.content}>
-				<ProfileHeader id={id} Loading={Loading} User={User} setUser={changeAdm}/>
+				<ProfileHeader id={id} Loading={Loading} User={User} setUser={changeAdm} PageUserLists={PageUserLists}/>
+				
 				{Loading && <ProfilePosts id={id} User={User} Loading={Loading} currentUserID={userSelector.uid} setUser={setUser}/>}
+				
 				{condition
 					? <ProfilePosts id={id} User={User} Loading={Loading} currentUserID={userSelector.uid} setUser={setUser}/>
 

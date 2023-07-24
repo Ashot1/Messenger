@@ -51,7 +51,7 @@ const AcceptDenyButtons: FC<IAcceptDenyButton> = ({id, PageUser}) => {
                                 fromPhoto: userSelector.userPhoto,
                                 getDate: getDate,
                                 text: `${userSelector.userDisplayName} отклонил вашу заявку в контакты`,
-                                url: ''
+                                url: '/contacts/accept'
                             })
                         CustomNotification('Заявка отклонена')
                     } catch (err) {

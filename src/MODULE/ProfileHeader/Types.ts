@@ -1,3 +1,5 @@
+import {PageUserType} from "./index.tsx";
+
 export type UserInfo = {
     name: string,
     tag: string,
@@ -7,6 +9,7 @@ export type UserInfo = {
     canBanUsers: boolean,
     addAdmin: boolean,
     addNews: boolean,
+    ban?: boolean
 }
 
 export interface IProfileHeader {
@@ -14,4 +17,5 @@ export interface IProfileHeader {
     id: string,
     User: UserInfo | undefined,
     setUser: (add: UserInfo) => void,
+    PageUserLists: PageUserType
 }

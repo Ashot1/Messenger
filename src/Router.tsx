@@ -1,4 +1,3 @@
-import MessagesDialogWindow from "./MODULE/MessagesDialogWindow";
 import {LoadingUserProfile} from "./PAGE/UserProfile";
 import {LoadingMessages} from "./PAGE/Messages";
 import {LoadinContacts} from "./PAGE/Contacts";
@@ -27,6 +26,7 @@ const ResetPassword = lazy(() => import("./MODULE/ResetPassword"))
 const ContactsList = lazy(() => import("./MODULE/ContactsList"))
 const ContactsAccept = lazy(() => import("./MODULE/ContactsAccept"))
 const SettingsPrivacy = lazy(() => import("./MODULE/SettingsPrivacy"))
+const MessagesDialogWindow = lazy(() => import("./MODULE/MessagesDialogWindow"))
 
 export const router = createBrowserRouter([
     {

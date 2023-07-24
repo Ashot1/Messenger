@@ -32,7 +32,7 @@ const MessageSendField: FC<IMessageSendField> = ({messagesPrev, id, CurrentUserI
 	return (
 		<form className={styles.sendMessage} ref={sectionref} onSubmit={sendMessage}>
 			<textarea onInput={(e) => {
-				if(sectionref.current) (sectionref.current as HTMLDivElement).style.height = (e.target as HTMLTextAreaElement).scrollHeight + 'px'
+				if(sectionref.current) (sectionref.current as HTMLDivElement).style.height = (e.target as HTMLFormElement).scrollHeight + 'px'
 			}} required></textarea>
 			<div className={styles.SendButtonPos}>
 				<button className={styles.sendButton}>

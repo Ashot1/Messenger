@@ -53,7 +53,7 @@ const CreateNews: FC = () => {
 								getDate: getDate,
 								text: `Вышло ${InputsValues.title.toLowerCase()}`,
 								fromPhoto: 'newsIcon',
-								url: ''
+								url: '/news'
 							})
 						))
 					},

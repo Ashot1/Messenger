@@ -5,7 +5,7 @@
     text-transform: uppercase
     font-weight: 300
     font-family: 'Mulish', sans-serif
-    font-size: 1.2rem
+    font-size: 1.15rem
     @media (max-width: 768px)
       font-size: 1rem
   ul
@@ -37,6 +37,7 @@
   display: flex
   flex: 1 1 auto
   justify-content: space-between
+  gap: 15px
   @media (max-width: 768px)
     flex-direction: column
     gap: 5px
@@ -61,7 +62,16 @@
       height: 45px
 
 .TextDataList
-  margin-left: 0 !important
+  margin-left: 15px !important
+  @media (max-width: 768px)
+    margin-left: 5px !important
+  p:nth-child(1)
+    font-size: 1rem
+    @media (max-width: 768px)
+      font-size: .9rem
+  p:nth-child(2)
+    @media (max-width: 768px)
+      font-size: .75rem
 
 .UserLink
   text-decoration: none
@@ -73,3 +83,11 @@
   &:hover
     transition: .3s
     background: var(--hoverColor)
+
+.ClearText
+  display: grid
+  place-items: center
+  padding: 35px 0
+  font-size: 1rem
+  @media (max-width: 500px)
+    font-size: .85rem

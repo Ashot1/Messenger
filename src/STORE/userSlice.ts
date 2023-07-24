@@ -9,6 +9,8 @@ export type messageType = {
     from: string
 }
 
+export type notificationType = {text: string, createAt: string, icon: string, url: string}
+
 export type UserInitialType = {
     userEmail: string | undefined,
     userDisplayName: string | undefined,
@@ -26,7 +28,7 @@ export type UserInitialType = {
     friendList: string[],
     settings: {canAddToFriends: boolean, canOtherMessage: boolean, canOtherSeePosts: boolean},
     posts: {title: string, content: string, createAt: string}[],
-    notifications: {text: string, createAt: string, icon: string}[],
+    notifications: notificationType[],
     messages: {id: string, users: string[], type: string, message: messageType[]}[]
 }
 
