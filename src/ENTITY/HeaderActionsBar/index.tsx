@@ -44,7 +44,7 @@ const HeaderActionsBar: FC<IHeaderActionsBar> = () => {
 		</div>
 	)
 
-	return (
+	if(user.notifications) return (
 		<div className={styles.actions}>
 			<UserCircle url={NotifPNG}
 						onclick={() => setOpenState({notif: !OpenState.notif, user: false})}
@@ -65,8 +65,7 @@ const HeaderActionsBar: FC<IHeaderActionsBar> = () => {
 
 				{user.notifications.length >= 1
 					&& <ul onBlur={() => HideWhenBlur('notif')}>
-					{//@ts-ignore
-						user.notifications.toReversed().map((notif, index) => {
+					{[...user.notifications].reverse().map((notif, index) => {
 						let src = notif.icon
 						if(SystemsNotifications[0] === src) src = newsIco
 

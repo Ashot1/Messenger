@@ -12,6 +12,7 @@ import BorderedButton from "../../UI/BorderedButton";
 import {DocumentData, QuerySnapshot} from "@firebase/firestore";
 import LoadinContacts from "./LoadinContacts.tsx"
 
+
 const Contacts: FC = () => {
 
 	const {
@@ -21,7 +22,12 @@ const Contacts: FC = () => {
 		location = useLocation(),
 		[UserListDB, setUserListDB] = useState<UserFromList[]>([]),
 		[LastElement, setLastElement] = useState<DocumentData | undefined>(undefined),
-		[SearchParams, seSearchParams] = useSearchParams()
+		[SearchParams, seSearchParams] = useSearchParams(),
+		MenuButtons = [
+			{url: '/contacts/list', title: 'Контакты'},
+			{url: '/contacts/accept', title: 'Заявки'},
+			{url: '/contacts/ban', title: 'Заблокированные'},
+		]
 
 	useEffect(() => {
 		if(!SearchParams.get('search')) return
@@ -71,7 +77,7 @@ const Contacts: FC = () => {
 				<form onSubmit={handleSubmit(Submit)}>
 					<Search register={register}/>
 				</form>
-				<Menu content={[{url: '/contacts/list', title: 'Контакты'}, {url: '/contacts/accept', title: 'Заявки'}]}/>
+				<Menu content={MenuButtons}/>
 				{!SearchParams.get('search') && <Outlet/>}
 
 				{SearchParams.get('search') && <UserList users={UserListDB} title="Результаты поиска"/>}

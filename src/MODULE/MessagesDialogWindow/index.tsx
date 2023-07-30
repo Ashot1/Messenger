@@ -1,24 +1,24 @@
 import styles from './MessagesDialogWindow.module.sass'
 import {FC, useEffect, useState} from 'react'
-import {useNavigate, useOutletContext, useParams} from "react-router-dom";
+import {useOutletContext, useParams} from "react-router-dom";
 import {useAppSelector} from "../../HOOK";
 import {UserFromList} from "../../ENTITY/UserList";
-import {messageType} from "../../STORE/userSlice.ts";
 import MessageHeader from "../../ENTITY/MessageHeader";
 import MessageSendField from "../../ENTITY/MessageSendField";
 import MessagesDialogList from "../../ENTITY/MessagesDialogList";
 import {PageUserType} from "../ProfileHeader";
 import {doc, getDoc} from "firebase/firestore";
 import {db} from "../../firebaseInit.ts";
+import LoadingMessagesDialogWindow from "./LoadingMessagesDialogWindow.tsx";
+import {messageList} from "../../STORE";
 
 const MessagesDialogWindow: FC = () => {
 
 	const {id} = useParams(),
 		user = useAppSelector(state => state.user),
 		[PageUser, setPageUser] = useState<UserFromList>(),
-		[Messages, setMessages] = useState<messageType[]>([]),
+		[Messages, setMessages] = useState<messageList>(),
 		{data, loading} = useOutletContext<{ data: UserFromList[], loading: boolean }>(),
-		navigate = useNavigate(),
 		[PageUserLists, setPageUserLists]
 			= useState<PageUserType>({banList: [], friends: [], acceptTo: []}),
 		[LoadingLists, setLoadingLists] = useState(true)
@@ -27,14 +27,19 @@ const MessagesDialogWindow: FC = () => {
 	useEffect(() => {
 		if(!user) return
 		const mes = user.messages.find((message) => message.type === 'private' && message.id === id)
-		if(!mes && !user.loading || !mes) return navigate('/notfound')
+		if(!mes && !user.loading.loadingMessages || !mes || !data) return
 		if(user.uid) {
-			if(!mes.users.includes(user.uid)) return navigate('/notfound')
+			if(!mes.users.includes(user.uid)) return
 			const userid = mes.users.filter(userMess => userMess !== user.uid)[0]
-			setPageUser(data.find(user => user.uid === userid))
+			if(userid && userid.length > 0){
+				setPageUser(data.find(user => user.uid === userid))
+			}
+			else {
+				const useridElse = mes.applicants[0]
+				setPageUser(data.find(user => user.uid === useridElse))
+			}
 		}
-
-		setMessages(mes.message)
+		setMessages(mes)
 	}, [data, user, id])
 
 	useEffect(() => {
@@ -49,21 +54,14 @@ const MessagesDialogWindow: FC = () => {
 	}, [PageUser])
 
 
+	if(loading && LoadingLists) return <LoadingMessagesDialogWindow/>
 
-	if(loading && LoadingLists) return (
+	if(PageUser && id && user.uid && PageUserLists.banList && Messages) return (
 		<div className={styles.dialogWindowWrapper}>
-			<MessageHeader PageUser={{photo: ' ', name: 'Загрузка', tag: "Загрузка", uid: "Загрузка"}} loading={true}/>
-			<MessagesDialogList messages={Messages} PageUser={{photo: ' ', name: 'Загрузка', tag: "Загрузка", uid: "Загрузка"}} loading={true} pageID="1234"/>
-			<MessageSendField messagesPrev={Messages} id={'1'} CurrentUserID={'2'}/>
-		</div>
-	)
-
-	if(PageUser && id && user.uid && PageUserLists.banList) return (
-		<div className={styles.dialogWindowWrapper}>
-			<MessageHeader PageUser={PageUser} loading={loading}/>
-			<MessagesDialogList messages={Messages} PageUser={PageUser} loading={loading} pageID={id}/>
+			<MessageHeader PageUser={PageUser} loading={loading} messageList={Messages} pageID={id}/>
+			<MessagesDialogList messages={Messages.message} PageUser={PageUser} loading={loading} pageID={id}/>
 			{!PageUserLists.banList.includes(user.uid)
-				? <MessageSendField messagesPrev={Messages} id={id} CurrentUserID={user.uid}/>
+				? <MessageSendField messagesPrev={Messages.message} id={id} CurrentUserID={user.uid}/>
 				: <p className={styles.BlockText}>Пользователь заблокировал вас</p>
 			}
 		</div>
@@ -71,3 +69,4 @@ const MessagesDialogWindow: FC = () => {
 }
 
 export default MessagesDialogWindow
+export {LoadingMessagesDialogWindow}

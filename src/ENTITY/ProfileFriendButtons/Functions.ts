@@ -89,7 +89,8 @@ export const CancelAccept = (
     id: string,
     PageUser: PageUserType,
     createNotifServer: notificationSendType,
-    getDate: (arg: string) => string) => {
+    getDate: (arg: string) => string,
+    needNotif: boolean = true) => {
 
     if(!userSelector.uid) return
     try {
@@ -103,11 +104,11 @@ export const CancelAccept = (
                 toId: id,
                 fromPhoto: userSelector.userPhoto,
                 getDate: getDate,
-                text: `${userSelector.userDisplayName} отклонил вашу заявку в контакты`,
+                text: `${userSelector.userDisplayName} отменил заявку в контакты`,
                 url: `/profile/${userSelector.uid}`
             }
         )
-        CustomNotification('Заявка отменена')
+        if(needNotif) CustomNotification('Заявка отменена')
     } catch (e) {
         CustomNotification('Ошибка', 'error')
     }

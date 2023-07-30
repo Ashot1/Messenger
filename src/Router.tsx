@@ -1,15 +1,16 @@
 import {LoadingUserProfile} from "./PAGE/UserProfile";
 import {LoadingMessages} from "./PAGE/Messages";
-import {LoadinContacts} from "./PAGE/Contacts";
+import Contacts, {LoadinContacts} from "./PAGE/Contacts";
 import {lazy, Suspense} from "react";
 import {createBrowserRouter} from "react-router-dom";
 import App from './APP'
 import {LoadingNews} from "./PAGE/News";
 import {LoadingSettings} from "./PAGE/Settings";
 import {LoadingAuth} from "./PAGE/Authentication";
+import ErrorDefaultComponent from "./MODULE/ErrorDefaultComponent";
+import {LoadingMessagesDialogWindow} from "./MODULE/MessagesDialogWindow";
 
 const Messages = lazy(() => import("./PAGE/Messages"))
-const Contacts = lazy(() => import("./PAGE/Contacts"))
 const News = lazy(() => import("./PAGE/News"))
 const Settings = lazy(() => import("./PAGE/Settings"))
 const NotFound = lazy(() => import("./PAGE/NotFound"))
@@ -27,6 +28,7 @@ const ContactsList = lazy(() => import("./MODULE/ContactsList"))
 const ContactsAccept = lazy(() => import("./MODULE/ContactsAccept"))
 const SettingsPrivacy = lazy(() => import("./MODULE/SettingsPrivacy"))
 const MessagesDialogWindow = lazy(() => import("./MODULE/MessagesDialogWindow"))
+const ContactsBanList = lazy(() => import("./MODULE/ContactsBanList"))
 
 export const router = createBrowserRouter([
     {
@@ -41,34 +43,42 @@ export const router = createBrowserRouter([
             {
                 path: "/messages",
                 element: <Suspense fallback={<LoadingMessages/>}><Messages /></Suspense>,
+                errorElement: <ErrorDefaultComponent type="settingsBlock"/>,
                 children: [
                     {
                         path: "/messages/:id",
-                        element: <MessagesDialogWindow/>
+                        element: <Suspense fallback={<LoadingMessagesDialogWindow/>}><MessagesDialogWindow/></Suspense>,
                     }
                 ]
             },
             {
                 path: "/news",
                 element: <Suspense fallback={<LoadingNews/>}><News /></Suspense>,
+                errorElement: <ErrorDefaultComponent type="TransparentBlock"/>,
             },
             {
                 path: "/contacts",
-                element:<Suspense fallback={<LoadinContacts/>}><Contacts /></Suspense>,
+                element: <Contacts />,
+                errorElement: <ErrorDefaultComponent type="settingsBlock"/>,
                 children: [
                     {
                         path: "/contacts/list",
-                        element: <ContactsList />,
+                        element: <Suspense fallback={<LoadinContacts/>}><ContactsList /></Suspense>,
                     },
                     {
                         path: "/contacts/accept",
-                        element: <ContactsAccept />,
+                        element: <Suspense fallback={<LoadinContacts/>}><ContactsAccept /></Suspense>,
+                    },
+                    {
+                        path: "/contacts/ban",
+                        element: <Suspense fallback={<LoadinContacts/>}><ContactsBanList /></Suspense>,
                     },
                 ]
             },
             {
                 path: "/settings",
                 element: <Suspense fallback={<LoadingSettings/>}><Settings /></Suspense>,
+                errorElement: <ErrorDefaultComponent type="settingsBlock"/>,
                 children: [
                 {
                     path: "/settings/main",
@@ -93,6 +103,7 @@ export const router = createBrowserRouter([
     {
         path: "/auth",
         element: <Suspense fallback={<LoadingAuth/>}><Authentication /></Suspense>,
+        errorElement: <h2>Ошибка</h2>,
         children: [
         {
             path: "/auth/register",

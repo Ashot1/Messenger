@@ -60,8 +60,14 @@ const MessagesDialogList: FC<IMessagesDialogList> = ({messages, PageUser, loadin
 						MarkColor = '#fff'
 					}
 
+					if(mes.from === 'system') return (
+						<li key={index} className={styles.SystemText}>
+							{mes.text}
+						</li>
+					)
+
 					return <li key={index} className={cl}>
-						<UserCircle url={url || userPNG} dopClass={styles.avatarDialog} style={{filter: url ? '' : 'var(--invertFilter)'}}/>
+						<UserCircle url={url || userPNG} dopClass={styles.avatarDialog} style={{filter: url ? '' : 'var(--invertFilter)'}} isButton={false}/>
 						<div className={styles.messageWrapper}>
 							<div className={styles.MessageTextWrap}>
 								<p>{mes.text}</p>

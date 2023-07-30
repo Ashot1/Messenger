@@ -9,14 +9,22 @@ import LoadingMessages from "./LoadingMessages.tsx"
 const Messages: FC = () => {
 
 	const [Users, setUsers] = useState<string[]>([]),
-		{data, isLoading} = useGetContactsQuery({data: Users}, {skip: !Users}),
+		{data, isLoading} = useGetContactsQuery({data: Users}, {skip: Users.length <= 0}),
 		user = useAppSelector(state => state.user)
 
 	useEffect(() => {
 		const getUserList = () => {
 			let list: string[] = [];
 			user.messages.forEach(chat => {
-				list.push(chat.users.filter(item => item !== user.uid)[0]);
+				if(chat.type !== 'private') return
+				if(chat.users.length > 1) {
+					list.push(
+						chat.users.filter(item => item !== user.uid)[0]
+					);
+				}
+				else {
+					list.push(chat.applicants[0])
+				}
 			});
 			setUsers(list);
 		}

@@ -103,7 +103,7 @@ export const UserMessagesChecker = (id: string | undefined, dispatcher: AppDispa
         where("type", "==", 'private')
     ), snapshot => {
             const message = snapshot.docs.map(item => (
-                {id: item.id, users: item.data()?.members, type: item.data()?.type, message: item.data()?.message}
+                {id: item.id, users: item.data()?.members, applicants: item.data()?.applicants, type: item.data()?.type, message: item.data()?.message}
             ))
             dispatcher(changeMessages({messages: message}))
 

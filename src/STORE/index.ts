@@ -1,7 +1,7 @@
 import {configureStore} from "@reduxjs/toolkit";
 import menuReducer from './menuSlice.ts'
 import userReducer from './userSlice.ts'
-import {UserInitialType} from './userSlice.ts'
+import {UserInitialType, messageList, messageType} from './userSlice.ts'
 import {firebaseAPI2} from "./firebaseAPI2.ts";
 import {firebaseapi} from "./firebaseApi.ts";
 import {newsAPI} from "./newsAPI.ts";
@@ -29,7 +29,7 @@ export default store
 
 export type RootState = ReturnType<typeof store.getState>
 export type AppDispatch = typeof store.dispatch
-export type {UserInitialType}
+export type {UserInitialType, messageList, messageType}
 
 export type listsMutationType = MutationTrigger<MutationDefinition<{
     id: string | undefined,

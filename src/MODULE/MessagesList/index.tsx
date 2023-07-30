@@ -31,7 +31,8 @@ const MessagesList: FC<{ data: UserFromList[] | undefined, loading: boolean }> =
 				let url = ''
 				let lastWord = 'Напишите сообщение'
 				user.messages.forEach(chat => {
-					if (chat.users.includes(dataUser.uid) && chat.type === 'private') {
+					const UserInAplicantsCondition = chat.applicants && chat.applicants.includes(dataUser.uid)
+					if ((chat.users.includes(dataUser.uid) || UserInAplicantsCondition) && chat.type === 'private') {
 						url = chat.id
 						if(!chat.message.length) return
 
