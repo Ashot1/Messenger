@@ -8,6 +8,10 @@
   @media (max-width: 768px)
     flex-direction: column
 
+.appMobileBottomMenu
+  @media (max-width: 768px)
+    flex-direction: column-reverse
+
 .rightside
   height: 100%
   display: flex
@@ -23,8 +27,10 @@
     width: 100%
     border-radius: 0
     padding-bottom: 150px
+
   &::-webkit-scrollbar
     background: transparent
+
   &::-webkit-scrollbar-thumb
     background: var(--primaryBGcolor)
     box-shadow: 0 0 5px var(--primaryBGcolor)

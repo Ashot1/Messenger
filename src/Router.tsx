@@ -1,14 +1,14 @@
 import {LoadingUserProfile} from "./PAGE/UserProfile";
 import {LoadingMessages} from "./PAGE/Messages";
-import Contacts, {LoadinContacts} from "./PAGE/Contacts";
+import Contacts from "./PAGE/Contacts";
 import {lazy, Suspense} from "react";
 import {createBrowserRouter} from "react-router-dom";
 import App from './APP'
 import {LoadingNews} from "./PAGE/News";
-import {LoadingSettings} from "./PAGE/Settings";
 import {LoadingAuth} from "./PAGE/Authentication";
 import ErrorDefaultComponent from "./MODULE/ErrorDefaultComponent";
 import {LoadingMessagesDialogWindow} from "./MODULE/MessagesDialogWindow";
+import {LoadingSettings} from "./PAGE/Settings";
 
 const Messages = lazy(() => import("./PAGE/Messages"))
 const News = lazy(() => import("./PAGE/News"))
@@ -17,7 +17,6 @@ const NotFound = lazy(() => import("./PAGE/NotFound"))
 const Authentication = lazy(() => import("./PAGE/Authentication"))
 const UserProfile = lazy(() => import("./PAGE/UserProfile"))
 const UserProfileError = lazy(() => import("./PAGE/UserProfileError"))
-
 
 const RegisterForm = lazy(() => import("./MODULE/RegisterForm"))
 const LoginForm = lazy(() => import("./MODULE/LoginForm"))
@@ -63,15 +62,15 @@ export const router = createBrowserRouter([
                 children: [
                     {
                         path: "/contacts/list",
-                        element: <Suspense fallback={<LoadinContacts/>}><ContactsList /></Suspense>,
+                        element: <Suspense fallback={<></>}><ContactsList /></Suspense>,
                     },
                     {
                         path: "/contacts/accept",
-                        element: <Suspense fallback={<LoadinContacts/>}><ContactsAccept /></Suspense>,
+                        element: <Suspense fallback={<></>}><ContactsAccept /></Suspense>,
                     },
                     {
                         path: "/contacts/ban",
-                        element: <Suspense fallback={<LoadinContacts/>}><ContactsBanList /></Suspense>,
+                        element: <Suspense fallback={<></>}><ContactsBanList /></Suspense>,
                     },
                 ]
             },

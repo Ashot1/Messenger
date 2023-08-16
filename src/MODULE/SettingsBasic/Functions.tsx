@@ -7,20 +7,23 @@ import {changeUser, UserInitialType} from "../../STORE/userSlice.ts";
 import {AppDispatch} from "../../STORE";
 
 export const DeleteAvatar = (userSelector: UserInitialType, dispatch: AppDispatch) => {
-    if(!userSelector.userPhoto)
+    if (!userSelector.userPhoto)
         return toast.error("У вас отсутствует фото профиля",
-            {style: {background: 'var(--primaryBGcolor)', color: 'var(--MainColor)'}, iconTheme: {primary: '#4487a2', secondary: '#fff'}})
+            {
+                style: {background: 'var(--primaryBGcolor)', color: 'var(--MainColor)'},
+                iconTheme: {primary: '#4487a2', secondary: '#fff'}
+            })
     PromiseNotification({
         successFunction: () => {
             return <b>Фото профиля успешно удалено</b>
         },
 
         mainFunction: () => {
-            if(!auth.currentUser) return Promise.reject(new Error('Пользователь не найден'))
-            try{
+            if (!auth.currentUser) return Promise.reject(new Error('Пользователь не найден'))
+            try {
                 const avatar = ref(FBstorage, userSelector.userPhoto)
                 return deleteObject(avatar)
-            } catch(e) {
+            } catch (e) {
                 return Promise.resolve()
             }
         }
@@ -47,3 +50,10 @@ export const changeHeader = () => {
     window.location.reload()
 }
 
+export const changeMenu = () => {
+    const menuPos = localStorage.getItem('menuStyle')
+
+    localStorage.setItem('menuStyle', `${menuPos === 'top' ? 'bottom' : 'top'}`)
+
+    window.location.reload()
+}

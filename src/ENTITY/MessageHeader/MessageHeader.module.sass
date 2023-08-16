@@ -10,10 +10,11 @@
   width: 20%
 
 .dataWrapper
+  background: transparent
   margin: 0 0 5px 35px
   padding: 5px 30px
   @media (max-width: 768px)
-    padding: 5px 10px
+    padding: 0 10px
     width: 80%
     margin: 0 0 5px 15px
 
@@ -27,11 +28,13 @@
 .TextDialog
   text-align: start
   width: 100%
+
   p
     &:nth-child(1)
       font-size: 1rem
       @media (max-width: 500px)
         font-size: .85rem
+
     &:nth-child(2)
       font-size: .85rem
       @media (max-width: 500px)
@@ -43,11 +46,13 @@
   background: var(--transparetColor)
   overflow: hidden
   margin-top: 20px
+
   li
     font-size: .9rem
     opacity: .7
     display: flex
     justify-content: center
+
     a
       color: var(--MainColor)
       text-decoration: none
@@ -55,13 +60,15 @@
       height: 100%
       display: flex
       justify-content: center
+
     &:hover
       opacity: 1
       background: var(--hoverColor)
 
 .DeleteDialogButton
-  background: rgba(255,25,0,0.21) !important
+  background: rgba(255, 25, 0, 0.21) !important
   color: var(--redColor)
+
   &:hover
     background: var(--redColor) !important
     color: #fff
@@ -73,6 +80,7 @@
   justify-content: center
   padding: 15px 0
   gap: 15px
+
   button
     cursor: pointer
     padding: 7px 14px
@@ -91,12 +99,14 @@
 .Quit
   color: white
   background: var(--redColor)
+
   &:hover
     box-shadow: 0 0 10px var(--redColor)
 
 .Close
   color: white
   background: black
+
   &:hover
     box-shadow: 0 0 10px black
 

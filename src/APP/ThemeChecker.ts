@@ -2,18 +2,23 @@ import {useEffect} from "react";
 
 export const ThemeChecker = () => {
 
-    const theme = localStorage.getItem("theme")
-    const headerPos = localStorage.getItem("headerPos")
+    const theme = localStorage.getItem("theme"),
+        headerPos = localStorage.getItem("headerPos"),
+        menuStyle = localStorage.getItem("menuStyle")
 
-    if(!theme) {
+    if (!theme) {
         localStorage.setItem("theme", "lightmode")
-        window.location.reload()
     }
 
-    if(!headerPos){
+    if (!headerPos) {
         localStorage.setItem("headerPos", "basic")
-        window.location.reload()
     }
+
+    if (!menuStyle) {
+        localStorage.setItem("menuStyle", "top")
+    }
+
+    if (!theme || !menuStyle || !headerPos) window.location.reload()
 
     useEffect(() => {
         if (theme) document.documentElement.dataset.theme = theme

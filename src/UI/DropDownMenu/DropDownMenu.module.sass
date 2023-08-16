@@ -3,20 +3,26 @@
   background: none
   border: none
 
-.CurrentValute
+.CurrentText
   padding: 10px
   border-radius: 10px
   cursor: pointer
   user-select: none
   transition: .2s
+
   p
     margin: 0
+
   &:hover
     transition: .2s
     background: var(--hoverColor)
 
-.CurrentValueActive
+  @media (max-width: 500px)
+    padding: 5px
+
+.CurrentTextActive
   background: var(--hoverColor)
+
   &:hover
     opacity: .6
 
@@ -24,10 +30,12 @@
   display: flex
   align-items: center
   gap: 20px
+
   & h1
     margin: 0
     padding: 0
     text-transform: uppercase
+
     &::after
       content: ''
 
@@ -40,12 +48,14 @@
   position: absolute
   z-index: 2
   overflow-x: hidden
+
   ul
     list-style-type: none
     padding: 0 20px
     display: flex
     gap: 8px
     flex-direction: column
+
     li
       display: flex
       align-items: center
@@ -55,9 +65,10 @@
       word-wrap: break-word
       user-select: none
       transition: .2s
+
   &::-webkit-scrollbar
-      background-color: rgba(255,255,255,0.09)
-      border-radius: 5px
+    background-color: rgba(255, 255, 255, 0.09)
+    border-radius: 5px
 
   &::-webkit-scrollbar-thumb
     background: linear-gradient(90.4deg, rgb(248, 52, 246) 0.6%, rgb(152, 38, 252) 90%)
@@ -70,6 +81,7 @@
   position: relative
   display: flex
   align-items: center
+
   &::before
     content: ''
     width: 13px
@@ -77,6 +89,7 @@
     position: absolute
     background: white
     transform: rotate(-40deg)
+
   &::after
     content: ""
     width: 13px

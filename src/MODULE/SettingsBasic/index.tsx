@@ -10,122 +10,147 @@ import PromiseNotification from "../../UI/PromiseNotification";
 import FullUserInfo from "../../ENTITY/FullUserInfo";
 import SettingsSwitchBlock from "../../ENTITY/SettingsSwitchBlock";
 import {collection, doc, getDocs, query, updateDoc, where} from "firebase/firestore";
-import {changeHeader, DeleteAvatar} from "./Functions.tsx";
+import {changeHeader, changeMenu, DeleteAvatar} from "./Functions.tsx";
 
 const SettingsBasic: FC = () => {
 
-	const {register,
-		formState: {errors},
-		handleSubmit,
-		reset} = useForm<Inputs>({mode: "onSubmit"}),
-		dispatch = useAppDispatch(),
-		ToLocale = useLocaleDate(),
-		userSelector = useAppSelector(state => state.user),
-		[Theme, setTheme] = useState<string | null>(localStorage.getItem("theme")),
-		header = localStorage.getItem("headerPos")
+    const {
+            register,
+            formState: {errors},
+            handleSubmit,
+            reset
+        } = useForm<Inputs>({mode: "onSubmit"}),
+        dispatch = useAppDispatch(),
+        ToLocale = useLocaleDate(),
+        userSelector = useAppSelector(state => state.user),
+        [Theme, setTheme] = useState<string | null>(localStorage.getItem("theme")),
+        header = localStorage.getItem("headerPos"),
+        menuStyle = localStorage.getItem("menuStyle")
 
-	if(userSelector.loading.loadingInfo)
-		return 	<div className={styles.BasicSettings}>
-			<FullUserInfo
-				lastSignIn="04.07.2023, 06:33:24"
-				createdAt="04.07.2023, 06:33:24"
-				signMethod="google.com"
-				adminRights="наивысшие"
-				email="tltxdmin@mail.gg"
-				dopClass={styles.Loading}/>
-		</div>
+    if (userSelector.loading.loadingInfo)
+        return <div className={styles.BasicSettings}>
+            <FullUserInfo
+                lastSignIn="04.07.2023, 06:33:24"
+                createdAt="04.07.2023, 06:33:24"
+                signMethod="google.com"
+                adminRights="наивысшие"
+                email="tltxdmin@mail.gg"
+                dopClass={styles.Loading}/>
+        </div>
 
 
-	const ChangeName = (data: Inputs) => {
-		PromiseNotification({
-			mainFunction: () => {
-				if(!auth.currentUser) return Promise.reject(new Error('Пользователь не найден'))
-				return updateDoc(doc(db, "Users", auth.currentUser.uid), {name: data.Name})
-			},
-			successFunction: () => {
-				reset()
-				return <b>Имя успешно изменено</b>
-			}
-		}).then(() => dispatch(changeUser(
-			{userEmail: userSelector.userEmail, userDisplayName: data.Name, userPhoto: userSelector.userPhoto, tag: userSelector.tag, uid: userSelector.uid}
-		)))
-	}
-	const changeTag = (data: Inputs) => {
-		PromiseNotification({
-			mainFunction: async () => {
-				if(!auth.currentUser) return Promise.reject(new Error('Пользователь не найден'))
+    const ChangeName = (data: Inputs) => {
+        PromiseNotification({
+            mainFunction: () => {
+                if (!auth.currentUser) return Promise.reject(new Error('Пользователь не найден'))
+                return updateDoc(doc(db, "Users", auth.currentUser.uid), {name: data.Name})
+            },
+            successFunction: () => {
+                reset()
+                return <b>Имя успешно изменено</b>
+            }
+        }).then(() => dispatch(changeUser(
+            {
+                userEmail: userSelector.userEmail,
+                userDisplayName: data.Name,
+                userPhoto: userSelector.userPhoto,
+                tag: userSelector.tag,
+                uid: userSelector.uid
+            }
+        )))
+    }
+    const changeTag = (data: Inputs) => {
+        PromiseNotification({
+            mainFunction: async () => {
+                if (!auth.currentUser) return Promise.reject(new Error('Пользователь не найден'))
 
-				const tagDocument = await getDocs(query(collection(db, "Users"), where("tag", "==", data.tag)))
-				if(tagDocument.size) return Promise.reject(new Error('этот id уже занят'))
+                const tagDocument =
+                    await getDocs(query(collection(db, "Users"), where("tag", "==", data.tag)))
 
-				return updateDoc(doc(db, "Users", auth.currentUser.uid), {tag: data.tag})
+                if (tagDocument.size) return Promise.reject(new Error('этот id уже занят'))
 
-			},
-			successFunction: () => {
-				reset()
-				return <b>ID успешно изменен</b>
-			}
-		}).then(() => dispatch(changeUser(
-			{userEmail: userSelector.userEmail, userDisplayName: userSelector.userDisplayName, userPhoto: userSelector.userPhoto, tag: data.tag, uid: userSelector.uid}
-		)))
-	}
+                return updateDoc(doc(db, "Users", auth.currentUser.uid), {tag: data.tag})
 
-	const createdAt = auth.currentUser?.metadata.creationTime,
-		lastSignIn = auth.currentUser?.metadata.lastSignInTime,
-		providerID = auth.currentUser?.providerData[0].providerId,
-		adminRights = userSelector.addAdmin ? 'наивысшие'
-			: userSelector.addNews ? 'расширенные'
-				: userSelector.canBanUsers ? 'базовые'
-					: 'отсутствуют'
+            },
+            successFunction: () => {
+                reset()
+                return <b>ID успешно изменен</b>
+            }
+        }).then(() => dispatch(changeUser(
+            {
+                userEmail: userSelector.userEmail,
+                userDisplayName: userSelector.userDisplayName,
+                userPhoto: userSelector.userPhoto,
+                tag: data.tag,
+                uid: userSelector.uid
+            }
+        )))
+    }
 
-	if(createdAt && lastSignIn && providerID && userSelector.userEmail) return (
-		<div className={styles.BasicSettings}>
-			<FullUserInfo
-				lastSignIn={ToLocale(lastSignIn)}
-				createdAt={ToLocale(createdAt)}
-				signMethod={providerID}
-				adminRights={adminRights}
-				email={userSelector.userEmail}
-				isVerified={auth.currentUser?.emailVerified}/>
-			<SettingsBlock
-				SubmitFunction={ChangeName}
-				handleSubmit={handleSubmit}
-				register={register}
-				options={{required: true, minLength: {value: 3, message: "Минимум 3 символа"}, maxLength: {value: 40, message: "Максимум 40 символов"}}}
-				errors={errors.Name}
-				label="Name"
-				title="Изменить имя"
-				type="text"/>
-			<SettingsBlock
-				SubmitFunction={changeTag}
-				handleSubmit={handleSubmit}
-				register={register}
-				options={{
-					required: true,
-					minLength: {value: 5, message: "Минимум 5 символов"},
-					maxLength: {value: 5, message: "Максимум 5 символов"},
-					pattern: {value: /^[a-zA-Z0-9]+$/, message: "В id должны присутствовать только буквы и цифры"}
-				}}
-				errors={errors.tag}
-				label="tag"
-				title="Изменить id"
-				type="text"/>
-			<SettingsSwitchBlock action={() => {
-				const condition = Theme === 'darkmode' ? 'lightmode' : 'darkmode'
-				localStorage.setItem('theme', condition)
-				setTheme(condition)
-				document.documentElement.dataset.theme = condition
-			}}
-			title="Изменить тему"
-			dopText={`Изменить тему на ${Theme === 'darkmode' ? 'светлую' : 'темную'}`}/>
-			<SettingsSwitchBlock action={() => DeleteAvatar(userSelector, dispatch)}
-			title="Удалить фото профиля"
-			dopText="Вы уверены, что хотите удалить аватарку? Восстановить её будет невозможно"/>
-			<SettingsSwitchBlock action={changeHeader}
-			title={`Сделать заголовок ${header === 'sticky' ? 'обычным' : 'нескрываемым'}`}
-			dopText="Страница будет перзагружена"/>
-		</div>
-	)
+    const createdAt = auth.currentUser?.metadata.creationTime,
+        lastSignIn = auth.currentUser?.metadata.lastSignInTime,
+        providerID = auth.currentUser?.providerData[0].providerId,
+        adminRights = userSelector.addAdmin ? 'наивысшие'
+            : userSelector.addNews ? 'расширенные'
+                : userSelector.canBanUsers ? 'базовые'
+                    : 'отсутствуют'
+
+    if (createdAt && lastSignIn && providerID && userSelector.userEmail) return (
+        <div className={styles.BasicSettings}>
+            <FullUserInfo
+                lastSignIn={ToLocale(lastSignIn)}
+                createdAt={ToLocale(createdAt)}
+                signMethod={providerID}
+                adminRights={adminRights}
+                email={userSelector.userEmail}
+                isVerified={auth.currentUser?.emailVerified}/>
+            <SettingsBlock
+                SubmitFunction={ChangeName}
+                handleSubmit={handleSubmit}
+                register={register}
+                options={{
+                    required: true,
+                    minLength: {value: 3, message: "Минимум 3 символа"},
+                    maxLength: {value: 40, message: "Максимум 40 символов"}
+                }}
+                errors={errors.Name}
+                label="Name"
+                title="Изменить имя"
+                type="text"/>
+            <SettingsBlock
+                SubmitFunction={changeTag}
+                handleSubmit={handleSubmit}
+                register={register}
+                options={{
+                    required: true,
+                    minLength: {value: 5, message: "Минимум 5 символов"},
+                    maxLength: {value: 5, message: "Максимум 5 символов"},
+                    pattern: {value: /^[a-zA-Z0-9]+$/, message: "В id должны присутствовать только буквы и цифры"}
+                }}
+                errors={errors.tag}
+                label="tag"
+                title="Изменить id"
+                type="text"/>
+            <SettingsSwitchBlock action={() => {
+                const condition = Theme === 'darkmode' ? 'lightmode' : 'darkmode'
+                localStorage.setItem('theme', condition)
+                setTheme(condition)
+                document.documentElement.dataset.theme = condition
+            }}
+                                 title="Изменить тему"
+                                 dopText={`Изменить тему на ${Theme === 'darkmode' ? 'светлую' : 'темную'}`}/>
+            <SettingsSwitchBlock action={() => DeleteAvatar(userSelector, dispatch)}
+                                 title="Удалить фото профиля"
+                                 dopText="Вы уверены, что хотите удалить аватарку? Восстановить её будет невозможно"/>
+            <SettingsSwitchBlock action={changeHeader}
+                                 title={`Сделать заголовок ${header === 'sticky' ? 'обычным' : 'нескрываемым'}`}
+                                 dopText="Страница будет перзагружена"/>
+            <SettingsSwitchBlock action={changeMenu}
+                                 title={`Переместить меню ${menuStyle === 'top' ? 'вниз' : 'вверх'}`}
+                                 dopText="Работает только на мобильных устройствах. Страница будет перезагружена"/>
+
+        </div>
+    )
 }
 
 export default SettingsBasic

@@ -25,7 +25,8 @@ const App: FC = () => {
 
     const location = useLocation(),
         dispatcher = useAppDispatch(),
-        UserSelector = useAppSelector(state => state.user)
+        UserSelector = useAppSelector(state => state.user),
+        menuStyle = localStorage.getItem('menuStyle')
 
     UserChecker(dispatcher)
 
@@ -48,18 +49,18 @@ const App: FC = () => {
         {url: '/profile', icon: ProfilePhoto, alt: 'Профиль'},
     ], [UserSelector.uid])
 
-    if(!UserSelector.loading.loadingInfo && !UserSelector.userEmail) return <Navigate to="/auth/login"/>
+    if (!UserSelector.loading.loadingInfo && !UserSelector.userEmail) return <Navigate to="/auth/login"/>
 
-    if(location.pathname === '/' && UserSelector.userEmail) return <Navigate to="/news"/>
+    if (location.pathname === '/' && UserSelector.userEmail) return <Navigate to="/news"/>
 
     return (
-        <div className={styles.app}>
+        <div className={`${styles.app} ${menuStyle === 'bottom' && styles.appMobileBottomMenu}`}>
             <AsideMenu PageList={PageList.slice(0, -3)}/>
 
             <section className={styles.rightside}>
                 <Header>
                     {PageList.map(page => {
-                        if(page.url === `/profile/${UserSelector.uid}`) return
+                        if (page.url === `/profile/${UserSelector.uid}`) return
                         if (location.pathname.includes(page.url)) {
                             return (<Fragment key={`${page.url}header`}>
                                 <img className={styles.HeaderIcon} src={page.icon} alt={page.alt}/>
@@ -69,7 +70,7 @@ const App: FC = () => {
                             </Fragment>)
                         }
                     })}
-            </Header>
+                </Header>
                 <Main>
                     <Outlet/>
                 </Main>

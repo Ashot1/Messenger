@@ -10,7 +10,6 @@ import UserList from "../../ENTITY/UserList";
 import {UserFromList} from "../../ENTITY/UserList";
 import BorderedButton from "../../UI/BorderedButton";
 import {DocumentData, QuerySnapshot} from "@firebase/firestore";
-import LoadinContacts from "./LoadinContacts.tsx"
 
 
 const Contacts: FC = () => {
@@ -91,4 +90,3 @@ const Contacts: FC = () => {
 }
 
 export default Contacts
-export {LoadinContacts}
